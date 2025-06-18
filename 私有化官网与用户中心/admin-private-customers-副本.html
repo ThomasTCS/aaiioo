@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>私有化客户 - AIO 运营平台</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-6">
+    <div class="max-w-[90%] mx-auto">
+        <!-- 筛选栏 -->
+        <div class="bg-white rounded-lg shadow-sm p-4 mb-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">授权服务</label>
+                        <select class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">全部</option>
+                            <option value="正式版">正式版</option>
+                            <option value="试用版">试用版</option>
+                            <option value="未授权">未授权</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">关联销售</label>
+                        <select class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">全部</option>
+                            <option value="张三">张三</option>
+                            <option value="李四">李四</option>
+                            <option value="王五">王五</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">企业名称</label>
+                        <input type="text" placeholder="搜索企业名称" class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button class="bg-blue-500 text-white px-4 py-2 rounded text-sm hover:bg-blue-600 transition duration-200">
+                        搜索
+                    </button>
+                    <button class="bg-gray-500 text-white px-4 py-2 rounded text-sm hover:bg-gray-600 transition duration-200">
+                        重置
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 客户列表 -->
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">企业标识码</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">企业名称</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">联系人</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">联系电话</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">联系邮箱</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">授权服务</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">到期日期</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">关联销售</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">操作</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200" id="customerTable">
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">TX001</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">腾讯科技</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">马化腾</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">138-0013-8000</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">contact@tencent.com</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">正式版</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2025-12-31</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">张三</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                            <button class="text-blue-600 hover:text-blue-900" onclick="openDetailModal('TX001')">企业详情</button>
+                            <button class="text-purple-600 hover:text-purple-900" onclick="openLicenseModal('TX001')">License 授权</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">AL001</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">阿里巴巴</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">马云</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">138-0013-8001</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">contact@alibaba.com</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">试用版</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2025-12-15</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">李四</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                            <button class="text-blue-600 hover:text-blue-900" onclick="openDetailModal('AL001')">企业详情</button>
+                            <button class="text-purple-600 hover:text-purple-900" onclick="openLicenseModal('AL001')">License 授权</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">BD001</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">百度科技</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">李彦宏</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">138-0013-8002</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">contact@baidu.com</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">未授权</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">-</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">王五</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                            <button class="text-blue-600 hover:text-blue-900" onclick="openDetailModal('BD001')">企业详情</button>
+                            <button class="text-purple-600 hover:text-purple-900" onclick="openLicenseModal('BD001')">License 授权</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">TEST001</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">测试企业</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">测试联系人</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">138-0013-8003</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">contact@test.com</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">试用版</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2025-01-31</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">赵六</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                            <button class="text-blue-600 hover:text-blue-900" onclick="openDetailModal('TEST001')">企业详情</button>
+                            <button class="text-purple-600 hover:text-purple-900" onclick="openLicenseModal('TEST001')">License 授权</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 客户详情弹窗 -->
+    <div id="detailModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen">
+            <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800">企业详细信息</h3>
+                    <button onclick="closeModal('detailModal')" class="text-gray-400 hover:text-gray-600">✕</button>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- 企业信息 -->
+                    <div>
+                        <h4 class="font-semibold text-gray-700 mb-3">企业信息</h4>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600">企业名称</label>
+                                <input type="text" id="companyName" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" readonly>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600">企业标识码</label>
+                                <input type="text" id="companyCode" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" readonly>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600">超管账号</label>
+                                <input type="text" id="adminAccount" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 联系信息 -->
+                    <div>
+                        <h4 class="font-semibold text-gray-700 mb-3">联系信息</h4>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600">联系人</label>
+                                <input type="text" id="contactPerson" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600">联系电话</label>
+                                <input type="text" id="contactPhone" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600">邮箱</label>
+                                <input type="email" id="email" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600">Telegram</label>
+                                <input type="text" id="telegram" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600">WhatsApp</label>
+                                <input type="text" id="whatsapp" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 销售信息 -->
+                    <div>
+                        <h4 class="font-semibold text-gray-700 mb-3">销售信息</h4>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600">关联销售</label>
+                            <select id="salesPerson" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md">
+                                <option value="张三">张三</option>
+                                <option value="李四">李四</option>
+                                <option value="王五">王五</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button onclick="closeModal('detailModal')" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">取消</button>
+                    <button onclick="saveCustomerDetail()" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- License 管理弹窗 -->
+    <div id="licenseModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen">
+            <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-6xl max-h-screen overflow-y-auto">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800">License 管理</h3>
+                    <button onclick="closeModal('licenseModal')" class="text-gray-400 hover:text-gray-600">✕</button>
+                </div>
+                
+                <!-- 隐藏字段存储当前企业代码 -->
+                <input type="hidden" id="currentCompanyCode" value="">
+
+                <!-- License 列表 -->
+                <div class="mb-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h4 class="font-semibold text-gray-700">当前 License 列表</h4>
+                        <div class="space-x-2">
+                            <button onclick="refreshCurrentLicenseTable()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">刷新</button>
+                            <button onclick="openAddLicenseForm()" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">添加 License</button>
+                        </div>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">类型</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">权益</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">开始时间</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">到期时间</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">状态</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">License 文件</th>
+                                </tr>
+                            </thead>
+                                                <tbody class="bg-white divide-y divide-gray-200" id="licenseTable">
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">正式版(已使用)</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">坐席成员: 10个<br>社媒账号: 50个<br>翻译字符: 10M</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2025-01-01</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2025-12-31</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">审核通过</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-600">
+                                <a href="#" class="hover:underline">下载</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">试用版(已过期)</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">坐席成员: 10个<br>社媒账号: 10个<br>翻译字符: 10M</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2025-01-01</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2025-01-14</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">审核通过</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-600">
+                                <a href="#" class="hover:underline">下载</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加 License 弹窗 -->
+    <div id="addLicenseModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen">
+            <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-4xl max-h-screen overflow-y-auto">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800">添加新 License</h3>
+                    <button onclick="closeModal('addLicenseModal')" class="text-gray-400 hover:text-gray-600">✕</button>
+                </div>
+
+                <form class="space-y-6">
+                    <!-- License 信息 -->
+                    <div>
+                        <h4 class="font-medium text-gray-700 mb-4">License 信息</h4>
+                        <!-- 第一行：版本 -->
+                        <div class="grid grid-cols-1 gap-4 mb-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600 mb-1">版本 <span class="text-red-500">*</span></label>
+                                <select id="licenseVersion" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                                    <option value="正式版">正式版</option>
+                                    <option value="试用版">试用版</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- 第二行：坐席数、社媒账号数、翻译字符数 -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600 mb-1">坐席成员数量 <span class="text-red-500">*</span></label>
+                                <input type="number" id="seats" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="输入数量" required min="1">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600 mb-1">社媒账号数量 <span class="text-red-500">*</span></label>
+                                <input type="number" id="socialAccounts" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="输入数量" required min="1">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600 mb-1">翻译字符数量(M) <span class="text-red-500">*</span></label>
+                                <input type="number" id="translationChars" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="输入数量" required min="1">
+                            </div>
+                        </div>
+
+                        <!-- 第三行：服务时长、开始时间、到期时间 -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600 mb-1">服务时长 <span class="text-red-500">*</span></label>
+                                <select id="serviceTime" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" onchange="calculateEndDate()" required>
+                                    <option value="180">180天</option>
+                                    <option value="360">360天</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600 mb-1">开始时间 <span class="text-red-500">*</span></label>
+                                <input type="date" id="startDate" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" onchange="calculateEndDate()" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600 mb-1">到期时间</label>
+                                <input type="date" id="endDate" class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100" readonly>
+                            </div>
+                        </div>
+
+                        <!-- 第四行：总金额 -->
+                        <div class="grid grid-cols-1 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600 mb-1">总金额(¥) <span class="text-red-500">*</span></label>
+                                <input type="number" id="totalAmount" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="输入金额" required min="0.01" step="0.01">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- IM 服务配置 -->
+                    <div>
+                        <h4 class="font-medium text-gray-700 mb-4">IM 服务配置</h4>
+                        
+                        <!-- IM 服务类型选择 -->
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-600 mb-2">IM 服务类型</label>
+                            <div class="flex space-x-6">
+                                <label class="flex items-center">
+                                    <input type="radio" name="imType" value="platform" class="mr-2" checked onchange="toggleImFields()">
+                                    <span class="text-sm text-gray-700">使用平台 IM</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="radio" name="imType" value="custom" class="mr-2" onchange="toggleImFields()">
+                                    <span class="text-sm text-gray-700">客户自己 IM</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- IM 配置字段 -->
+                        <div id="imFields" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600 mb-1">AppID</label>
+                                <input type="text" id="appId" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="输入AppID">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600 mb-1">SecretKey</label>
+                                <input type="text" id="secretKey" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="输入SecretKey">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end space-x-3 pt-4 border-t">
+                        <button type="button" onclick="closeModal('addLicenseModal')" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">取消</button>
+                        <button type="button" onclick="addNewLicense()" class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">提交</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 全局数据管理
+        const DataManager = {
+            // 获取License数据
+            getLicenseData: function(companyCode) {
+                const key = `license_${companyCode}`;
+                const data = localStorage.getItem(key);
+                return data ? JSON.parse(data) : [];
+            },
+            
+            // 保存License数据
+            saveLicenseData: function(companyCode, licenseList) {
+                const key = `license_${companyCode}`;
+                localStorage.setItem(key, JSON.stringify(licenseList));
+            },
+            
+            // 添加新License
+            addLicense: function(companyCode, licenseData) {
+                const licenses = this.getLicenseData(companyCode);
+                const newLicense = {
+                    id: Date.now().toString(),
+                    ...licenseData,
+                    status: '待审核',
+                    createTime: new Date().toISOString()
+                };
+                licenses.unshift(newLicense); // 添加到列表开头
+                this.saveLicenseData(companyCode, licenses);
+                return newLicense;
+            },
+            
+            // 更新License状态
+            updateLicenseStatus: function(companyCode, licenseId, status) {
+                const licenses = this.getLicenseData(companyCode);
+                const license = licenses.find(l => l.id === licenseId);
+                if (license) {
+                    license.status = status;
+                    this.saveLicenseData(companyCode, licenses);
+                    
+                    // 触发License数据变化事件
+                    window.dispatchEvent(new CustomEvent('licenseDataChanged', {
+                        detail: { companyCode: companyCode }
+                    }));
+                }
+            },
+            
+            // 获取订单数据
+            getOrderData: function() {
+                const data = localStorage.getItem('private_orders');
+                return data ? JSON.parse(data) : [];
+            },
+            
+            // 保存订单数据
+            saveOrderData: function(orders) {
+                localStorage.setItem('private_orders', JSON.stringify(orders));
+            },
+            
+            // 添加新订单
+            addOrder: function(orderData) {
+                const orders = this.getOrderData();
+                const newOrder = {
+                    id: Date.now().toString(),
+                    orderNumber: this.generateOrderNumber(),
+                    ...orderData,
+                    auditStatus: '待审核',
+                    createTime: new Date().toISOString()
+                };
+                orders.unshift(newOrder); // 添加到列表开头
+                this.saveOrderData(orders);
+                return newOrder;
+            },
+            
+            // 生成订单编号
+            generateOrderNumber: function() {
+                const now = new Date();
+                const year = now.getFullYear();
+                const month = String(now.getMonth() + 1).padStart(2, '0');
+                const day = String(now.getDate()).padStart(2, '0');
+                const timestamp = now.getTime().toString().slice(-3);
+                return `#${year}${month}${day}${timestamp}`;
+            }
+        };
+
+        // 页面加载时监听存储变化
+        window.addEventListener('storage', function(e) {
+            if (e.key && e.key.startsWith('license_')) {
+                // License数据发生变化，刷新当前显示的License表格
+                const currentCompanyCode = document.getElementById('currentCompanyCode').value;
+                if (currentCompanyCode) {
+                    updateLicenseTable(currentCompanyCode);
+                }
+            }
+        });
+
+        // 添加自定义事件监听，用于同页面内的数据更新
+        window.addEventListener('licenseDataChanged', function(e) {
+            const currentCompanyCode = document.getElementById('currentCompanyCode').value;
+            if (currentCompanyCode && currentCompanyCode === e.detail.companyCode) {
+                updateLicenseTable(currentCompanyCode);
+            }
+        });
+
+        // 打开详情弹窗
+        function openDetailModal(companyCode) {
+            // 模拟获取客户数据
+            const customerData = {
+                'TX001': {
+                    companyName: '腾讯科技',
+                    companyCode: 'TX001',
+                    adminAccount: 'admin@tencent.com',
+                    contactPerson: '马化腾',
+                    contactPhone: '13800138000',
+                    email: 'contact@tencent.com',
+                    telegram: '@tencent',
+                    whatsapp: '+86138001380000',
+                    salesPerson: '张三'
+                },
+                'TEST001': {
+                    companyName: '测试企业',
+                    companyCode: 'TEST001',
+                    adminAccount: 'admin@test.com',
+                    contactPerson: '测试联系人',
+                    contactPhone: '13900139000',
+                    email: 'contact@test.com',
+                    telegram: '@testcompany',
+                    whatsapp: '+86139001390000',
+                    salesPerson: '赵六'
+                }
+            };
+
+            const data = customerData[companyCode] || {};
+            document.getElementById('companyName').value = data.companyName || '';
+            document.getElementById('companyCode').value = data.companyCode || '';
+            document.getElementById('adminAccount').value = data.adminAccount || '';
+            document.getElementById('contactPerson').value = data.contactPerson || '';
+            document.getElementById('contactPhone').value = data.contactPhone || '';
+            document.getElementById('email').value = data.email || '';
+            document.getElementById('telegram').value = data.telegram || '';
+            document.getElementById('whatsapp').value = data.whatsapp || '';
+            document.getElementById('salesPerson').value = data.salesPerson || '';
+
+            document.getElementById('detailModal').classList.remove('hidden');
+        }
+
+        // 打开License弹窗
+        function openLicenseModal(companyCode) {
+            // 设置当前企业代码
+            document.getElementById('currentCompanyCode').value = companyCode;
+            // 根据不同公司显示不同的License信息
+            updateLicenseTable(companyCode);
+            document.getElementById('licenseModal').classList.remove('hidden');
+        }
+
+        // 更新License表格内容
+        function updateLicenseTable(companyCode) {
+            const licenseTable = document.getElementById('licenseTable');
+            
+            // 获取动态添加的License数据
+            const dynamicLicenses = DataManager.getLicenseData(companyCode);
+            let dynamicLicenseRows = '';
+            
+            // 生成动态License行
+            dynamicLicenses.forEach(license => {
+                const statusColor = license.status === '待审核' ? 'bg-yellow-100 text-yellow-800' : 
+                                  license.status === '审核通过' ? 'bg-green-100 text-green-800' : 
+                                  'bg-red-100 text-red-800';
+                
+                const downloadButton = license.status === '审核通过' ? 
+                    '<a href="#" class="hover:underline">下载</a>' : 
+                    '<span class="text-gray-400">-</span>';
+                
+                dynamicLicenseRows += `
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">${license.version}(${license.status === '审核通过' ? '已使用' : '未使用'})</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">坐席成员: ${license.seats}个<br>社媒账号: ${license.socialAccounts}个<br>翻译字符: ${license.translationChars}M</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${license.startDate}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${license.endDate}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${statusColor}">${license.status}</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-600">
+                            ${downloadButton}
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            if (companyCode === 'TEST001') {
+                // 测试企业显示多种License状态
+                licenseTable.innerHTML = dynamicLicenseRows + `
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-orange-100 text-orange-800">正式版(未使用)</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">坐席成员: 20个<br>社媒账号: 100个<br>翻译字符: 50M</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2025-02-01</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2026-01-31</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">审核通过</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-600">
+                            <a href="#" class="hover:underline">下载</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">正式版(已使用)</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">坐席成员: 15个<br>社媒账号: 80个<br>翻译字符: 30M</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2024-12-01</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2025-11-30</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">审核通过</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-600">
+                            <a href="#" class="hover:underline">下载</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">正式版(已过期)</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">坐席成员: 10个<br>社媒账号: 50个<br>翻译字符: 20M</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2023-12-01</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2024-11-30</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">审核通过</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-600">
+                            <a href="#" class="hover:underline">下载</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">试用版(已过期)</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">坐席成员: 5个<br>社媒账号: 10个<br>翻译字符: 5M</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2024-10-01</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2024-10-14</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">审核通过</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-600">
+                            <a href="#" class="hover:underline">下载</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">试用版(已使用)</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">坐席成员: 5个<br>社媒账号: 5个<br>翻译字符: 1M</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2025-01-01</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2025-01-31</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">审核通过</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-600">
+                            <a href="#" class="hover:underline">下载</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-orange-100 text-orange-800">试用版(未使用)</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">坐席成员: 3个<br>社媒账号: 3个<br>翻译字符: 1M</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2025-02-15</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2025-03-01</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">审核通过</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-600">
+                            <a href="#" class="hover:underline">下载</a>
+                        </td>
+                    </tr>
+                `;
+            } else {
+                // 其他企业显示默认的License信息
+                licenseTable.innerHTML = `
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">正式版(已使用)</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">坐席成员: 10个<br>社媒账号: 50个<br>翻译字符: 10M</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2025-01-01</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2025-12-31</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">审核通过</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-600">
+                            <a href="#" class="hover:underline">下载</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">试用版(已过期)</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">坐席成员: 10个<br>社媒账号: 10个<br>翻译字符: 10M</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2025-01-01</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2025-01-14</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">审核通过</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-600">
+                            <a href="#" class="hover:underline">下载</a>
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        // 关闭弹窗
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        // 打开添加License弹窗
+        function openAddLicenseForm() {
+            // 设置默认开始时间为当日
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('startDate').value = today;
+            
+            // 计算默认到期时间
+            calculateEndDate();
+            
+            document.getElementById('addLicenseModal').classList.remove('hidden');
+        }
+
+        // 计算到期时间
+        function calculateEndDate() {
+            const startDateInput = document.getElementById('startDate');
+            const serviceTimeSelect = document.getElementById('serviceTime');
+            const endDateInput = document.getElementById('endDate');
+            
+            if (startDateInput.value && serviceTimeSelect.value) {
+                const startDate = new Date(startDateInput.value);
+                const days = parseInt(serviceTimeSelect.value);
+                
+                const endDate = new Date(startDate);
+                endDate.setDate(startDate.getDate() + days);
+                
+                endDateInput.value = endDate.toISOString().split('T')[0];
+            }
+        }
+
+        // 切换IM字段显示
+        function toggleImFields() {
+            const platformRadio = document.querySelector('input[name="imType"][value="platform"]');
+            const imFields = document.getElementById('imFields');
+            
+            if (platformRadio.checked) {
+                imFields.style.display = 'grid';
+            } else {
+                imFields.style.display = 'none';
+            }
+        }
+
+        // 保存客户详情
+        function saveCustomerDetail() {
+            alert('客户信息已保存');
+            closeModal('detailModal');
+        }
+
+        // 添加新License
+        function addNewLicense() {
+            // 验证必填字段
+            if (!validateLicenseForm()) {
+                return;
+            }
+
+            const imType = document.querySelector('input[name="imType"]:checked').value;
+            
+            const licenseData = {
+                version: document.getElementById('licenseVersion').value,
+                serviceTime: document.getElementById('serviceTime').value,
+                startDate: document.getElementById('startDate').value,
+                endDate: document.getElementById('endDate').value,
+                seats: document.getElementById('seats').value,
+                socialAccounts: document.getElementById('socialAccounts').value,
+                translationChars: document.getElementById('translationChars').value,
+                totalAmount: document.getElementById('totalAmount').value,
+                imType: imType
+            };
+
+            // 只有选择使用平台IM时才收集AppID和SecretKey
+            if (imType === 'platform') {
+                licenseData.appId = document.getElementById('appId').value;
+                licenseData.secretKey = document.getElementById('secretKey').value;
+            }
+
+            // 获取当前企业代码
+            const currentCompanyCode = document.getElementById('currentCompanyCode').value;
+            
+            // 添加License到数据管理器
+            const newLicense = DataManager.addLicense(currentCompanyCode, licenseData);
+            
+            // 获取企业信息
+            const companyInfo = getCompanyInfo(currentCompanyCode);
+            
+            // 创建对应的订单
+            const orderData = {
+                companyCode: currentCompanyCode,
+                companyName: companyInfo.name,
+                orderType: licenseData.version,
+                paymentMethod: 'USDT', // 默认支付方式
+                amount: licenseData.totalAmount,
+                paymentTime: new Date().toLocaleString('zh-CN'),
+                licenseId: newLicense.id
+            };
+            
+            DataManager.addOrder(orderData);
+            
+            alert('License已创建，同时在订单管理中创建了对应订单，状态为"待审核"');
+            closeModal('addLicenseModal');
+            
+            // 触发License数据变化事件
+            window.dispatchEvent(new CustomEvent('licenseDataChanged', {
+                detail: { companyCode: currentCompanyCode }
+            }));
+        }
+        
+        // 获取企业信息
+        function getCompanyInfo(companyCode) {
+            const companyMap = {
+                'TEST001': { name: '测试企业', contact: '张三' },
+                'TX001': { name: '腾讯科技', contact: '李四' },
+                'AL001': { name: '阿里巴巴', contact: '王五' },
+                'BD001': { name: '百度科技', contact: '赵六' },
+                'HW001': { name: '华为技术', contact: '钱七' },
+                'XM001': { name: '小米科技', contact: '孙八' },
+                'DJI001': { name: '大疆创新', contact: '周九' }
+            };
+            return companyMap[companyCode] || { name: '未知企业', contact: '未知' };
+        }
+        
+        // 刷新当前License表格
+        function refreshCurrentLicenseTable() {
+            const currentCompanyCode = document.getElementById('currentCompanyCode').value;
+            if (currentCompanyCode) {
+                updateLicenseTable(currentCompanyCode);
+                alert('License列表已刷新');
+            }
+        }
+
+        // 验证License表单
+        function validateLicenseForm() {
+            const requiredFields = [
+                { id: 'licenseVersion', name: '版本' },
+                { id: 'seats', name: '坐席成员数量' },
+                { id: 'socialAccounts', name: '社媒账号数量' },
+                { id: 'translationChars', name: '翻译字符数量' },
+                { id: 'serviceTime', name: '服务时长' },
+                { id: 'startDate', name: '开始时间' },
+                { id: 'totalAmount', name: '总金额' }
+            ];
+
+            for (let field of requiredFields) {
+                const element = document.getElementById(field.id);
+                const value = element.value.trim();
+                
+                if (!value) {
+                    alert(`请填写${field.name}`);
+                    element.focus();
+                    return false;
+                }
+
+                // 验证数字字段
+                if (['seats', 'socialAccounts', 'translationChars', 'totalAmount'].includes(field.id)) {
+                    const numValue = parseFloat(value);
+                    if (isNaN(numValue) || numValue <= 0) {
+                        alert(`${field.name}必须是大于0的数字`);
+                        element.focus();
+                        return false;
+                    }
+                }
+            }
+
+
+
+            return true;
+        }
+
+        // 打开添加客户弹窗
+        function openAddCustomerModal() {
+            alert('添加客户功能开发中...');
+        }
+    </script>
+</body>
+</html> 

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AIOChat - 私有化部署</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body {
+      background-color: #f9fafb;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23e5e7eb' fill-opacity='0.4'%3E%3Cpath opacity='.5' d='M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9z'/%3E%3Cpath d='M6 5V0H5v5H0v1h5v94h1V6h94V5H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .login-card {
+      box-shadow: var(--shadow-lg);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+  <!-- 左上角品牌Logo -->
+  <div class="fixed top-6 left-6 z-10">
+    <a href="home.html" class="flex items-center hover:opacity-80 transition duration-150">
+      <img src="../私有化官网与用户中心/images/aio-logo_kxblvp.png.png" alt="AIOChat Logo" class="h-8 w-8 mr-2">
+      <span class="text-xl font-bold text-gray-800">AIOChat</span>
+    </a>
+  </div>
+
+  <div class="absolute top-4 right-4 flex space-x-2 z-10">
+    <button id="zhBtn" class="px-3 py-1.5 rounded-md bg-white shadow-sm border border-gray-200 hover:bg-gray-50 transition-colors font-medium flex items-center space-x-1 text-sm">
+      <span>🇨🇳</span>
+      <span class="ml-1">中文</span>
+    </button>
+    <button id="enBtn" class="px-3 py-1.5 rounded-md bg-white shadow-sm border border-gray-200 hover:bg-gray-50 transition-colors font-medium flex items-center space-x-1 text-sm">
+      <span>🇬🇧</span>
+      <span class="ml-1">English</span>
+    </button>
+  </div>
+
+  <div class="login-card bg-white rounded-xl shadow-lg overflow-hidden flex max-w-6xl mx-auto w-full animate-fadeIn">
+    <!-- 左侧信息区域 -->
+    <div class="w-1/2 p-12 auth-feature-section hidden md:block">
+      <h2 class="text-3xl font-bold mb-6 text-gray-800" data-lang-key="company-deployment">企业私有化部署</h2>
+      <p class="text-gray-700 mb-8" data-lang-key="data-security">数据安全私密，企业自主掌控</p>
+      
+      <div class="bg-blue-50 p-6 rounded-lg mb-8 border-l-4 border-blue-400">
+        <h3 class="font-semibold mb-4 flex items-center" data-lang-key="admin-notice">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          管理员须知
+        </h3>
+        <ul class="space-y-3">
+          <li class="flex items-start">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            <span data-lang-key="notice-1">完成注册后可免费申请试用授权文件</span>
+          </li>
+          <li class="flex items-start">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            <span data-lang-key="notice-2">安装部署服务端输入人工授权文件即可使用</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="mb-8">
+        <h3 class="font-semibold mb-4 flex items-center" data-lang-key="trial-instructions">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          试用说明
+        </h3>
+        <ol class="list-decimal pl-5 space-y-3 text-gray-700">
+          <li data-lang-key="trial-1" class="pl-2">试用版与正式版功能相同，有效期 14 天</li>
+          <li data-lang-key="trial-2" class="pl-2">部分功能暂停及第三方平台，可自行创建或联系客服产品经理</li>
+          <li data-lang-key="trial-3" class="pl-2">正式版支持月度年度续约，拥有专属服务限制和售后维护服务，可联系客户经理购买。</li>
+        </ol>
+      </div>
+    </div>
+    
+    <!-- 右侧登录表单 -->
+    <div class="w-full md:w-1/2 p-12 auth-section flex flex-col justify-center">
+      <div class="md:hidden mb-10 flex justify-center">
+        <img src="../私有化官网与用户中心/images/aio-logo_kxblvp.png.png" alt="AIOChat Logo" class="h-16 w-16 logo">
+      </div>
+      
+      <h2 class="text-2xl font-bold mb-8 text-center text-gray-800 relative">
+        <span data-lang-key="free-trial">申请免费试用</span>
+        <span class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1/4 h-1 bg-primary-color rounded-full"></span>
+      </h2>
+      
+      <form action="application.html" method="GET" class="space-y-6">
+        <div class="form-group">
+          <label for="email" class="block text-sm font-medium text-gray-700 mb-2" data-lang-key="email">邮箱</label>
+          <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            required
+            class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+            placeholder="example@company.com"
+          >
+        </div>
+        
+        <div class="form-group">
+          <label for="verificationCode" class="block text-sm font-medium text-gray-700 mb-2" data-lang-key="verification-code">验证码</label>
+          <div class="flex">
+            <input 
+              type="text" 
+              id="verificationCode" 
+              name="verificationCode" 
+              required
+              class="flex-1 px-4 py-3 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+            >
+            <button 
+              type="button" 
+              id="verificationBtn" 
+              class="w-32 bg-blue-500 text-white rounded-r-md hover:bg-blue-600 transition-colors duration-300 flex items-center justify-center"
+              data-lang-key="get-code"
+            >
+              获取验证码
+            </button>
+          </div>
+        </div>
+        
+        <div class="mt-8">
+          <button 
+            type="submit" 
+            class="w-full bg-blue-500 text-white py-3 rounded-md hover:bg-blue-600 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 flex items-center justify-center btn-primary"
+            data-lang-key="login-register"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+            </svg>
+            登录/注册
+          </button>
+        </div>
+      </form>
+      
+      <!-- SaaS服务入口 -->
+      <div class="mt-8 pt-6 border-t border-gray-200 text-center">
+        <p class="text-sm text-gray-500 mb-3" data-lang-key="saas-alternative">
+          想要更快开始？
+        </p>
+        <p class="text-sm text-gray-600 mb-4" data-lang-key="saas-description">
+          无需部署，立即使用云端SaaS服务
+        </p>
+        <a 
+          href="saas-login.html" 
+          class="inline-flex items-center px-4 py-2 text-blue-600 hover:text-blue-700 hover:underline transition duration-150 text-sm font-medium"
+          data-lang-key="try-saas"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+          </svg>
+          体验SaaS云服务
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 中英文对照表
+    const translations = {
+      'zh': {
+        'company-deployment': '企业私有化部署',
+        'data-security': '数据安全私密，企业自主掌控',
+        'admin-notice': '管理员须知',
+        'notice-1': '完成注册后可免费申请试用授权文件',
+        'notice-2': '安装部署服务端输入人工授权文件即可使用',
+        'trial-instructions': '试用说明',
+        'trial-1': '试用版与正式版功能相同，有效期 14 天',
+        'trial-2': '部分功能暂停及第三方平台，可自行创建或联系客服产品经理',
+        'trial-3': '正式版支持月度年度续约，拥有专属服务限制和售后维护服务，可联系客户经理购买。',
+        'free-trial': '申请免费试用',
+        'email': '邮箱',
+        'verification-code': '验证码',
+        'get-code': '获取验证码',
+        'login-register': '登录/注册',
+        'currentLang': '中文',
+        'saas-alternative': '想要更快开始？',
+        'saas-description': '无需部署，立即使用云端SaaS服务',
+        'try-saas': '体验SaaS云服务'
+      },
+      'en': {
+        'company-deployment': 'Enterprise Private Deployment',
+        'data-security': 'Secure data privacy, enterprise self-control',
+        'admin-notice': 'Administrator Notice',
+        'notice-1': 'After registration, you can apply for a free trial authorization file',
+        'notice-2': 'Install the server and enter the authorization file to use',
+        'trial-instructions': 'Trial Instructions',
+        'trial-1': 'The trial version has the same features as the official version, valid for 14 days',
+        'trial-2': 'Some features and third-party platforms are suspended, you can create them yourself or contact customer service',
+        'trial-3': 'The official version supports monthly and yearly renewal, with exclusive service and maintenance support.',
+        'free-trial': 'Apply for Free Trial',
+        'email': 'Email',
+        'verification-code': 'Verification Code',
+        'get-code': 'Get Code',
+        'login-register': 'Login/Register',
+        'currentLang': 'English',
+        'saas-alternative': 'Want to get started faster?',
+        'saas-description': 'Use the cloud SaaS service without deployment',
+        'try-saas': 'Experience SaaS Cloud Service'
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const zhBtn = document.getElementById('zhBtn');
+      const enBtn = document.getElementById('enBtn');
+      let currentLang = localStorage.getItem('selectedLanguage') || 'zh';
+      
+      // 设置当前语言按钮样式
+      function updateButtonStyles() {
+        if (currentLang === 'zh') {
+          zhBtn.classList.add('bg-blue-50', 'border-blue-300', 'text-blue-700');
+          enBtn.classList.remove('bg-blue-50', 'border-blue-300', 'text-blue-700');
+        } else {
+          enBtn.classList.add('bg-blue-50', 'border-blue-300', 'text-blue-700');
+          zhBtn.classList.remove('bg-blue-50', 'border-blue-300', 'text-blue-700');
+        }
+      }
+      
+      // 应用当前语言
+      function applyLanguage() {
+        updateButtonStyles();
+        document.querySelectorAll('[data-lang-key]').forEach(element => {
+          const key = element.getAttribute('data-lang-key');
+          if (translations[currentLang][key]) {
+            element.textContent = translations[currentLang][key];
+          }
+        });
+      }
+      
+      // 初始化应用语言
+      applyLanguage();
+      
+      // 语言按钮点击事件
+      zhBtn.addEventListener('click', function() {
+        currentLang = 'zh';
+        localStorage.setItem('selectedLanguage', currentLang);
+        applyLanguage();
+      });
+      
+      enBtn.addEventListener('click', function() {
+        currentLang = 'en';
+        localStorage.setItem('selectedLanguage', currentLang);
+        applyLanguage();
+      });
+      
+      // 获取验证码按钮点击事件
+      const verificationBtn = document.getElementById('verificationBtn');
+      verificationBtn.addEventListener('click', function() {
+        const emailInput = document.getElementById('email');
+        if (!emailInput.value) {
+          alert(currentLang === 'zh' ? '请先输入邮箱地址' : 'Please enter your email address first');
+          return;
+        }
+        
+        let countdown = 60;
+        verificationBtn.disabled = true;
+        verificationBtn.classList.add('bg-gray-400', 'hover:bg-gray-400');
+        verificationBtn.classList.remove('bg-blue-500', 'hover:bg-blue-600');
+        verificationBtn.innerText = currentLang === 'zh' ? `${countdown}秒后重新获取` : `${countdown}s to resend`;
+        
+        const timer = setInterval(() => {
+          countdown--;
+          verificationBtn.innerText = currentLang === 'zh' ? `${countdown}秒后重新获取` : `${countdown}s to resend`;
+          
+          if (countdown <= 0) {
+            clearInterval(timer);
+            verificationBtn.disabled = false;
+            verificationBtn.classList.remove('bg-gray-400', 'hover:bg-gray-400');
+            verificationBtn.classList.add('bg-blue-500', 'hover:bg-blue-600');
+            verificationBtn.innerText = currentLang === 'zh' ? '获取验证码' : 'Get Code';
+          }
+        }, 1000);
+      });
+      
+      // 表单提交事件，确保将当前语言传递给下一个页面
+      const form = document.querySelector('form');
+      form.addEventListener('submit', function(e) {
+        // 将表单提交目标修改为带有语言参数的URL
+        const targetUrl = `application.html?lang=${currentLang}`;
+        form.setAttribute('action', targetUrl);
+      });
+    });
+  </script>
+</body>
+</html> 

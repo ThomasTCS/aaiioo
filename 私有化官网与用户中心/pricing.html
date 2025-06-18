@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AIOChat - 产品定价</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .bg-primary { background-color: #247CFF; }
+    .text-primary { color: #247CFF; }
+    .border-primary { border-color: #247CFF; }
+    .hover\:bg-primary:hover { background-color: #1E6BDB; }
+    .hover\:text-primary:hover { color: #247CFF; }
+    .hover\:border-primary:hover { border-color: #247CFF; }
+    .bg-primary-50 { background-color: #EBF5FF; }
+    .bg-primary-100 { background-color: #DBEAFE; }
+    .text-primary-600 { color: #1E6BDB; }
+    .text-primary-800 { color: #1E40AF; }
+  </style>
+</head>
+<body>
+  <!-- 导航栏 -->
+  <header class="bg-white shadow-sm">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+      <div class="flex items-center">
+        <img src="../私有化官网与用户中心/images/aio-logo_kxblvp.png.png" alt="AIOChat Logo" class="h-8 w-8 mr-2">
+        <span class="text-xl font-bold text-gray-800">AIOChat</span>
+      </div>
+      <nav class="hidden md:flex space-x-8">
+        <a href="home.html" class="text-gray-600 hover:text-gray-900">首页</a>
+        <a href="product.html" class="text-gray-600 hover:text-gray-900">产品介绍</a>
+        <a href="pricing.html" class="text-primary font-medium border-b-2 border-primary pb-1">产品定价</a>
+        <a href="index.html" class="text-gray-600 hover:text-gray-900">私有化服务</a>
+        <a href="#" class="text-gray-600 hover:text-gray-900">解决方案</a>
+      </nav>
+      <div class="flex items-center">
+        <div class="relative">
+          <a href="#" id="loginButton" class="px-4 py-2 text-gray-600 hover:text-gray-900 transition duration-150">登录</a>
+          <div id="loginDropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden z-10 border border-gray-100">
+            <a href="saas-login.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-primary">SaaS 云服务</a>
+            <a href="private-login.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-primary">私有化服务</a>
+          </div>
+        </div>
+        <a href="saas-login.html" class="ml-4 px-4 py-2 bg-primary text-white rounded hover:bg-primary transition duration-150">免费试用</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 头部横幅 -->
+  <section class="py-16 bg-gradient-to-br from-blue-50 to-white relative overflow-hidden">
+    <div class="absolute inset-0 opacity-5">
+      <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2015&h=1200&q=80" alt="Background" class="w-full h-full object-cover">
+    </div>
+    <div class="container mx-auto px-4 text-center relative z-10">
+      <h1 class="text-5xl font-bold mb-6">产品定价</h1>
+      <p class="text-xl text-gray-600 mb-8">灵活的定价方案，满足不同规模企业的需求</p>
+      
+      <!-- 服务类型切换 -->
+      <div class="flex justify-center mb-8">
+        <div class="bg-gray-100 rounded-lg p-1 flex">
+          <button id="saasTab" class="px-8 py-3 rounded-md bg-white shadow-sm text-primary-600 font-medium transition">SaaS 服务</button>
+          <button id="privateTab" class="px-8 py-3 rounded-md text-gray-600 font-medium transition">私有化部署</button>
+        </div>
+      </div>
+      
+      <!-- 计费周期切换（仅在SaaS服务中显示） -->
+      <div id="billingToggle" class="flex justify-center mb-8 hidden">
+        <div class="bg-gray-100 rounded-lg p-1 flex">
+          <button id="monthlyBtn" class="px-6 py-2 rounded-md bg-white shadow-sm text-primary-600 font-medium transition">按月付费</button>
+          <button id="yearlyBtn" class="px-6 py-2 rounded-md text-gray-600 font-medium transition">按年付费 <span class="text-sm bg-primary-100 text-primary-600 px-2 py-1 rounded-full ml-1">省20%</span></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SaaS 服务定价 -->
+  <section id="saasContent" class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        
+        <!-- 免费版 -->
+        <div class="bg-white border border-gray-200 rounded-xl p-8 shadow-lg hover:shadow-xl transition">
+          <div class="text-center mb-8">
+            <h3 class="text-2xl font-bold mb-2">免费版</h3>
+            <p class="text-gray-600 mb-6">适合小型企业和个人使用</p>
+            <div class="mb-6">
+              <span class="text-4xl font-bold monthly-price">¥0</span>
+              <span class="text-4xl font-bold yearly-price hidden">¥0</span>
+              <span class="text-gray-500">/月</span>
+            </div>
+            <a href="saas-login.html" class="w-full bg-gray-100 text-gray-700 py-3 px-6 rounded-lg hover:bg-gray-200 transition font-medium inline-block">
+              免费使用
+            </a>
+          </div>
+          
+          <div class="space-y-4">
+            <div class="flex items-center">
+              <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span>1个客服坐席</span>
+            </div>
+            <div class="flex items-center">
+              <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span>3个社媒账号</span>
+            </div>
+            <div class="flex items-center">
+              <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span>10000个翻译字符数</span>
+            </div>
+            <div class="flex items-center">
+              <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span>基础知识库</span>
+            </div>
+            <div class="flex items-center">
+              <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span>基础数据统计</span>
+            </div>
+            <div class="flex items-center">
+              <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span>多渠道接入</span>
+            </div>
+            <div class="flex items-center text-gray-400">
+              <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+              <span>API接口</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 专业版 -->
+        <div class="bg-white border-2 border-primary rounded-xl p-8 shadow-xl transform scale-105 relative">
+          <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            <span class="bg-primary text-white px-4 py-1 rounded-full text-sm font-medium">推荐</span>
+          </div>
+          
+          <div class="text-center mb-8">
+            <h3 class="text-2xl font-bold mb-2">专业版</h3>
+            <p class="text-gray-600 mb-6">适合中型企业，功能更全面</p>
+            <div class="mb-6">
+              <span class="text-4xl font-bold text-primary-600 monthly-price">¥299</span>
+              <span class="text-4xl font-bold text-primary-600 yearly-price hidden">¥239</span>
+              <span class="text-gray-500">/月</span>
+            </div>
+            <a href="saas-login.html" class="w-full bg-primary text-white py-3 px-6 rounded-lg hover:bg-primary transition font-medium inline-block">
+              立即订购
+            </a>
+          </div>
+          
+          <div class="space-y-4">
+            <div class="flex items-center">
+              <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span>5个客服坐席</span>
+            </div>
+            <div class="flex items-center">
+              <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span>高级知识库</span>
+            </div>
+            <div class="flex items-center">
+              <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span>高级数据统计</span>
+            </div>
+            <div class="flex items-center">
+              <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span>多渠道接入</span>
+            </div>
+            <div class="flex items-center">
+              <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span>API接口</span>
+            </div>
+            <div class="flex items-center">
+              <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span>在线客服支持</span>
+            </div>
+            <div class="flex items-center text-gray-400">
+              <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+              <span>定制开发</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 企业版 -->
+        <div class="bg-white border border-gray-200 rounded-xl p-8 shadow-lg hover:shadow-xl transition">
+          <div class="text-center mb-8">
+            <h3 class="text-2xl font-bold mb-2">企业版</h3>
+            <p class="text-gray-600 mb-6">适合大型企业，提供全套解决方案</p>
+            <div class="mb-6">
+              <span class="text-4xl font-bold monthly-price">¥999</span>
+              <span class="text-4xl font-bold yearly-price hidden">¥799</span>
+              <span class="text-gray-500">/月</span>
+            </div>
+            <a href="saas-login.html" class="w-full bg-gray-800 text-white py-3 px-6 rounded-lg hover:bg-gray-900 transition font-medium inline-block">
+              立即订购
+            </a>
+          </div>
+          
+          <div class="space-y-4">
+            <div class="flex items-center">
+              <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span>不限客服坐席</span>
+            </div>
+            <div class="flex items-center">
+              <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span>企业级知识库</span>
+            </div>
+            <div class="flex items-center">
+              <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span>企业级数据统计</span>
+            </div>
+            <div class="flex items-center">
+              <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span>全渠道接入</span>
+            </div>
+            <div class="flex items-center">
+              <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span>完整API接口</span>
+            </div>
+            <div class="flex items-center">
+              <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span>专属客户经理</span>
+            </div>
+            <div class="flex items-center">
+              <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span>定制开发服务</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 私有化服务定价 -->
+  <section id="privateContent" class="py-16 bg-white hidden">
+    <div class="container mx-auto px-4">
+      <div class="max-w-6xl mx-auto">
+        <!-- 私有化部署方案 -->
+        <div class="max-w-5xl mx-auto mb-16">
+          <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold mb-4">私有化部署方案</h2>
+            <p class="text-xl text-gray-600">为企业提供独立部署的解决方案，数据完全可控</p>
+          </div>
+          
+          <div class="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+            <!-- 价格标题区域 -->
+            <div class="bg-gradient-to-br from-blue-500 to-blue-700 text-white p-8" style="background: linear-gradient(135deg, #247CFF 0%, #1E6BDB 100%);">
+              <div class="text-center">
+                <h3 class="text-3xl font-bold mb-4 text-white">私有化授权服务费</h3>
+                <p class="text-lg mb-6 text-white opacity-90">部署在您的服务器，完全控制数据安全</p>
+                <div class="text-center mb-6">
+                  <div class="text-white">
+                    <span class="text-5xl font-bold">¥88,000</span>
+                    <span class="text-xl opacity-90"> / 年</span>
+                  </div>
+                </div>
+                <p class="text-lg text-white opacity-90">包含系统功能、安装部署、培训支持、技术维护等全套服务</p>
+              </div>
+            </div>
+            
+            <!-- 功能详情区域 -->
+            <div class="p-8">
+              <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div>
+                  <h4 class="text-xl font-bold mb-4 text-primary">包含功能</h4>
+                  <ul class="space-y-3">
+                    <li class="flex items-center">
+                      <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                      </svg>
+                      <span>全功能模块</span>
+                    </li>
+                    <li class="flex items-center">
+                      <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                      </svg>
+                      <span>客服坐席无上限</span>
+                    </li>
+                    <li class="flex items-center">
+                      <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                      </svg>
+                      <span>全平台渠道</span>
+                    </li>
+                    <li class="flex items-center">
+                      <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                      </svg>
+                      <span>完整系统服务</span>
+                    </li>
+                  </ul>
+                </div>
+                
+                <div>
+                  <h4 class="text-xl font-bold mb-4 text-primary">部署服务</h4>
+                  <ul class="space-y-3">
+                    <li class="flex items-center">
+                      <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                      </svg>
+                      <span>远程部署指导</span>
+                    </li>
+                    <li class="flex items-center">
+                      <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                      </svg>
+                      <span>系统环境配置</span>
+                    </li>
+                    <li class="flex items-center">
+                      <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                      </svg>
+                      <span>数据隐私安全</span>
+                    </li>
+                    <li class="flex items-center">
+                      <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                      </svg>
+                      <span>技术培训</span>
+                    </li>
+                  </ul>
+                </div>
+                
+                <div>
+                  <h4 class="text-xl font-bold mb-4 text-primary">持续支持</h4>
+                  <ul class="space-y-3">
+                    <li class="flex items-center">
+                      <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                      </svg>
+                      <span>7x24 企业服务</span>
+                    </li>
+                    <li class="flex items-center">
+                      <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                      </svg>
+                      <span>一对一技术支持</span>
+                    </li>
+                    <li class="flex items-center">
+                      <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                      </svg>
+                      <span>系统维护</span>
+                    </li>
+                    <li class="flex items-center">
+                      <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                      </svg>
+                      <span>技术咨询</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div class="text-center mt-8 pt-8 border-t border-gray-200">
+                <a href="index.html" class="inline-block bg-primary text-white px-8 py-3 rounded-lg hover:bg-primary transition font-medium mr-4">
+                  了解私有化部署详情
+                </a>
+                <a href="login.html" class="inline-block border-2 border-primary text-primary px-8 py-3 rounded-lg hover:bg-primary hover:text-white transition font-medium">
+                  立即咨询报价
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 资费详情 -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+          <!-- 坐席资费 -->
+          <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-lg">
+            <div class="text-center mb-6">
+              <div class="w-16 h-16 bg-primary rounded-lg flex items-center justify-center mx-auto mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
+                </svg>
+              </div>
+              <h4 class="text-xl font-bold mb-2">坐席资费</h4>
+              <p class="text-gray-600 text-sm">按坐席数量分级计费</p>
+            </div>
+            <div class="text-center py-8">
+              <div class="text-3xl font-bold text-primary mb-1">¥12.00</div>
+              <div class="text-sm text-gray-500 mb-2">/ 个 起</div>
+              <p class="text-gray-600">根据坐席数量灵活计费</p>
+            </div>
+          </div>
+
+          <!-- 社媒账号资费 -->
+          <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-lg">
+            <div class="text-center mb-6">
+              <div class="w-16 h-16 bg-green-500 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a2 2 0 01-2-2v-6a2 2 0 012-2h8z" />
+                </svg>
+              </div>
+              <h4 class="text-xl font-bold mb-2">社媒账号资费</h4>
+              <p class="text-gray-600 text-sm">支持多平台社交媒体接入</p>
+            </div>
+            <div class="text-center py-8">
+              <div class="text-3xl font-bold text-green-600 mb-1">¥12.00</div>
+              <div class="text-sm text-gray-500 mb-2">/ 个 起</div>
+              <p class="text-gray-600">根据账号数量灵活计费</p>
+            </div>
+          </div>
+
+          <!-- 翻译字符数资费 -->
+          <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-lg">
+            <div class="text-center mb-6">
+              <div class="w-16 h-16 bg-purple-500 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+                </svg>
+              </div>
+              <h4 class="text-xl font-bold mb-2">翻译字符数</h4>
+              <p class="text-gray-600 text-sm">多语言翻译服务支持</p>
+            </div>
+            <div class="text-center py-8">
+              <div class="text-3xl font-bold text-purple-600 mb-1">¥100.00</div>
+              <div class="text-sm text-gray-500 mb-2">/ 1 万个字符 起</div>
+              <p class="text-gray-600">根据字符数量灵活计费</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 在线订购按钮 -->
+        <div class="text-center">
+          <div class="bg-gray-50 rounded-xl p-8">
+            <h3 class="text-2xl font-bold mb-4">准备开始私有化部署？</h3>
+            <p class="text-gray-600 mb-6">根据您的需求选择合适的权益配置，立即开始您的业务</p>
+            <a href="index.html" class="inline-block px-8 py-4 border-2 border-primary text-primary rounded-lg hover:bg-primary hover:text-white transition shadow-lg hover:shadow-xl transform hover:-translate-y-1 font-medium text-lg mr-4">
+              立即安装部署
+            </a>
+            <a href="private-login.html" class="inline-block px-8 py-4 bg-primary text-white rounded-lg hover:bg-primary transition shadow-lg hover:shadow-xl transform hover:-translate-y-1 font-medium text-lg">
+              立即在线订购
+            </a>
+            <p class="mt-4 text-sm text-gray-500 hidden">点击后将跳转到登录页面完成订购流程</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 功能对比表 -->
+  <section class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-bold mb-4">详细功能对比</h2>
+        <p class="text-xl text-gray-600">选择最适合您企业需求的版本</p>
+      </div>
+      
+      <div class="overflow-x-auto">
+        <table class="w-full max-w-6xl mx-auto border-collapse bg-white rounded-lg shadow-lg overflow-hidden">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="text-left p-4 font-semibold">功能特性</th>
+              <th class="text-center p-4 font-semibold">免费版</th>
+              <th class="text-center p-4 font-semibold bg-primary-50">专业版</th>
+              <th class="text-center p-4 font-semibold">企业版</th>
+              <th class="text-center p-4 font-semibold">私有化版</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200">
+            <tr>
+              <td class="p-4 font-medium">客服坐席数</td>
+              <td class="p-4 text-center">1个</td>
+              <td class="p-4 text-center bg-primary-50">5个</td>
+              <td class="p-4 text-center">不限</td>
+              <td class="p-4 text-center">不限</td>
+            </tr>
+            <tr>
+              <td class="p-4 font-medium">知识库存储</td>
+              <td class="p-4 text-center">100MB</td>
+              <td class="p-4 text-center bg-primary-50">1GB</td>
+              <td class="p-4 text-center">10GB</td>
+              <td class="p-4 text-center">不限</td>
+            </tr>
+            <tr>
+              <td class="p-4 font-medium">多渠道接入</td>
+              <td class="p-4 text-center">✅</td>
+              <td class="p-4 text-center bg-primary-50">✅</td>
+              <td class="p-4 text-center">✅</td>
+              <td class="p-4 text-center">✅</td>
+            </tr>
+            <tr>
+              <td class="p-4 font-medium">API接口</td>
+              <td class="p-4 text-center">❌</td>
+              <td class="p-4 text-center bg-primary-50">✅</td>
+              <td class="p-4 text-center">✅</td>
+              <td class="p-4 text-center">✅</td>
+            </tr>
+            <tr>
+              <td class="p-4 font-medium">数据分析报表</td>
+              <td class="p-4 text-center">基础</td>
+              <td class="p-4 text-center bg-primary-50">高级</td>
+              <td class="p-4 text-center">完整</td>
+              <td class="p-4 text-center">完整</td>
+            </tr>
+            <tr>
+              <td class="p-4 font-medium">定制开发</td>
+              <td class="p-4 text-center">❌</td>
+              <td class="p-4 text-center bg-primary-50">❌</td>
+              <td class="p-4 text-center">✅</td>
+              <td class="p-4 text-center">✅</td>
+            </tr>
+            <tr>
+              <td class="p-4 font-medium">数据安全性</td>
+              <td class="p-4 text-center">标准</td>
+              <td class="p-4 text-center bg-primary-50">增强</td>
+              <td class="p-4 text-center">企业级</td>
+              <td class="p-4 text-center">最高</td>
+            </tr>
+            <tr>
+              <td class="p-4 font-medium">技术支持</td>
+              <td class="p-4 text-center">社区支持</td>
+              <td class="p-4 text-center bg-primary-50">在线客服</td>
+              <td class="p-4 text-center">专属经理</td>
+              <td class="p-4 text-center">7x24专属</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- 常见问题 -->
+  <section class="py-16 bg-gray-50">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-bold mb-4">定价常见问题</h2>
+        <p class="text-xl text-gray-600">解答您关于定价的疑问</p>
+      </div>
+      
+      <div class="max-w-4xl mx-auto space-y-6">
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <h3 class="font-semibold mb-3">可以免费试用吗？</h3>
+          <p class="text-gray-600">所有版本都提供14天免费试用，无需绑定信用卡，试用期内可以体验完整功能。</p>
+        </div>
+        
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <h3 class="font-semibold mb-3">支持哪些付款方式？</h3>
+          <p class="text-gray-600">支持银行转账、支付宝、微信支付等多种付款方式。企业客户可申请月度或季度付款。</p>
+        </div>
+        
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <h3 class="font-semibold mb-3">可以随时升级或降级套餐吗？</h3>
+          <p class="text-gray-600">可以随时升级套餐，降级需要在当前计费周期结束前申请，次月生效。</p>
+        </div>
+        
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <h3 class="font-semibold mb-3">私有化部署包含哪些服务？</h3>
+          <p class="text-gray-600">包含完整源码、部署指导、技术培训、一年免费更新和7x24技术支持。</p>
+        </div>
+        
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <h3 class="font-semibold mb-3">超出套餐限制怎么办？</h3>
+          <p class="text-gray-600">超出部分按量计费，或可升级到更高版本。我们会提前通知您接近限制。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 底部CTA -->
+  <section class="py-16 bg-primary text-white">
+    <div class="container mx-auto px-4 text-center">
+      <h2 class="text-4xl font-bold mb-6">准备开始了吗？</h2>
+      <p class="text-xl mb-8 opacity-90">选择适合您的套餐，立即开启智能客服之旅</p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <a href="saas-login.html" class="px-8 py-4 bg-white text-primary rounded-lg hover:bg-gray-100 transition shadow-lg hover:shadow-xl transform hover:-translate-y-1 font-medium">
+          免费试用
+        </a>
+        <a href="#" class="px-8 py-4 border-2 border-white text-white rounded-lg hover:bg-white hover:text-primary transition font-medium">
+          联系销售
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 页脚 -->
+  <footer class="py-8 bg-gray-100">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-wrap justify-between">
+        <div class="w-full md:w-1/4 mb-6 md:mb-0">
+          <div class="flex items-center mb-4">
+            <img src="../私有化官网与用户中心/images/aio-logo_kxblvp.png.png" alt="AIOChat Logo" class="h-8 w-8 mr-2">
+            <span class="text-xl font-bold">AIOChat</span>
+          </div>
+          <p class="text-gray-600 text-sm">专业的AI智能客服系统，为企业提供定制化智能对话解决方案</p>
+        </div>
+        
+        <div class="w-full md:w-2/3">
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div>
+              <h4 class="font-semibold mb-3">产品</h4>
+              <ul class="space-y-2 text-sm text-gray-600">
+                <li><a href="product.html" class="hover:text-primary">产品介绍</a></li>
+                <li><a href="pricing.html" class="hover:text-primary">产品定价</a></li>
+                <li><a href="index.html" class="hover:text-primary">私有化服务</a></li>
+                <li><a href="#" class="hover:text-primary">API接口</a></li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 class="font-semibold mb-3">解决方案</h4>
+              <ul class="space-y-2 text-sm text-gray-600">
+                <li><a href="#" class="hover:text-primary">金融行业</a></li>
+                <li><a href="#" class="hover:text-primary">电商零售</a></li>
+                <li><a href="#" class="hover:text-primary">教育培训</a></li>
+                <li><a href="#" class="hover:text-primary">医疗健康</a></li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 class="font-semibold mb-3">支持</h4>
+              <ul class="space-y-2 text-sm text-gray-600">
+                <li><a href="#" class="hover:text-primary">帮助中心</a></li>
+                <li><a href="#" class="hover:text-primary">开发文档</a></li>
+                <li><a href="#" class="hover:text-primary">API文档</a></li>
+                <li><a href="#" class="hover:text-primary">常见问题</a></li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 class="font-semibold mb-3">关于我们</h4>
+              <ul class="space-y-2 text-sm text-gray-600">
+                <li><a href="#" class="hover:text-primary">公司简介</a></li>
+                <li><a href="#" class="hover:text-primary">联系我们</a></li>
+                <li><a href="#" class="hover:text-primary">加入我们</a></li>
+                <li><a href="#" class="hover:text-primary">隐私政策</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="mt-8 pt-8 border-t border-gray-200 text-sm text-gray-600 text-center">
+        <p>© 2023 AIOChat. 保留所有权利</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 登录下拉菜单交互
+      const loginButton = document.getElementById('loginButton');
+      const loginDropdown = document.getElementById('loginDropdown');
+      
+      if (loginButton && loginDropdown) {
+        loginButton.addEventListener('click', function(e) {
+          e.preventDefault();
+          loginDropdown.classList.toggle('hidden');
+          loginButton.classList.toggle('text-primary');
+        });
+        
+        document.addEventListener('click', function(e) {
+          if (!loginButton.contains(e.target) && !loginDropdown.contains(e.target)) {
+            loginDropdown.classList.add('hidden');
+            loginButton.classList.remove('text-primary');
+          }
+        });
+      }
+      
+      // Tab切换功能
+      const saasTab = document.getElementById('saasTab');
+      const privateTab = document.getElementById('privateTab');
+      const saasContent = document.getElementById('saasContent');
+      const privateContent = document.getElementById('privateContent');
+      const billingToggle = document.getElementById('billingToggle');
+      
+      // 默认显示SaaS服务
+      function showSaasContent() {
+        saasTab.classList.add('bg-white', 'shadow-sm', 'text-primary-600');
+        saasTab.classList.remove('text-gray-600');
+        privateTab.classList.remove('bg-white', 'shadow-sm', 'text-primary-600');
+        privateTab.classList.add('text-gray-600');
+        
+        saasContent.classList.remove('hidden');
+        privateContent.classList.add('hidden');
+        // billingToggle.classList.remove('hidden'); // 保持隐藏
+      }
+      
+      function showPrivateContent() {
+        privateTab.classList.add('bg-white', 'shadow-sm', 'text-primary-600');
+        privateTab.classList.remove('text-gray-600');
+        saasTab.classList.remove('bg-white', 'shadow-sm', 'text-primary-600');
+        saasTab.classList.add('text-gray-600');
+        
+        privateContent.classList.remove('hidden');
+        saasContent.classList.add('hidden');
+        billingToggle.classList.add('hidden');
+      }
+      
+      // 初始化默认状态
+      showSaasContent();
+      
+      saasTab.addEventListener('click', showSaasContent);
+      privateTab.addEventListener('click', showPrivateContent);
+      
+      // 价格切换功能（仅在SaaS服务中生效）
+      const monthlyBtn = document.getElementById('monthlyBtn');
+      const yearlyBtn = document.getElementById('yearlyBtn');
+      const monthlyPrices = document.querySelectorAll('.monthly-price');
+      const yearlyPrices = document.querySelectorAll('.yearly-price');
+      
+      if (monthlyBtn && yearlyBtn) {
+        monthlyBtn.addEventListener('click', function() {
+          monthlyBtn.classList.add('bg-white', 'shadow-sm', 'text-primary-600');
+          monthlyBtn.classList.remove('text-gray-600');
+          yearlyBtn.classList.remove('bg-white', 'shadow-sm', 'text-primary-600');
+          yearlyBtn.classList.add('text-gray-600');
+          
+          monthlyPrices.forEach(price => price.classList.remove('hidden'));
+          yearlyPrices.forEach(price => price.classList.add('hidden'));
+        });
+        
+        yearlyBtn.addEventListener('click', function() {
+          yearlyBtn.classList.add('bg-white', 'shadow-sm', 'text-primary-600');
+          yearlyBtn.classList.remove('text-gray-600');
+          monthlyBtn.classList.remove('bg-white', 'shadow-sm', 'text-primary-600');
+          monthlyBtn.classList.add('text-gray-600');
+          
+          yearlyPrices.forEach(price => price.classList.remove('hidden'));
+          monthlyPrices.forEach(price => price.classList.add('hidden'));
+        });
+      }
+    });
+  </script>
+</body>
+</html> 

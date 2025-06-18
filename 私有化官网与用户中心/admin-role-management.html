@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>角色管理 - AIO 运营平台</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-6">
+    <div class="max-w-[90%] mx-auto">
+        <!-- 筛选栏 -->
+        <div class="bg-white rounded-lg shadow-sm p-4 mb-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">角色名称</label>
+                        <input type="text" placeholder="搜索角色名称" class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">更新时间</label>
+                        <input type="date" class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button class="bg-blue-500 text-white px-4 py-2 rounded text-sm hover:bg-blue-600 transition duration-200">
+                        搜索
+                    </button>
+                    <button class="bg-gray-500 text-white px-4 py-2 rounded text-sm hover:bg-gray-600 transition duration-200">
+                        重置
+                    </button>
+                    <button class="bg-green-500 text-white px-4 py-2 rounded text-sm hover:bg-green-600 transition duration-200" onclick="openAddModal()">
+                        添加角色
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 角色列表 -->
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">角色</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">备注</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">更新时间</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">操作</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200" id="roleTable">
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">超级管理员</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">拥有所有权限的系统管理员</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2024-01-01 00:00:00</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <span class="text-gray-400">不可操作</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">运营管理员</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">负责客户管理、订单管理等运营相关功能</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2024-11-30 14:20:00</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                            <button class="text-blue-600 hover:text-blue-900" onclick="openEditModal('2')">编辑</button>
+                            <button class="text-red-600 hover:text-red-900" onclick="deleteRole('2')">删除</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">销售管理员</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">负责销售管理、客户跟进等销售相关功能</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2024-11-28 10:15:00</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                            <button class="text-blue-600 hover:text-blue-900" onclick="openEditModal('3')">编辑</button>
+                            <button class="text-red-600 hover:text-red-900" onclick="deleteRole('3')">删除</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-orange-100 text-orange-800">客服管理员</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">负责客户服务、工单处理等客服相关功能</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2024-11-25 16:30:00</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                            <button class="text-blue-600 hover:text-blue-900" onclick="openEditModal('4')">编辑</button>
+                            <button class="text-red-600 hover:text-red-900" onclick="deleteRole('4')">删除</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 添加/编辑角色弹窗 -->
+    <div id="roleModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen">
+            <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 id="modalTitle" class="text-lg font-semibold text-gray-800">添加角色</h3>
+                    <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600">✕</button>
+                </div>
+                
+                <form id="roleForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">角色名称</label>
+                        <input type="text" id="roleName" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">角色描述</label>
+                        <textarea id="roleNote" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="请描述该角色的职责和权限范围..." required></textarea>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-3">权限配置</label>
+                        <div class="space-y-4">
+                            <!-- 客户管理权限 -->
+                            <div class="border rounded-lg p-4">
+                                <div class="flex items-center mb-2">
+                                    <input type="checkbox" id="customerManage" class="mr-2">
+                                    <label for="customerManage" class="font-medium text-gray-700">客户管理</label>
+                                </div>
+                                <div class="ml-6 space-y-1">
+                                    <label class="flex items-center text-sm">
+                                        <input type="checkbox" class="mr-2 customer-sub-perm" data-parent="customerManage">
+                                        <span>私有化客户管理</span>
+                                    </label>
+                                    <label class="flex items-center text-sm">
+                                        <input type="checkbox" class="mr-2 customer-sub-perm" data-parent="customerManage">
+                                        <span>SaaS客户管理</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- 订单管理权限 -->
+                            <div class="border rounded-lg p-4">
+                                <div class="flex items-center mb-2">
+                                    <input type="checkbox" id="orderManage" class="mr-2">
+                                    <label for="orderManage" class="font-medium text-gray-700">订单管理</label>
+                                </div>
+                                <div class="ml-6 space-y-1">
+                                    <label class="flex items-center text-sm">
+                                        <input type="checkbox" class="mr-2 order-sub-perm" data-parent="orderManage">
+                                        <span>私有化订单管理</span>
+                                    </label>
+                                    <label class="flex items-center text-sm">
+                                        <input type="checkbox" class="mr-2 order-sub-perm" data-parent="orderManage">
+                                        <span>SaaS订单管理</span>
+                                    </label>
+                                    <label class="flex items-center text-sm">
+                                        <input type="checkbox" class="mr-2 order-sub-perm" data-parent="orderManage">
+                                        <span>订单审核</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- 销售管理权限 -->
+                            <div class="border rounded-lg p-4">
+                                <div class="flex items-center mb-2">
+                                    <input type="checkbox" id="salesManage" class="mr-2">
+                                    <label for="salesManage" class="font-medium text-gray-700">销售管理</label>
+                                </div>
+                                <div class="ml-6 space-y-1">
+                                    <label class="flex items-center text-sm">
+                                        <input type="checkbox" class="mr-2 sales-sub-perm" data-parent="salesManage">
+                                        <span>销售人员管理</span>
+                                    </label>
+                                    <label class="flex items-center text-sm">
+                                        <input type="checkbox" class="mr-2 sales-sub-perm" data-parent="salesManage">
+                                        <span>License管理</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- 系统管理权限 -->
+                            <div class="border rounded-lg p-4">
+                                <div class="flex items-center mb-2">
+                                    <input type="checkbox" id="systemManage" class="mr-2">
+                                    <label for="systemManage" class="font-medium text-gray-700">系统管理</label>
+                                </div>
+                                <div class="ml-6 space-y-1">
+                                    <label class="flex items-center text-sm">
+                                        <input type="checkbox" class="mr-2 system-sub-perm" data-parent="systemManage">
+                                        <span>账号管理</span>
+                                    </label>
+                                    <label class="flex items-center text-sm">
+                                        <input type="checkbox" class="mr-2 system-sub-perm" data-parent="systemManage">
+                                        <span>角色管理</span>
+                                    </label>
+                                    <label class="flex items-center text-sm">
+                                        <input type="checkbox" class="mr-2 system-sub-perm" data-parent="systemManage">
+                                        <span>权益管理</span>
+                                    </label>
+                                    <label class="flex items-center text-sm">
+                                        <input type="checkbox" class="mr-2 system-sub-perm" data-parent="systemManage">
+                                        <span>费用管理</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button onclick="closeModal()" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">取消</button>
+                    <button onclick="saveRole()" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isEditMode = false;
+        let currentRoleId = '';
+
+        // 角色数据
+        const roleData = {
+            '1': {
+                name: '超级管理员',
+                note: '拥有所有权限的系统管理员',
+                isSuperAdmin: true,
+                permissions: ['all']
+            },
+            '2': {
+                name: '运营管理员',
+                note: '负责客户管理、订单管理等运营相关功能',
+                permissions: ['customerManage', 'orderManage']
+            },
+            '3': {
+                name: '销售管理员',
+                note: '负责销售管理、客户跟进等销售相关功能',
+                permissions: ['customerManage', 'salesManage']
+            },
+            '4': {
+                name: '客服管理员',
+                note: '负责客户服务、工单处理等客服相关功能',
+                permissions: ['customerManage']
+            }
+        };
+
+        // 初始化权限联动
+        document.addEventListener('DOMContentLoaded', function() {
+            // 主权限复选框变化时，控制子权限
+            const mainPermissions = ['customerManage', 'orderManage', 'salesManage', 'systemManage'];
+            mainPermissions.forEach(perm => {
+                const mainCheckbox = document.getElementById(perm);
+                const subCheckboxes = document.querySelectorAll(`[data-parent="${perm}"]`);
+                
+                mainCheckbox.addEventListener('change', function() {
+                    subCheckboxes.forEach(sub => {
+                        sub.checked = this.checked;
+                    });
+                });
+                
+                // 子权限变化时，控制主权限
+                subCheckboxes.forEach(sub => {
+                    sub.addEventListener('change', function() {
+                        const allSubChecked = Array.from(subCheckboxes).every(cb => cb.checked);
+                        const anySubChecked = Array.from(subCheckboxes).some(cb => cb.checked);
+                        
+                        mainCheckbox.checked = allSubChecked;
+                        mainCheckbox.indeterminate = anySubChecked && !allSubChecked;
+                    });
+                });
+            });
+        });
+
+        // 打开添加弹窗
+        function openAddModal() {
+            isEditMode = false;
+            document.getElementById('modalTitle').textContent = '添加角色';
+            clearForm();
+            document.getElementById('roleModal').classList.remove('hidden');
+        }
+
+        // 打开编辑弹窗
+        function openEditModal(roleId) {
+            isEditMode = true;
+            currentRoleId = roleId;
+            document.getElementById('modalTitle').textContent = '编辑角色';
+            
+            const data = roleData[roleId];
+            if (data) {
+                document.getElementById('roleName').value = data.name;
+                document.getElementById('roleNote').value = data.note;
+                
+                // 设置权限
+                clearPermissions();
+                if (data.permissions) {
+                    data.permissions.forEach(perm => {
+                        const checkbox = document.getElementById(perm);
+                        if (checkbox) {
+                            checkbox.checked = true;
+                            // 触发change事件以更新子权限
+                            checkbox.dispatchEvent(new Event('change'));
+                        }
+                    });
+                }
+            }
+            
+            document.getElementById('roleModal').classList.remove('hidden');
+        }
+
+        // 关闭弹窗
+        function closeModal() {
+            document.getElementById('roleModal').classList.add('hidden');
+            clearForm();
+        }
+
+        // 清空表单
+        function clearForm() {
+            document.getElementById('roleForm').reset();
+            clearPermissions();
+        }
+
+        // 清空权限选择
+        function clearPermissions() {
+            const allCheckboxes = document.querySelectorAll('#roleForm input[type="checkbox"]');
+            allCheckboxes.forEach(cb => {
+                cb.checked = false;
+                cb.indeterminate = false;
+            });
+        }
+
+        // 获取选中的权限
+        function getSelectedPermissions() {
+            const permissions = [];
+            const mainPermissions = ['customerManage', 'orderManage', 'salesManage', 'systemManage'];
+            
+            mainPermissions.forEach(perm => {
+                const checkbox = document.getElementById(perm);
+                if (checkbox.checked) {
+                    permissions.push(perm);
+                }
+            });
+            
+            return permissions;
+        }
+
+        // 保存角色
+        function saveRole() {
+            const formData = {
+                name: document.getElementById('roleName').value.trim(),
+                note: document.getElementById('roleNote').value.trim(),
+                permissions: getSelectedPermissions()
+            };
+
+            // 基本验证
+            if (!formData.name || !formData.note) {
+                alert('请填写必填项！');
+                return;
+            }
+
+            if (formData.permissions.length === 0) {
+                alert('请至少选择一个权限！');
+                return;
+            }
+
+            if (isEditMode) {
+                roleData[currentRoleId] = { ...roleData[currentRoleId], ...formData };
+                alert('角色信息已更新！');
+            } else {
+                const newId = Date.now().toString();
+                roleData[newId] = formData;
+                alert('角色添加成功！');
+            }
+
+            closeModal();
+            // 这里可以添加刷新表格的逻辑
+        }
+
+        // 删除角色
+        function deleteRole(roleId) {
+            const role = roleData[roleId];
+            
+            if (role?.isSuperAdmin) {
+                alert('超级管理员角色不能删除！');
+                return;
+            }
+            
+            const roleName = role?.name || '未知';
+            
+            if (confirm(`确定要删除角色 "${roleName}" 吗？`)) {
+                delete roleData[roleId];
+                alert('角色已删除！');
+                // 这里可以添加刷新表格的逻辑
+            }
+        }
+    </script>
+</body>
+</html> 

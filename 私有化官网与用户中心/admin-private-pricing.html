@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>私有化费用 - AIO 运营平台</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-6">
+    <div class="max-w-[90%] mx-auto">
+        <!-- 提示信息 -->
+        <div class="bg-white rounded-lg shadow-sm p-4 mb-6">
+            <div class="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-4 w-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-2">
+                        <p class="text-xs text-yellow-700">配置提交后将会立即同步至官网费用页面和私有化客户License费用页面，请谨慎修改。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 授权服务配置 -->
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <div class="mb-4">
+                <h2 class="text-lg font-semibold text-gray-800">授权服务</h2>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">授权服务</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">金额(¥)</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">备注</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200" id="baseFeeTable">
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">360 天服务</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">88,000.00</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">年费套餐</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                                <button class="text-blue-600 hover:text-blue-900" onclick="editBaseFee('360')">编辑</button>
+                                <button class="text-red-600 hover:text-red-900" onclick="deleteBaseFee('360')">删除</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">180 天服务</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">44,000.00</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">半年套餐</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                                <button class="text-blue-600 hover:text-blue-900" onclick="editBaseFee('180')">编辑</button>
+                                <button class="text-red-600 hover:text-red-900" onclick="deleteBaseFee('180')">删除</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 权益服务费配置 -->
+        <div class="bg-white rounded-lg shadow-sm p-6">
+            <h2 class="text-lg font-semibold text-gray-800 mb-4">权益服务费</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- 坐席成员费用 -->
+                <div class="border rounded-lg p-4">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mr-2">
+                                <span class="text-sm">👤</span>
+                            </div>
+                            <h3 class="font-medium text-gray-800">坐席资费</h3>
+                        </div>
+                        <button onclick="editSeats()" class="text-blue-600 hover:text-blue-900 text-sm">编辑</button>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div class="text-lg font-medium text-gray-800">每个 ¥12.00</div>
+                    </div>
+                </div>
+
+                <!-- 社媒账号费用 -->
+                <div class="border rounded-lg p-4">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center mr-2">
+                                <span class="text-sm">📱</span>
+                            </div>
+                            <h3 class="font-medium text-gray-800">社媒账号资费</h3>
+                        </div>
+                        <button onclick="editSocial()" class="text-blue-600 hover:text-blue-900 text-sm">编辑</button>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div class="text-lg font-medium text-gray-800">每个 ¥12.00</div>
+                    </div>
+                </div>
+
+                <!-- 翻译字符费用 -->
+                <div class="border rounded-lg p-4">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center mr-2">
+                                <span class="text-sm">🌐</span>
+                            </div>
+                            <h3 class="font-medium text-gray-800">翻译字符</h3>
+                        </div>
+                        <button onclick="editTranslation()" class="text-blue-600 hover:text-blue-900 text-sm">编辑</button>
+                    </div>
+                    
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">1万个</span>
+                            <span class="font-medium">¥100.00</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">10万个</span>
+                            <span class="font-medium">¥800.00</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">100万个</span>
+                            <span class="font-medium">¥5,000.00</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">1000万个</span>
+                            <span class="font-medium">¥30,000.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 基础费用编辑弹窗 -->
+    <div id="baseFeeModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen">
+            <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 id="baseFeeModalTitle" class="text-lg font-semibold text-gray-800">编辑授权服务</h3>
+                    <button onclick="closeBaseFeeModal()" class="text-gray-400 hover:text-gray-600">✕</button>
+                </div>
+                
+                <form id="baseFeeForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">授权服务</label>
+                        <select id="serviceDuration" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-100 cursor-not-allowed" required disabled>
+                            <option value="">请选择授权服务</option>
+                            <option value="360">360 天服务</option>
+                            <option value="180">180 天服务</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">金额(¥)</label>
+                        <input type="number" id="baseAmount" step="0.01" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">备注</label>
+                        <input type="text" id="baseNote" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </form>
+
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button onclick="closeBaseFeeModal()" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">取消</button>
+                    <button onclick="saveBaseFee()" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 权益费用编辑弹窗 -->
+    <div id="benefitFeeModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen">
+            <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 id="benefitFeeModalTitle" class="text-lg font-semibold text-gray-800">编辑权益费用</h3>
+                    <button onclick="closeBenefitFeeModal()" class="text-gray-400 hover:text-gray-600">✕</button>
+                </div>
+                
+                <form id="benefitFeeForm" class="space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600 mb-1">基础版单价</label>
+                            <input type="number" id="basicPrice" step="0.01" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600 mb-1">基础版配额</label>
+                            <input type="number" id="basicQuota" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600 mb-1">标准版单价</label>
+                            <input type="number" id="standardPrice" step="0.01" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600 mb-1">标准版配额</label>
+                            <input type="number" id="standardQuota" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600 mb-1">企业版单价</label>
+                            <input type="number" id="enterprisePrice" step="0.01" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600 mb-1">企业版配额</label>
+                            <input type="number" id="enterpriseQuota" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button onclick="closeBenefitFeeModal()" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">取消</button>
+                    <button onclick="saveBenefitFee()" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 坐席成员编辑弹窗 -->
+    <div id="seatsModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen">
+            <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800">编辑坐席资费</h3>
+                    <button onclick="closeSeatsModal()" class="text-gray-400 hover:text-gray-600">✕</button>
+                </div>
+                
+                <form id="seatsForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">价格(¥/个)</label>
+                        <input type="number" id="seatsPrice" step="0.01" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                    </div>
+                </form>
+
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button onclick="closeSeatsModal()" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">取消</button>
+                    <button onclick="saveSeats()" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 社媒账号编辑弹窗 -->
+    <div id="socialModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen">
+            <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800">编辑社媒账号资费</h3>
+                    <button onclick="closeSocialModal()" class="text-gray-400 hover:text-gray-600">✕</button>
+                </div>
+                
+                <form id="socialForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">价格(¥/个)</label>
+                        <input type="number" id="socialPrice" step="0.01" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                    </div>
+                </form>
+
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button onclick="closeSocialModal()" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">取消</button>
+                    <button onclick="saveSocial()" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 翻译字符编辑弹窗 -->
+    <div id="translationModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen">
+            <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800">编辑翻译字符费用</h3>
+                    <button onclick="closeTranslationModal()" class="text-gray-400 hover:text-gray-600">✕</button>
+                </div>
+                
+                <form id="translationForm" class="space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600 mb-1">选项一</label>
+                            <input type="text" id="trans1wCount" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600 mb-1">价格(¥)</label>
+                            <input type="number" id="trans1wPrice" step="0.01" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600 mb-1">选项二</label>
+                            <input type="text" id="trans10wCount" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600 mb-1">价格(¥)</label>
+                            <input type="number" id="trans10wPrice" step="0.01" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600 mb-1">选项三</label>
+                            <input type="text" id="trans100wCount" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600 mb-1">价格(¥)</label>
+                            <input type="number" id="trans100wPrice" step="0.01" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600 mb-1">选项四</label>
+                            <input type="text" id="trans1000wCount" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600 mb-1">价格(¥)</label>
+                            <input type="number" id="trans1000wPrice" step="0.01" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button onclick="closeTranslationModal()" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">取消</button>
+                    <button onclick="saveTranslation()" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentEditType = '';
+        let isEditMode = false;
+
+        // 基础服务费数据
+        const baseFeeData = {
+            '360': {
+                duration: 360,
+                amount: 88000,
+                note: '年费套餐'
+            },
+            '180': {
+                duration: 180,
+                amount: 44000,
+                note: '半年套餐'
+            }
+        };
+
+        // 权益费用数据
+        const benefitFeeData = {
+            'seats': {
+                name: '坐席成员',
+                basic: { price: 1200, quota: 1 },
+                standard: { price: 1000, quota: 3 },
+                enterprise: { price: 800, quota: 10 }
+            },
+            'social': {
+                name: '社媒账号',
+                basic: { price: 200, quota: 5 },
+                standard: { price: 180, quota: 20 },
+                enterprise: { price: 150, quota: 50 }
+            },
+            'translation': {
+                name: '翻译字符',
+                basic: { price: 18000, quota: 20 },
+                standard: { price: 9000, quota: 10 },
+                enterprise: { price: 3000, quota: 1 }
+            }
+        };
+
+        // 添加基础费用
+        function addBaseFee() {
+            isEditMode = false;
+            currentEditType = '';
+            document.getElementById('baseFeeModalTitle').textContent = '添加基础服务费';
+            document.getElementById('baseFeeForm').reset();
+            document.getElementById('baseFeeModal').classList.remove('hidden');
+        }
+
+        // 编辑基础费用
+        function editBaseFee(duration) {
+            isEditMode = true;
+            currentEditType = duration;
+            document.getElementById('baseFeeModalTitle').textContent = '编辑基础服务费';
+            
+            const data = baseFeeData[duration];
+            if (data) {
+                document.getElementById('serviceDuration').value = duration;
+                document.getElementById('baseAmount').value = data.amount;
+                document.getElementById('baseNote').value = data.note;
+            }
+            
+            document.getElementById('baseFeeModal').classList.remove('hidden');
+        }
+
+        // 保存基础费用
+        function saveBaseFee() {
+            const selectedDuration = document.getElementById('serviceDuration').value;
+            const formData = {
+                duration: parseInt(selectedDuration),
+                amount: parseFloat(document.getElementById('baseAmount').value),
+                note: document.getElementById('baseNote').value.trim()
+            };
+
+            if (!selectedDuration || !formData.amount) {
+                alert('请填写必填项！');
+                return;
+            }
+
+            if (isEditMode) {
+                baseFeeData[currentEditType] = formData;
+                alert('基础服务费已更新！');
+            } else {
+                baseFeeData[selectedDuration] = formData;
+                alert('基础服务费添加成功！');
+            }
+
+            closeBaseFeeModal();
+        }
+
+        // 关闭基础费用弹窗
+        function closeBaseFeeModal() {
+            document.getElementById('baseFeeModal').classList.add('hidden');
+        }
+
+        // 删除基础费用
+        function deleteBaseFee(duration) {
+            if (confirm(`确定要删除 ${duration}天 的基础服务费配置吗？`)) {
+                delete baseFeeData[duration];
+                alert('基础服务费已删除！');
+            }
+        }
+
+        // 编辑权益费用
+        function editBenefitFee(type) {
+            currentEditType = type;
+            const data = benefitFeeData[type];
+            
+            document.getElementById('benefitFeeModalTitle').textContent = `编辑${data.name}费用`;
+            document.getElementById('basicPrice').value = data.basic.price;
+            document.getElementById('basicQuota').value = data.basic.quota;
+            document.getElementById('standardPrice').value = data.standard.price;
+            document.getElementById('standardQuota').value = data.standard.quota;
+            document.getElementById('enterprisePrice').value = data.enterprise.price;
+            document.getElementById('enterpriseQuota').value = data.enterprise.quota;
+            
+            document.getElementById('benefitFeeModal').classList.remove('hidden');
+        }
+
+        // 保存权益费用
+        function saveBenefitFee() {
+            const formData = {
+                basic: {
+                    price: parseFloat(document.getElementById('basicPrice').value),
+                    quota: parseInt(document.getElementById('basicQuota').value)
+                },
+                standard: {
+                    price: parseFloat(document.getElementById('standardPrice').value),
+                    quota: parseInt(document.getElementById('standardQuota').value)
+                },
+                enterprise: {
+                    price: parseFloat(document.getElementById('enterprisePrice').value),
+                    quota: parseInt(document.getElementById('enterpriseQuota').value)
+                }
+            };
+
+            // 验证数据
+            const fields = ['basic', 'standard', 'enterprise'];
+            for (let field of fields) {
+                if (!formData[field].price || !formData[field].quota) {
+                    alert(`请填写完整的${field === 'basic' ? '基础版' : field === 'standard' ? '标准版' : '企业版'}信息！`);
+                    return;
+                }
+            }
+
+            benefitFeeData[currentEditType] = {
+                ...benefitFeeData[currentEditType],
+                ...formData
+            };
+
+            alert(`${benefitFeeData[currentEditType].name}费用已更新！`);
+            closeBenefitFeeModal();
+        }
+
+        // 关闭权益费用弹窗
+        function closeBenefitFeeModal() {
+            document.getElementById('benefitFeeModal').classList.add('hidden');
+        }
+
+        // 坐席成员费用数据
+        let seatsData = {
+            price: 20.00
+        };
+
+        // 社媒账号费用数据
+        let socialData = {
+            price: 20.00
+        };
+
+        // 翻译字符费用数据
+        let translationData = {
+            '1w': { count: '1万个', price: 100.00 },
+            '10w': { count: '10万个', price: 800.00 },
+            '100w': { count: '100万个', price: 5000.00 },
+            '1000w': { count: '1000万个', price: 30000.00 }
+        };
+
+        // 编辑坐席成员
+        function editSeats() {
+            document.getElementById('seatsPrice').value = seatsData.price;
+            document.getElementById('seatsModal').classList.remove('hidden');
+        }
+
+        // 保存坐席成员
+        function saveSeats() {
+            const price = parseFloat(document.getElementById('seatsPrice').value);
+            
+            if (!price || price <= 0) {
+                alert('请输入有效的价格！');
+                return;
+            }
+
+            seatsData.price = price;
+            alert('坐席成员费用已更新！');
+            closeSeatsModal();
+        }
+
+        // 关闭坐席成员弹窗
+        function closeSeatsModal() {
+            document.getElementById('seatsModal').classList.add('hidden');
+        }
+
+        // 编辑社媒账号
+        function editSocial() {
+            document.getElementById('socialPrice').value = socialData.price;
+            document.getElementById('socialModal').classList.remove('hidden');
+        }
+
+        // 保存社媒账号
+        function saveSocial() {
+            const price = parseFloat(document.getElementById('socialPrice').value);
+            
+            if (!price || price <= 0) {
+                alert('请输入有效的价格！');
+                return;
+            }
+
+            socialData.price = price;
+            alert('社媒账号费用已更新！');
+            closeSocialModal();
+        }
+
+        // 关闭社媒账号弹窗
+        function closeSocialModal() {
+            document.getElementById('socialModal').classList.add('hidden');
+        }
+
+        // 编辑翻译字符
+        function editTranslation() {
+            document.getElementById('trans1wCount').value = translationData['1w'].count;
+            document.getElementById('trans1wPrice').value = translationData['1w'].price;
+            document.getElementById('trans10wCount').value = translationData['10w'].count;
+            document.getElementById('trans10wPrice').value = translationData['10w'].price;
+            document.getElementById('trans100wCount').value = translationData['100w'].count;
+            document.getElementById('trans100wPrice').value = translationData['100w'].price;
+            document.getElementById('trans1000wCount').value = translationData['1000w'].count;
+            document.getElementById('trans1000wPrice').value = translationData['1000w'].price;
+            
+            document.getElementById('translationModal').classList.remove('hidden');
+        }
+
+        // 保存翻译字符
+        function saveTranslation() {
+            const data = {
+                '1w': {
+                    count: document.getElementById('trans1wCount').value.trim(),
+                    price: parseFloat(document.getElementById('trans1wPrice').value)
+                },
+                '10w': {
+                    count: document.getElementById('trans10wCount').value.trim(),
+                    price: parseFloat(document.getElementById('trans10wPrice').value)
+                },
+                '100w': {
+                    count: document.getElementById('trans100wCount').value.trim(),
+                    price: parseFloat(document.getElementById('trans100wPrice').value)
+                },
+                '1000w': {
+                    count: document.getElementById('trans1000wCount').value.trim(),
+                    price: parseFloat(document.getElementById('trans1000wPrice').value)
+                }
+            };
+
+            // 验证数据
+            for (let key in data) {
+                if (!data[key].count || !data[key].price || data[key].price <= 0) {
+                    alert('请填写完整且有效的数量和价格信息！');
+                    return;
+                }
+            }
+
+            translationData = data;
+            alert('翻译字符费用已更新！');
+            closeTranslationModal();
+        }
+
+        // 关闭翻译字符弹窗
+        function closeTranslationModal() {
+            document.getElementById('translationModal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html> 

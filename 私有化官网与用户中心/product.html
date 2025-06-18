@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AIOChat - 产品介绍</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .bg-primary { background-color: #247CFF; }
+    .text-primary { color: #247CFF; }
+    .border-primary { border-color: #247CFF; }
+    .hover\:bg-primary:hover { background-color: #1E6BDB; }
+    .hover\:text-primary:hover { color: #247CFF; }
+    .hover\:border-primary:hover { border-color: #247CFF; }
+    .bg-primary-50 { background-color: #EBF5FF; }
+    .bg-primary-100 { background-color: #DBEAFE; }
+    .text-primary-600 { color: #1E6BDB; }
+    .text-primary-800 { color: #1E40AF; }
+  </style>
+</head>
+<body>
+  <!-- 导航栏 -->
+  <header class="bg-white shadow-sm">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+      <div class="flex items-center">
+        <img src="../私有化官网与用户中心/images/aio-logo_kxblvp.png.png" alt="AIOChat Logo" class="h-8 w-8 mr-2">
+        <span class="text-xl font-bold text-gray-800">AIOChat</span>
+      </div>
+      <nav class="hidden md:flex space-x-8">
+        <a href="home.html" class="text-gray-600 hover:text-gray-900">首页</a>
+        <a href="product.html" class="text-primary font-medium border-b-2 border-primary pb-1">产品介绍</a>
+        <a href="pricing.html" class="text-gray-600 hover:text-gray-900">产品定价</a>
+        <a href="index.html" class="text-gray-600 hover:text-gray-900">私有化服务</a>
+        <a href="#" class="text-gray-600 hover:text-gray-900">解决方案</a>
+      </nav>
+      <div class="flex items-center">
+        <div class="relative">
+          <a href="#" id="loginButton" class="px-4 py-2 text-gray-600 hover:text-gray-900 transition duration-150">登录</a>
+          <div id="loginDropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden z-10 border border-gray-100">
+            <a href="saas-login.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-primary">SaaS 云服务</a>
+            <a href="private-login.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-primary">私有化服务</a>
+          </div>
+        </div>
+        <a href="saas-login.html" class="ml-4 px-4 py-2 bg-primary text-white rounded hover:bg-primary transition duration-150">免费试用</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 头部横幅 -->
+  <section class="py-16 bg-gradient-to-br from-blue-50 to-white">
+    <div class="container mx-auto px-4 text-center">
+      <h1 class="text-5xl font-bold mb-6">产品功能介绍</h1>
+      <p class="text-xl text-gray-600 mb-8">全面的智能客服功能模块，满足企业各种客服场景需求</p>
+    </div>
+  </section>
+
+  <!-- 核心功能 -->
+  <section class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <!-- 实时聊天 -->
+      <div class="mb-20">
+        <div class="flex flex-wrap items-center -mx-4">
+          <div class="w-full lg:w-1/2 px-4 mb-8 lg:mb-0">
+            <div class="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center mb-6">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+              </svg>
+            </div>
+            <h2 class="text-3xl font-bold mb-4">实时聊天</h2>
+            <p class="text-gray-600 text-lg mb-6">支持实时在线聊天，客户可以与AI助手或人工客服进行即时沟通，快速解决问题</p>
+            <ul class="space-y-3">
+              <li class="flex items-center">
+                <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>毫秒级响应，即时回复</span>
+              </li>
+              <li class="flex items-center">
+                <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>支持文字、图片、文件传输</span>
+              </li>
+              <li class="flex items-center">
+                <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>聊天记录云端保存</span>
+              </li>
+            </ul>
+          </div>
+          <div class="w-full lg:w-1/2 px-4">
+            <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&h=700&q=80" alt="实时聊天" class="rounded-lg shadow-lg">
+          </div>
+        </div>
+      </div>
+
+      <!-- 多渠道接入 -->
+      <div class="mb-20">
+        <div class="flex flex-wrap items-center -mx-4">
+          <div class="w-full lg:w-1/2 px-4 mb-8 lg:mb-0 lg:order-2">
+            <div class="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center mb-6">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              </svg>
+            </div>
+            <h2 class="text-3xl font-bold mb-4">多渠道接入</h2>
+            <p class="text-gray-600 text-lg mb-6">统一管理来自不同渠道的客户咨询，提供一致的服务体验</p>
+            <ul class="space-y-3">
+              <li class="flex items-center">
+                <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>网站在线客服</span>
+              </li>
+              <li class="flex items-center">
+                <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>微信公众号/小程序</span>
+              </li>
+              <li class="flex items-center">
+                <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>APP内嵌客服</span>
+              </li>
+              <li class="flex items-center">
+                <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>邮件/电话/短信</span>
+              </li>
+            </ul>
+          </div>
+          <div class="w-full lg:w-1/2 px-4 lg:order-1">
+            <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&h=700&q=80" alt="多渠道接入" class="rounded-lg shadow-lg">
+          </div>
+        </div>
+      </div>
+
+      <!-- 知识库问答 -->
+      <div class="mb-20">
+        <div class="flex flex-wrap items-center -mx-4">
+          <div class="w-full lg:w-1/2 px-4 mb-8 lg:mb-0">
+            <div class="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center mb-6">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg>
+            </div>
+            <h2 class="text-3xl font-bold mb-4">知识库问答</h2>
+            <p class="text-gray-600 text-lg mb-6">智能检索企业知识库，为客户提供准确、专业的答案</p>
+            <ul class="space-y-3">
+              <li class="flex items-center">
+                <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>支持PDF、Word、网页等格式</span>
+              </li>
+              <li class="flex items-center">
+                <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>语义理解和模糊匹配</span>
+              </li>
+              <li class="flex items-center">
+                <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>知识库实时更新</span>
+              </li>
+            </ul>
+          </div>
+          <div class="w-full lg:w-1/2 px-4">
+            <img src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&h=700&q=80" alt="知识库问答" class="rounded-lg shadow-lg">
+          </div>
+        </div>
+      </div>
+
+      <!-- AI智能服务 -->
+      <div class="mb-20">
+        <div class="flex flex-wrap items-center -mx-4">
+          <div class="w-full lg:w-1/2 px-4 mb-8 lg:mb-0 lg:order-2">
+            <div class="w-12 h-12 bg-red-500 rounded-lg flex items-center justify-center mb-6">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+              </svg>
+            </div>
+            <h2 class="text-3xl font-bold mb-4">AI智能服务</h2>
+            <p class="text-gray-600 text-lg mb-6">基于先进的人工智能技术，提供智能化的客服解决方案</p>
+            <ul class="space-y-3">
+              <li class="flex items-center">
+                <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>自然语言理解</span>
+              </li>
+              <li class="flex items-center">
+                <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>情感分析与情绪识别</span>
+              </li>
+              <li class="flex items-center">
+                <svg class="h-5 w-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>智能推荐和个性化服务</span>
+              </li>
+            </ul>
+          </div>
+          <div class="w-full lg:w-1/2 px-4 lg:order-1">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&h=700&q=80" alt="AI智能服务" class="rounded-lg shadow-lg">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 其他功能模块 -->
+  <section class="py-16 bg-gray-50">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-bold mb-4">更多功能模块</h2>
+        <p class="text-xl text-gray-600">完整的客服功能生态，助力企业提升服务效率</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition">
+          <div class="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold mb-3">客服工作台</h3>
+          <p class="text-gray-600">统一的客服工作界面，支持多会话管理、客户信息查看等功能</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition">
+          <div class="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold mb-3">数据统计分析</h3>
+          <p class="text-gray-600">详细的客服数据报表，包括响应时间、满意度、解决率等指标</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition">
+          <div class="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold mb-3">智能路由分配</h3>
+          <p class="text-gray-600">根据客户问题类型和客服专长，智能分配客服人员</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition">
+          <div class="w-12 h-12 bg-yellow-500 rounded-lg flex items-center justify-center mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold mb-3">质量监控</h3>
+          <p class="text-gray-600">实时监控客服质量，支持对话录音、服务评价等功能</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition">
+          <div class="w-12 h-12 bg-indigo-500 rounded-lg flex items-center justify-center mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold mb-3">CRM集成</h3>
+          <p class="text-gray-600">与企业CRM系统无缝集成，获取客户完整信息</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition">
+          <div class="w-12 h-12 bg-pink-500 rounded-lg flex items-center justify-center mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold mb-3">营销推广</h3>
+          <p class="text-gray-600">在客服过程中进行智能营销推荐，提升转化率</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 技术优势 -->
+  <section class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-bold mb-4">技术优势</h2>
+        <p class="text-xl text-gray-600">基于先进技术架构，保障系统稳定性和扩展性</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div class="text-center">
+          <div class="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold mb-2">高并发处理</h3>
+          <p class="text-gray-600 text-sm">支持万级并发访问，系统稳定可靠</p>
+        </div>
+        
+        <div class="text-center">
+          <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold mb-2">安全保障</h3>
+          <p class="text-gray-600 text-sm">数据加密传输，权限管理严格</p>
+        </div>
+        
+        <div class="text-center">
+          <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold mb-2">易于集成</h3>
+          <p class="text-gray-600 text-sm">丰富的API接口，快速接入现有系统</p>
+        </div>
+        
+        <div class="text-center">
+          <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold mb-2">弹性扩展</h3>
+          <p class="text-gray-600 text-sm">云原生架构，按需扩展资源</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 底部CTA -->
+  <section class="py-16 bg-primary text-white">
+    <div class="container mx-auto px-4 text-center">
+      <h2 class="text-4xl font-bold mb-6">想要体验这些强大功能吗？</h2>
+      <p class="text-xl mb-8 opacity-90">立即免费试用，体验全功能客服系统</p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <a href="saas-login.html" class="px-8 py-4 bg-white text-primary rounded-lg hover:bg-gray-100 transition shadow-lg hover:shadow-xl transform hover:-translate-y-1 font-medium">
+          免费试用
+        </a>
+        <a href="pricing.html" class="px-8 py-4 border-2 border-white text-white rounded-lg hover:bg-white hover:text-primary transition font-medium">
+          查看定价
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 页脚 -->
+  <footer class="py-8 bg-gray-100">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-wrap justify-between">
+        <div class="w-full md:w-1/4 mb-6 md:mb-0">
+          <div class="flex items-center mb-4">
+            <img src="../私有化官网与用户中心/images/aio-logo_kxblvp.png.png" alt="AIOChat Logo" class="h-8 w-8 mr-2">
+            <span class="text-xl font-bold">AIOChat</span>
+          </div>
+          <p class="text-gray-600 text-sm">专业的AI智能客服系统，为企业提供定制化智能对话解决方案</p>
+        </div>
+        
+        <div class="w-full md:w-2/3">
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div>
+              <h4 class="font-semibold mb-3">产品</h4>
+              <ul class="space-y-2 text-sm text-gray-600">
+                <li><a href="product.html" class="hover:text-primary">产品介绍</a></li>
+                <li><a href="pricing.html" class="hover:text-primary">产品定价</a></li>
+                <li><a href="index.html" class="hover:text-primary">私有化服务</a></li>
+                <li><a href="#" class="hover:text-primary">API接口</a></li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 class="font-semibold mb-3">解决方案</h4>
+              <ul class="space-y-2 text-sm text-gray-600">
+                <li><a href="#" class="hover:text-primary">金融行业</a></li>
+                <li><a href="#" class="hover:text-primary">电商零售</a></li>
+                <li><a href="#" class="hover:text-primary">教育培训</a></li>
+                <li><a href="#" class="hover:text-primary">医疗健康</a></li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 class="font-semibold mb-3">支持</h4>
+              <ul class="space-y-2 text-sm text-gray-600">
+                <li><a href="#" class="hover:text-primary">帮助中心</a></li>
+                <li><a href="#" class="hover:text-primary">开发文档</a></li>
+                <li><a href="#" class="hover:text-primary">API文档</a></li>
+                <li><a href="#" class="hover:text-primary">常见问题</a></li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 class="font-semibold mb-3">关于我们</h4>
+              <ul class="space-y-2 text-sm text-gray-600">
+                <li><a href="#" class="hover:text-primary">公司简介</a></li>
+                <li><a href="#" class="hover:text-primary">联系我们</a></li>
+                <li><a href="#" class="hover:text-primary">加入我们</a></li>
+                <li><a href="#" class="hover:text-primary">隐私政策</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="mt-8 pt-8 border-t border-gray-200 text-sm text-gray-600 text-center">
+        <p>© 2023 AIOChat. 保留所有权利</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 登录下拉菜单交互
+      const loginButton = document.getElementById('loginButton');
+      const loginDropdown = document.getElementById('loginDropdown');
+      
+      if (loginButton && loginDropdown) {
+        loginButton.addEventListener('click', function(e) {
+          e.preventDefault();
+          loginDropdown.classList.toggle('hidden');
+          loginButton.classList.toggle('text-primary');
+        });
+        
+        document.addEventListener('click', function(e) {
+          if (!loginButton.contains(e.target) && !loginDropdown.contains(e.target)) {
+            loginDropdown.classList.add('hidden');
+            loginButton.classList.remove('text-primary');
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html> 

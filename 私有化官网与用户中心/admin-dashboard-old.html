@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AIO 运营平台</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .sidebar {
+      width: 280px;
+      height: calc(100vh - 64px);
+      position: fixed;
+      left: 0;
+      top: 64px;
+      transition: margin-left 0.3s ease;
+      z-index: 40;
+    }
+    
+    .sidebar.collapsed {
+      margin-left: -280px;
+    }
+    
+    .menu-item {
+      transition: all 0.2s ease;
+    }
+    
+    .menu-item:hover {
+      background-color: #f3f4f6;
+      color: #374151;
+    }
+    
+    .menu-item.active {
+      background-color: #3b82f6;
+      color: white;
+      position: relative;
+    }
+    
+    .menu-item.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 20px;
+      background-color: #3b82f6;
+      border-radius: 0 2px 2px 0;
+    }
+    
+    .submenu-item {
+      transition: all 0.2s ease;
+    }
+    
+    .submenu-item:hover {
+      background-color: #f3f4f6;
+      color: #374151;
+    }
+    
+    .submenu-item.active {
+      background-color: #e0e7ff;
+      color: #3730a3;
+      position: relative;
+    }
+    
+    .submenu-item.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 20px;
+      background-color: #3b82f6;
+      border-radius: 0 2px 2px 0;
+    }
+    
+    .content-area {
+      min-height: calc(100vh - 64px);
+      transition: margin-left 0.3s ease;
+    }
+    
+    .content-area.expanded {
+      margin-left: 280px;
+    }
+    
+    .header-shadow {
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    }
+    
+    /* 移动端适配 */
+    @media (max-width: 1024px) {
+      .sidebar {
+        margin-left: -280px;
+      }
+      
+      .sidebar.collapsed {
+        margin-left: 0;
+      }
+      
+      .content-area {
+        margin-left: 0;
+      }
+      
+      .content-area.expanded {
+        margin-left: 280px;
+      }
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <!-- 顶部导航栏 -->
+  <header class="bg-white header-shadow sticky top-0 z-50">
+    <div class="flex justify-between items-center px-6 py-4">
+      <!-- 左侧Logo和菜单按钮 -->
+      <div class="flex items-center space-x-4">
+        <button id="sidebarToggle" class="p-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+        
+        <div class="flex items-center">
+          <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mr-3">
+            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-2m-2 0H5m14 0v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5m6 0v-4a1 1 0 00-1-1h-2a1 1 0 00-1 1v4"></path>
+            </svg>
+          </div>
+          <h1 class="text-xl font-bold text-gray-800">AIO 运营平台</h1>
+        </div>
+      </div>
+      
+      <!-- 右侧用户信息 -->
+      <div class="flex items-center">
+        <div class="relative">
+          <div class="flex items-center text-gray-700 cursor-pointer rounded-full hover:bg-gray-100 px-3 py-2 transition-colors duration-300" id="userMenuButton">
+            <div class="user-avatar mr-3">
+              <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center">
+                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                </svg>
+              </div>
+            </div>
+            <span id="userAccount" class="font-medium text-sm">admin</span>
+            <svg class="h-4 w-4 ml-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </div>
+          
+          <!-- 用户下拉菜单 -->
+          <div id="userDropdownMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+              <svg class="w-4 h-4 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+              </svg>
+              个人设置
+            </a>
+            <div class="border-t border-gray-100"></div>
+            <a href="admin-login.html" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors" id="logoutBtn">
+              <svg class="w-4 h-4 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+              </svg>
+              退出登录
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="flex">
+    <!-- 左侧菜单栏 -->
+    <aside id="sidebar" class="sidebar bg-white shadow-sm">
+      <nav class="pt-6 pb-4">
+        <!-- 首页菜单 -->
+        <div class="px-3 mb-2">
+          <div class="menu-item px-3 py-2 rounded-md cursor-pointer flex items-center active" data-page="home">
+            <svg class="w-5 h-5 mr-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+            </svg>
+            <span class="text-sm font-medium text-gray-700">首页</span>
+          </div>
+        </div>
+
+        <!-- 客户管理菜单 -->
+        <div class="px-3 mb-2">
+          <div class="menu-item px-3 py-2 rounded-md cursor-pointer flex items-center justify-between" id="customerMenu">
+            <div class="flex items-center">
+              <svg class="w-5 h-5 mr-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+              </svg>
+              <span class="text-sm font-medium text-gray-700">客户管理</span>
+            </div>
+            <svg id="customerArrow" class="w-4 h-4 text-gray-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </div>
+          
+          <!-- 二级菜单 -->
+          <div id="customerSubmenu" class="ml-8 mt-1 space-y-1">
+            <div class="submenu-item px-3 py-2 text-sm text-gray-600 cursor-pointer rounded-md" data-page="private-customers">
+              <svg class="w-4 h-4 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-2m-2 0H5m14 0v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5m6 0v-4a1 1 0 00-1-1h-2a1 1 0 00-1 1v4"></path>
+              </svg>
+              私有化客户
+            </div>
+            <div class="submenu-item px-3 py-2 text-sm text-gray-600 cursor-pointer rounded-md" data-page="saas-customers">
+              <svg class="w-4 h-4 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+              </svg>
+              SaaS 客户
+            </div>
+          </div>
+        </div>
+
+        <!-- 订单管理菜单 -->
+        <div class="px-3 mb-2">
+          <div class="menu-item px-3 py-2 rounded-md cursor-pointer flex items-center justify-between" id="orderMenu">
+            <div class="flex items-center">
+              <svg class="w-5 h-5 mr-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+              </svg>
+              <span class="text-sm font-medium text-gray-700">订单管理</span>
+            </div>
+            <svg id="orderArrow" class="w-4 h-4 text-gray-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </div>
+          
+          <!-- 二级菜单 -->
+          <div id="orderSubmenu" class="ml-8 mt-1 space-y-1">
+            <div class="submenu-item px-3 py-2 text-sm text-gray-600 cursor-pointer rounded-md" data-page="private-orders">
+              <svg class="w-4 h-4 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-2m-2 0H5m14 0v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5m6 0v-4a1 1 0 00-1-1h-2a1 1 0 00-1 1v4"></path>
+              </svg>
+              私有化订单
+            </div>
+            <div class="submenu-item px-3 py-2 text-sm text-gray-600 cursor-pointer rounded-md" data-page="saas-orders">
+              <svg class="w-4 h-4 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+              </svg>
+              SaaS 订单
+            </div>
+          </div>
+        </div>
+
+        <!-- 销售列表菜单 -->
+        <div class="px-3 mb-2">
+          <div class="menu-item px-3 py-2 rounded-md cursor-pointer flex items-center" data-page="sales">
+            <svg class="w-5 h-5 mr-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+            </svg>
+            <span class="text-sm font-medium text-gray-700">销售列表</span>
+          </div>
+        </div>
+
+        <!-- 平台账号菜单 -->
+        <div class="px-3 mb-2">
+          <div class="menu-item px-3 py-2 rounded-md cursor-pointer flex items-center justify-between" id="accountMenu">
+            <div class="flex items-center">
+              <svg class="w-5 h-5 mr-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+              </svg>
+              <span class="text-sm font-medium text-gray-700">平台账号</span>
+            </div>
+            <svg id="accountArrow" class="w-4 h-4 text-gray-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </div>
+          
+          <!-- 二级菜单 -->
+          <div id="accountSubmenu" class="ml-8 mt-1 space-y-1">
+            <div class="submenu-item px-3 py-2 text-sm text-gray-600 cursor-pointer rounded-md" data-page="account-management">
+              <svg class="w-4 h-4 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+              </svg>
+              账号管理
+            </div>
+            <div class="submenu-item px-3 py-2 text-sm text-gray-600 cursor-pointer rounded-md" data-page="role-management">
+              <svg class="w-4 h-4 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+              </svg>
+              角色管理
+            </div>
+          </div>
+        </div>
+
+        <!-- 权益管理菜单 -->
+        <div class="px-3 mb-2">
+          <div class="menu-item px-3 py-2 rounded-md cursor-pointer flex items-center" data-page="benefits">
+            <svg class="w-5 h-5 mr-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"></path>
+            </svg>
+            <span class="text-sm font-medium text-gray-700">权益管理</span>
+          </div>
+        </div>
+
+        <!-- 费用管理菜单 -->
+        <div class="px-3 mb-2">
+          <div class="menu-item px-3 py-2 rounded-md cursor-pointer flex items-center justify-between" id="pricingMenu">
+            <div class="flex items-center">
+              <svg class="w-5 h-5 mr-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+              </svg>
+              <span class="text-sm font-medium text-gray-700">费用管理</span>
+            </div>
+            <svg id="pricingArrow" class="w-4 h-4 text-gray-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </div>
+          
+          <!-- 二级菜单 -->
+          <div id="pricingSubmenu" class="ml-8 mt-1 space-y-1">
+            <div class="submenu-item px-3 py-2 text-sm text-gray-600 cursor-pointer rounded-md" data-page="private-pricing">
+              <svg class="w-4 h-4 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-2m-2 0H5m14 0v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5m6 0v-4a1 1 0 00-1-1h-2a1 1 0 00-1 1v4"></path>
+              </svg>
+              私有化费用
+            </div>
+            <div class="submenu-item px-3 py-2 text-sm text-gray-600 cursor-pointer rounded-md" data-page="saas-pricing">
+              <svg class="w-4 h-4 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+              </svg>
+              SaaS 费用
+            </div>
+          </div>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- 主内容区域 -->
+    <main class="content-area bg-gray-50 p-6">
+      <div class="max-w-7xl mx-auto">
+        <!-- 内容将通过iframe加载 -->
+        <iframe id="contentFrame" src="pages/home.html" class="w-full h-full border-0 rounded-lg bg-white shadow-sm" style="min-height: calc(100vh - 140px);"></iframe>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 检查登录状态
+      if (sessionStorage.getItem('isAdminLoggedIn') !== 'true') {
+        window.location.href = 'admin-login.html';
+        return;
+      }
+      
+      // 显示用户账号
+      const userAccount = sessionStorage.getItem('adminUser');
+      if (userAccount) {
+        document.getElementById('userAccount').textContent = userAccount;
+      }
+      
+      // 页面映射
+      const pageMap = {
+        'home': 'pages/home.html',
+        'private-customers': 'pages/private-customers.html',
+        'saas-customers': 'pages/saas-customers.html',
+        'private-orders': 'pages/private-orders.html',
+        'saas-orders': 'pages/saas-orders.html',
+        'sales': 'pages/sales.html',
+        'account-management': 'pages/account-management.html',
+        'role-management': 'pages/role-management.html',
+        'benefits': 'pages/benefits.html',
+        'private-pricing': 'pages/private-pricing.html',
+        'saas-pricing': 'pages/saas-pricing.html'
+      };
+      
+      // 侧边栏切换
+      const sidebarToggle = document.getElementById('sidebarToggle');
+      const sidebar = document.getElementById('sidebar');
+      const contentArea = document.querySelector('.content-area');
+      
+      sidebarToggle.addEventListener('click', function() {
+        sidebar.classList.toggle('collapsed');
+        contentArea.classList.toggle('expanded');
+      });
+      
+      // 菜单切换功能
+      function setupMenuToggle(menuId, submenuId, arrowId) {
+        const menu = document.getElementById(menuId);
+        const submenu = document.getElementById(submenuId);
+        const arrow = document.getElementById(arrowId);
+        
+        if (menu && submenu && arrow) {
+          menu.addEventListener('click', function() {
+            const isExpanded = submenu.style.display !== 'none';
+            submenu.style.display = isExpanded ? 'none' : 'block';
+            arrow.style.transform = isExpanded ? 'rotate(0deg)' : 'rotate(90deg)';
+          });
+          
+          // 初始化为展开状态
+          submenu.style.display = 'block';
+          arrow.style.transform = 'rotate(90deg)';
+        }
+      }
+      
+      // 设置所有菜单切换
+      setupMenuToggle('customerMenu', 'customerSubmenu', 'customerArrow');
+      setupMenuToggle('orderMenu', 'orderSubmenu', 'orderArrow');
+      setupMenuToggle('accountMenu', 'accountSubmenu', 'accountArrow');
+      setupMenuToggle('pricingMenu', 'pricingSubmenu', 'pricingArrow');
+      
+      // 页面切换功能
+      function switchPage(pageName) {
+        // 移除所有菜单活动状态
+        document.querySelectorAll('.menu-item, .submenu-item').forEach(item => {
+          item.classList.remove('active');
+        });
+        
+        // 加载对应页面到iframe
+        const pageUrl = pageMap[pageName];
+        if (pageUrl) {
+          document.getElementById('contentFrame').src = pageUrl;
+        }
+        
+        // 设置对应菜单为活动状态
+        const menuItem = document.querySelector(`[data-page="${pageName}"]`);
+        if (menuItem) {
+          menuItem.classList.add('active');
+        }
+      }
+      
+      // 一级菜单点击事件
+      document.querySelectorAll('.menu-item[data-page]').forEach(item => {
+        item.addEventListener('click', function() {
+          const pageName = this.dataset.page;
+          switchPage(pageName);
+        });
+      });
+      
+      // 二级菜单点击事件
+      document.querySelectorAll('.submenu-item[data-page]').forEach(item => {
+        item.addEventListener('click', function() {
+          const pageName = this.dataset.page;
+          switchPage(pageName);
+        });
+      });
+      
+      // 用户菜单切换
+      const userMenuButton = document.getElementById('userMenuButton');
+      const userDropdownMenu = document.getElementById('userDropdownMenu');
+      
+      userMenuButton.addEventListener('click', function() {
+        userDropdownMenu.classList.toggle('hidden');
+      });
+      
+      // 点击页面其他地方关闭下拉菜单
+      document.addEventListener('click', function(e) {
+        if (!userMenuButton.contains(e.target) && !userDropdownMenu.contains(e.target)) {
+          userDropdownMenu.classList.add('hidden');
+        }
+      });
+      
+      // 退出登录
+      document.getElementById('logoutBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        sessionStorage.removeItem('isAdminLoggedIn');
+        sessionStorage.removeItem('adminUser');
+        window.location.href = 'admin-login.html';
+      });
+    });
+  </script>
+</body>
+</html> 

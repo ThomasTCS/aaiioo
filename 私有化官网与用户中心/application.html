@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-lang-key="page-title">AIOChat - 免费申请授权</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/@arco-design/web-react/dist/css/arco.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@arco-design/web-react/dist/arco.min.js"></script>
+  <style>
+    .language-switch {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+    }
+    .language-dropdown {
+      display: none;
+      position: absolute;
+      right: 0;
+      background: white;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .language-dropdown.show {
+      display: block;
+    }
+    .language-option {
+      padding: 8px 16px;
+      cursor: pointer;
+    }
+    .language-option:hover {
+      background-color: #f0f0f0;
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <!-- 顶部导航栏 -->
+  <header class="bg-white shadow-sm sticky top-0 z-50 transition-shadow duration-300">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+      <div class="flex items-center">
+        <img src="../私有化官网与用户中心/images/aio-logo_kxblvp.png.png" alt="AIOChat Logo" class="h-8 w-8 mr-2 logo">
+        <a href="index.html" class="text-xl font-bold text-gray-800 hover:text-primary-color transition-colors duration-300">AIOChat</a>
+        
+        <a href="private-admin-login.html" class="ml-4 bg-white border border-gray-300 text-gray-600 hover:text-gray-800 hover:border-gray-400 px-3 py-1.5 rounded-md text-sm font-medium transition-colors duration-200">
+          私有化客户后台(demo)
+        </a>
+      </div>
+      <div class="flex items-center">
+        <button class="mx-2 text-gray-600 hover:text-gray-900 nav-link">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span data-lang-key="auth-tutorial">授权使用教程</span>
+        </button>
+        
+        <div class="relative ml-4">
+          <div class="flex items-center text-gray-700 cursor-pointer rounded-full hover:bg-gray-100 px-3 py-2 transition-colors duration-300" id="userMenuButton">
+            <div class="user-avatar mr-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <span id="userEmail" class="font-medium">123@gmail.com</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+          
+          <!-- 用户下拉菜单 -->
+          <div id="userDropdownMenu" class="hidden absolute right-0 mt-2 w-56 dropdown-menu animate-slideDown">
+            <!-- 切换服务 -->
+            <div class="px-4 py-2 text-xs font-semibold text-gray-500 border-b">切换服务</div>
+            <a href="#" class="dropdown-item">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2H5z" />
+              </svg>
+              <span data-lang-key="private-service">私有化服务</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-auto text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+            </a>
+            <a href="index.html" class="dropdown-item">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+              </svg>
+              <span data-lang-key="saas-service">SAAS 服务</span>
+            </a>
+            
+            <!-- 语言设置 -->
+            <div class="dropdown-divider"></div>
+            <div class="px-4 py-2 text-xs font-semibold text-gray-500">语言</div>
+            <a href="#" data-lang="zh" class="lang-option dropdown-item">
+              <span class="mr-2">🇨🇳</span>
+              <span>中文</span>
+              <svg id="zhCheckmark" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-auto text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+            </a>
+            <a href="#" data-lang="en" class="lang-option dropdown-item">
+              <span class="mr-2">🇬🇧</span>
+              <span>English</span>
+              <svg id="enCheckmark" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-auto text-blue-500 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+            </a>
+            
+            <!-- 退出选项 -->
+            <div class="dropdown-divider"></div>
+            <a href="private-login.html" class="dropdown-item text-red-600 hover:bg-red-50">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+              </svg>
+              <span data-lang-key="logout">退出</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主要内容区域 -->
+  <main class="container mx-auto px-4 py-8 animate-fadeIn">
+    <div class="max-w-4xl mx-auto">
+      <div class="flex justify-between items-center border-b border-gray-200 pb-3 mb-6">
+        <h1 class="text-2xl font-bold text-gray-800 relative" data-lang-key="apply-auth-title">
+          免费申请授权
+          <span class="absolute bottom-0 left-0 w-1/3 h-1 bg-primary-color rounded-full"></span>
+        </h1>
+        <button
+          id="buyLicenseBtn"
+          class="inline-flex items-center px-6 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-sm font-medium rounded-lg hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 shadow-lg hover:shadow-xl"
+        >
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 11-4 0v-6m4 0V9a2 2 0 10-4 0v4.01"></path>
+          </svg>
+          购买 License 授权
+        </button>
+      </div>
+
+      <!-- 申请表单 -->
+      <div class="bg-white p-6 rounded-lg shadow card mb-6 animate-slideUp">
+        <h2 class="text-lg font-semibold mb-4 flex items-center" data-lang-key="preconditions">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary-color mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          申请试用的前置条件：
+        </h2>
+        <div class="mb-6 text-gray-600 bg-blue-50 p-4 rounded-lg border-l-4 border-blue-400">
+          <p class="mb-3 flex items-center" data-lang-key="precondition-1">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            <span>需要准备好服务器，并且已完成本地部署</span>
+          </p>
+          <p class="mb-3 flex items-center" data-lang-key="precondition-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            <span>AIO 私有化部署链接：<a href="https://private.aiochat.im" class="text-blue-500 hover:underline font-medium">https://private.aiochat.im</a></span>
+          </p>
+          <p class="flex items-center" data-lang-key="precondition-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            <span>本地部署完成后，登录进入管理平台，获取唯一机器码</span>
+          </p>
+        </div>
+
+        <form action="dashboard.html" method="GET" class="space-y-4">
+          <!-- 企业名称 -->
+          <div class="form-group">
+            <label for="company" class="block text-sm font-medium text-gray-700 mb-2" >
+              <span class="text-red-500 mr-1">*</span>
+              <span data-lang-key="company-name">企业名称</span>
+            </label>
+            <input
+              type="text"
+              id="company"
+              name="company"
+              required
+              placeholder="请输入"
+              data-lang-key-placeholder="input-placeholder"
+              class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+            >
+          </div>
+
+          <!-- 邮箱 -->
+          <div class="form-group">
+            <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+              <span class="text-red-500 mr-1">*</span> 
+              <span data-lang-key="email">邮箱</span>
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              required
+              placeholder="请输入"
+              data-lang-key-placeholder="input-placeholder"
+              class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-100 transition-colors"
+              readonly
+            >
+          </div>
+
+          <!-- 联系人姓名 -->
+          <div class="form-group">
+            <label for="contact" class="block text-sm font-medium text-gray-700 mb-2" data-lang-key="contact-name">
+              联系人姓名
+            </label>
+            <input
+              type="text"
+              id="contact"
+              name="contact"
+              placeholder="请输入"
+              data-lang-key-placeholder="input-placeholder"
+              class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+            >
+          </div>
+
+          <!-- 联系人电话 -->
+          <div class="form-group">
+            <label for="phone" class="block text-sm font-medium text-gray-700 mb-2" data-lang-key="contact-phone">
+              联系人电话
+            </label>
+            <div class="flex">
+              <div class="w-20">
+                <select class="w-full h-full px-2 py-3 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                  <option value="+1">+1</option>
+                  <option value="+44">+44</option>
+                  <option value="+86">+86</option>
+                  <option value="+65">+65</option>
+                </select>
+              </div>
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                placeholder="请输入"
+                data-lang-key-placeholder="input-placeholder"
+                class="flex-1 px-4 py-3 border border-gray-300 rounded-r-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+              >
+            </div>
+          </div>
+
+          <!-- Telegram -->
+          <div class="form-group">
+            <label for="telegram" class="block text-sm font-medium text-gray-700 mb-2" data-lang-key="telegram-label">
+              Telegram
+            </label>
+            <input
+              type="text"
+              id="telegram"
+              name="telegram"
+              placeholder="@username 或 链接"
+              data-lang-key-placeholder="telegram-placeholder"
+              class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+            >
+          </div>
+
+          <!-- WhatsApp -->
+          <div class="form-group">
+            <label for="whatsapp" class="block text-sm font-medium text-gray-700 mb-2" data-lang-key="whatsapp-label">
+              WhatsApp
+            </label>
+            <input
+              type="text"
+              id="whatsapp"
+              name="whatsapp"
+              placeholder="电话号码(包含区号)或链接"
+              data-lang-key-placeholder="whatsapp-placeholder"
+              class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+            >
+          </div>
+
+          <!-- 服务器机器码 -->
+          <div class="form-group">
+            <label class="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+              <span class="text-red-500 mr-1">*</span>
+              <span data-lang-key="server-code">服务器机器码</span>
+              <span class="ml-1 cursor-pointer tooltip">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span class="tooltip-text" data-lang-key="server-code-tooltip">
+                  获取机器码：
+                  <br>1. 前往"私有化服务"页面，使用安装好的本地私有化部署：
+                  <br>https://private.aiochat.im
+                  <br>2. 本地部署完成后，登录进入管理平台，获取唯一机器码：
+                </span>
+              </span>
+            </label>
+            <textarea
+              id="machineCode"
+              name="machineCode"
+              rows="4"
+              required
+              placeholder="请输入"
+              data-lang-key-placeholder="input-placeholder"
+              class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+            ></textarea>
+          </div>
+
+          <!-- 提交按钮 -->
+          <div class="mt-8">
+            <button
+              type="submit"
+              class="w-full bg-blue-500 text-white py-3 px-6 rounded-md hover:bg-blue-600 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 flex items-center justify-center btn-primary"
+              data-lang-key="apply-trial-button"
+              id="submitBtn"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              申请试用授权
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <!-- 右侧联系客服部分 -->
+  <div class="fixed top-1/2 right-0 transform -translate-y-1/2 z-40">
+    <div class="bg-white shadow-lg rounded-l-lg overflow-hidden transition-transform duration-300 hover:translate-x-0 translate-x-[75%] group card" style="max-width: 280px;">
+      <div class="p-3 bg-blue-50 border-b cursor-pointer flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+        </svg>
+        <h3 class="font-medium text-sm text-gray-700" data-lang-key="contact-customer-service">联系客户服务</h3>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 ml-auto transform transition-transform duration-300 group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+      </div>
+      <div class="p-4">
+        <p class="text-xs text-gray-600 mb-4" data-lang-key="contact-description">如果您有任何疑问或需要进一步了解，欢迎联系我们的客户经理</p>
+
+        <div class="space-y-4">
+          <div class="bg-blue-50 rounded-lg p-3 transition-all duration-300 hover:shadow-md">
+            <div class="flex items-center mb-2">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Telegram_2019_Logo.svg/1200px-Telegram_2019_Logo.svg.png" alt="Telegram" class="h-6 w-6 mr-2">
+              <span class="font-medium text-sm text-gray-800">Telegram</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-xs text-gray-600 font-mono">@AIOCustomerService</span>
+              <button class="btn-outline text-xs px-3 py-1 rounded-full text-blue-500 border border-blue-500 hover:bg-blue-500 hover:text-white transition-colors duration-300" data-lang-key="contact-now">立即联系</button>
+            </div>
+          </div>
+
+          <div class="bg-green-50 rounded-lg p-3 transition-all duration-300 hover:shadow-md">
+            <div class="flex items-center mb-2">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/1200px-WhatsApp.svg.png" alt="WhatsApp" class="h-6 w-6 mr-2">
+              <span class="font-medium text-sm text-gray-800">WhatsApp</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-xs text-gray-600 font-mono">+60 23640051</span>
+              <button class="btn-outline text-xs px-3 py-1 rounded-full text-green-500 border border-green-500 hover:bg-green-500 hover:text-white transition-colors duration-300" data-lang-key="contact-now">立即联系</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 购买License授权信息填写弹窗 -->
+  <div id="buyLicenseModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
+      <!-- 弹窗头部 -->
+      <div class="flex justify-between items-center px-6 py-4 border-b">
+        <h3 class="text-lg font-semibold text-gray-800">购买 License 授权</h3>
+        <button id="closeBuyLicenseModal" class="text-gray-400 hover:text-gray-600">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- 弹窗内容 -->
+      <div class="px-6 py-4">
+        <div class="space-y-4">
+          <!-- 企业名称 -->
+          <div>
+            <label for="licenseCompanyName" class="block text-sm font-medium text-gray-700 mb-2">
+              <span class="text-red-500 mr-1">*</span>
+              企业名称
+            </label>
+            <input
+              type="text"
+              id="licenseCompanyName"
+              required
+              placeholder="请输入企业名称"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            >
+          </div>
+
+          <!-- 邮箱 -->
+          <div>
+            <label for="licenseEmail" class="block text-sm font-medium text-gray-700 mb-2">
+              <span class="text-red-500 mr-1">*</span>
+              邮箱
+            </label>
+            <input
+              type="email"
+              id="licenseEmail"
+              required
+              readonly
+              class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 focus:outline-none"
+            >
+          </div>
+
+          <!-- 服务器机器码 -->
+          <div>
+            <label for="licenseMachineCode" class="block text-sm font-medium text-gray-700 mb-2">
+              <span class="text-red-500 mr-1">*</span>
+              服务器机器码
+            </label>
+            <textarea
+              id="licenseMachineCode"
+              rows="3"
+              required
+              placeholder="请输入服务器机器码"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            ></textarea>
+          </div>
+        </div>
+
+        <!-- 操作按钮 -->
+        <div class="flex space-x-3 mt-6">
+          <button id="cancelBuyLicense" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors duration-200">
+            取消
+          </button>
+          <button id="nextToPurchase" class="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
+            下一步
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 购买授权弹窗 -->
+  <div id="purchaseModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-2">
+    <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[80vh] overflow-hidden flex flex-col">
+      <!-- 弹窗头部 -->
+      <div class="flex justify-between items-center px-4 py-3 border-b bg-white flex-shrink-0">
+        <h3 class="text-lg font-semibold text-gray-800">购买授权</h3>
+        <button id="closePurchaseModal" class="text-gray-400 hover:text-gray-600">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- 弹窗内容 - 可滚动区域 -->
+      <div class="flex-1 overflow-y-auto">
+        <div class="p-4">
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <!-- 左侧：费用选择 -->
+            <div class="lg:col-span-2 space-y-4">
+              <!-- 授权服务 -->
+              <div class="bg-gray-50 rounded-lg p-3">
+                <h4 class="text-base font-medium text-gray-800 mb-3">授权服务</h4>
+                <div class="space-y-2">
+                  <div id="service360" class="service-option bg-white border-2 border-blue-500 rounded-lg p-3 cursor-pointer transition-all duration-200">
+                    <div class="flex justify-between items-center">
+                      <div>
+                        <div class="font-medium text-gray-800 text-sm">360 天服务</div>
+                        <div class="text-xs text-gray-500">年付套餐，更优惠</div>
+                      </div>
+                      <div class="text-base font-bold text-blue-600">¥88,000.00</div>
+                    </div>
+                  </div>
+                  <div id="service180" class="service-option bg-white border-2 border-gray-200 rounded-lg p-3 cursor-pointer transition-all duration-200">
+                    <div class="flex justify-between items-center">
+                      <div>
+                        <div class="font-medium text-gray-800 text-sm">180 天服务</div>
+                        <div class="text-xs text-gray-500">半年套餐</div>
+                      </div>
+                      <div class="text-base font-bold text-blue-600">¥44,000.00</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 权益费用 -->
+              <div class="bg-gray-50 rounded-lg p-3">
+                <h4 class="text-base font-medium text-gray-800 mb-3">权益费用</h4>
+                
+                <!-- 坐席费用 -->
+                <div class="bg-white rounded-lg p-3 mb-3">
+                  <h5 class="font-medium text-gray-800 mb-2 text-sm">坐席费用</h5>
+                  <div class="flex items-center space-x-3 mb-1">
+                    <div class="flex items-center space-x-2">
+                      <label class="text-xs text-gray-600">数量：</label>
+                      <input type="number" id="seatQuantity" min="1" max="500" value="1" class="w-16 px-2 py-1 border border-gray-300 rounded text-center text-sm">
+                      <span class="text-xs text-gray-500">个</span>
+                    </div>
+                    <div class="text-xs text-gray-500">每个 ¥12.00</div>
+                    <div class="ml-auto">
+                      <span class="text-xs text-gray-600">小计：</span>
+                      <span id="seatSubtotal" class="font-medium text-blue-600 text-sm">¥12.00</span>
+                    </div>
+                  </div>
+                  <div class="text-xs text-gray-400 mb-1">可输入范围1-500</div>
+                  <div class="text-xs text-orange-600">更多坐席需求，请联系客户经理</div>
+                </div>
+
+                <!-- 社媒账号费用 -->
+                <div class="bg-white rounded-lg p-3 mb-3">
+                  <h5 class="font-medium text-gray-800 mb-2 text-sm">社媒账号费用</h5>
+                  <div class="flex items-center space-x-3 mb-1">
+                    <div class="flex items-center space-x-2">
+                      <label class="text-xs text-gray-600">数量：</label>
+                      <input type="number" id="socialQuantity" min="1" max="500" value="1" class="w-16 px-2 py-1 border border-gray-300 rounded text-center text-sm">
+                      <span class="text-xs text-gray-500">个</span>
+                    </div>
+                    <div class="text-xs text-gray-500">每个 ¥12.00</div>
+                    <div class="ml-auto">
+                      <span class="text-xs text-gray-600">小计：</span>
+                      <span id="socialSubtotal" class="font-medium text-blue-600 text-sm">¥12.00</span>
+                    </div>
+                  </div>
+                  <div class="text-xs text-gray-400 mb-1">可输入范围1-500</div>
+                  <div class="text-xs text-orange-600">更多社媒账号需求，请联系客户经理</div>
+                </div>
+
+                <!-- 翻译字符费用 -->
+                <div class="bg-white rounded-lg p-3">
+                  <h5 class="font-medium text-gray-800 mb-2 text-sm">翻译字符费用</h5>
+                  <div class="space-y-1 mb-2">
+                    <div id="char1000w" class="char-option bg-gray-50 border-2 border-gray-200 rounded-lg p-2 cursor-pointer transition-all duration-200">
+                      <div class="flex justify-between items-center">
+                        <span class="text-xs font-medium">1000 万个字符</span>
+                        <span class="font-medium text-blue-600 text-sm">¥30,000.00</span>
+                      </div>
+                    </div>
+                    <div id="char100w" class="char-option bg-white border-2 border-blue-500 rounded-lg p-2 cursor-pointer transition-all duration-200">
+                      <div class="flex justify-between items-center">
+                        <span class="text-xs font-medium">100 万个字符</span>
+                        <span class="font-medium text-blue-600 text-sm">¥5,000.00</span>
+                      </div>
+                    </div>
+                    <div id="char10w" class="char-option bg-gray-50 border-2 border-gray-200 rounded-lg p-2 cursor-pointer transition-all duration-200">
+                      <div class="flex justify-between items-center">
+                        <span class="text-xs font-medium">10 万个字符</span>
+                        <span class="font-medium text-blue-600 text-sm">¥800.00</span>
+                      </div>
+                    </div>
+                    <div id="char1w" class="char-option bg-gray-50 border-2 border-gray-200 rounded-lg p-2 cursor-pointer transition-all duration-200">
+                      <div class="flex justify-between items-center">
+                        <span class="text-xs font-medium">1 万个字符</span>
+                        <span class="font-medium text-blue-600 text-sm">¥100.00</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="text-xs text-orange-600">更多翻译字符需求，请联系客户经理</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 右侧：费用汇总 -->
+            <div class="lg:col-span-1">
+              <div class="bg-gray-50 rounded-lg p-3 sticky top-0">
+                <h4 class="text-base font-medium text-gray-800 mb-3">费用汇总</h4>
+                
+                <!-- 基础服务费汇总 -->
+                <div class="space-y-1 mb-3">
+                  <div class="flex justify-between text-xs">
+                    <span class="text-gray-600">授权服务：</span>
+                    <span id="serviceFeeDisplay" class="font-medium">¥88,000.00</span>
+                  </div>
+                </div>
+
+                <!-- 权益费用汇总 -->
+                <div class="space-y-1 mb-3 pb-3 border-b">
+                  <div class="flex justify-between text-xs">
+                    <span class="text-gray-600">坐席费用：</span>
+                    <span id="seatFeeDisplay" class="font-medium">¥12.00</span>
+                  </div>
+                  <div class="flex justify-between text-xs">
+                    <span class="text-gray-600">社媒账号费用：</span>
+                    <span id="socialFeeDisplay" class="font-medium">¥12.00</span>
+                  </div>
+                  <div class="flex justify-between text-xs">
+                    <span class="text-gray-600">翻译字符费用：</span>
+                    <span id="charFeeDisplay" class="font-medium">¥5,000.00</span>
+                  </div>
+                </div>
+
+                <!-- 总计 -->
+                <div class="flex justify-between text-base font-bold mb-4">
+                  <span>总计：</span>
+                  <span id="totalAmount" class="text-blue-600">¥93,024.00</span>
+                </div>
+
+                <!-- 支付渠道 -->
+                <div class="mb-4">
+                  <h5 class="font-medium text-gray-800 mb-2 text-sm">支付渠道</h5>
+                  <div class="space-y-2">
+                    <div id="paymentUSDT" class="payment-method bg-white border-2 border-blue-500 rounded-lg p-2 cursor-pointer transition-all duration-200">
+                      <div class="flex items-center">
+                        <div class="w-5 h-5 bg-green-500 rounded mr-2 flex items-center justify-center">
+                          <span class="text-white text-xs font-bold">₮</span>
+                        </div>
+                        <span class="font-medium text-sm">USDT</span>
+                      </div>
+                    </div>
+                    <div id="paymentPaypal" class="payment-method bg-gray-50 border-2 border-gray-200 rounded-lg p-2 cursor-pointer transition-all duration-200">
+                      <div class="flex items-center">
+                        <div class="w-5 h-5 bg-blue-600 rounded mr-2 flex items-center justify-center">
+                          <span class="text-white text-xs font-bold">P</span>
+                        </div>
+                        <span class="font-medium text-sm">PayPal</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 立即支付按钮 -->
+                <button id="payNowBtn" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 rounded-lg transition-colors duration-200 text-sm">
+                  立即支付
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- USDT支付弹窗 -->
+  <div id="usdtPaymentModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
+      <!-- 弹窗头部 -->
+      <div class="flex justify-between items-center px-6 py-4 border-b">
+        <h3 class="text-lg font-semibold text-gray-800">USDT 支付</h3>
+        <button id="closeUsdtPaymentModal" class="text-gray-400 hover:text-gray-600">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- 弹窗内容 -->
+      <div class="px-6 py-4">
+        <!-- 支付金额 -->
+        <div class="text-center mb-6">
+          <div class="text-sm text-gray-600 mb-2">需要支付</div>
+          <div id="usdtPaymentAmount" class="text-2xl font-bold text-blue-600">¥93,024.00</div>
+          <div class="text-sm text-gray-500 mt-1">约 13,289.14 USDT</div>
+        </div>
+
+        <!-- 支付地址 -->
+        <div class="mb-6">
+          <div class="text-sm font-medium text-gray-800 mb-2">USDT 支付地址</div>
+          <div class="bg-gray-50 rounded-lg p-3 border">
+            <div class="text-xs text-gray-600 mb-1">TRC20 网络</div>
+            <div id="usdtAddress" class="font-mono text-sm text-gray-800 break-all">TQn9Y2khEsLMG73Lyubovk8oQzqiEuFd4A</div>
+            <button id="copyAddressBtn" class="mt-2 text-xs text-blue-600 hover:text-blue-800 flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              </svg>
+              复制地址
+            </button>
+          </div>
+        </div>
+
+        <!-- 二维码 -->
+        <div class="text-center mb-6">
+          <div class="text-sm font-medium text-gray-800 mb-2">扫码支付</div>
+          <div class="inline-block p-4 bg-white border-2 border-gray-200 rounded-lg">
+            <div class="w-32 h-32 bg-gray-100 flex items-center justify-center text-gray-400 text-xs">
+              <!-- 这里可以放置真实的二维码 -->
+              <div class="text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+                </svg>
+                二维码
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 重要提示 -->
+        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-6">
+          <div class="flex items-start">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-600 mt-0.5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+            </svg>
+            <div class="text-sm">
+              <div class="font-medium text-yellow-800 mb-1">重要提示</div>
+              <ul class="text-yellow-700 text-xs space-y-1">
+                <li>• 请务必使用 TRC20 网络转账</li>
+                <li>• 支付地址必须输入正确，转错无法找回</li>
+                <li>• 转账完成后请点击"支付成功"按钮</li>
+                <li>• 我们将在1-3个工作日内处理您的订单</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- 操作按钮 -->
+        <div class="flex space-x-3">
+          <button id="cancelUsdtPayment" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors duration-200">
+            取消
+          </button>
+          <button id="confirmUsdtPayment" class="flex-1 bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
+            支付成功
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 中英文对照表
+    const translations = {
+      'zh': {
+        'dashboard': '仪表盘',
+        'servers': '服务器',
+        'authorization': '授权',
+        'auth-records': '授权记录',
+        'contact-us': '联系我们',
+        'auth-tutorial': '授权使用教程',
+        'fill-form': '请填写以下表单申请授权',
+        'company-name': '企业名称',
+        'email': '邮箱',
+        'contact-name': '联系人',
+        'phone-number': '电话号码',
+        'machine-code': '服务器机器码',
+        'input-company': '请输入公司名称',
+        'input-email': '请输入邮箱',
+        'input-contact': '请输入联系人姓名',
+        'input-phone': '请输入电话号码',
+        'input-machine-code': '请输入服务器机器码',
+        'submit-application': '提交申请',
+        'private-service': '私有化服务',
+        'saas-service': 'SAAS 服务',
+        'logout': '退出',
+        'conditions-title': '申请授权需要满足以下条件',
+        'condition-1': '提交的信息需完整有效',
+        'condition-2': '需提交公司真实信息',
+        'condition-3': '请确保填写正确的电子邮箱',
+        'customer-service': '如有任何疑问，请联系客服：',
+        'apply-now': '立即申请',
+        'page-title': 'AIOChat - 免费申请授权',
+        'auth-tutorial': '授权使用教程',
+        'private-service': '私有化服务',
+        'cloud-service': '云服务',
+        'settings-menu': '设置',
+        'logout': '退出',
+        'apply-auth-title': '免费申请授权',
+        'contact-service': '联系客户服务',
+        'get-auth-code': '获取授权码',
+        'preconditions': '申请试用的前置条件：',
+        'precondition-1': '需要准备好服务器，并且已完成本地部署',
+        'precondition-2': 'AIO 私有化部署链接：https://private.aiochat.im',
+        'precondition-3': '本地部署完成后，登录进入管理平台，获取唯一机器码',
+        'server-code': '服务器机器码',
+        'server-code-tooltip': '获取机器码：\n1. 前往"私有化服务"页面，使用安装好的本地私有化部署：\nhttps://private.aiochat.im\n2. 本地部署完成后，登录进入管理平台，获取唯一机器码：',
+        'apply-trial-button': '申请试用授权',
+        'code-already-applied': '此机器码已申请授权，请重新输入',
+        'contact-customer-service': '联系客户服务',
+        'contact-description': '如果您有任何疑问或需要进一步了解，欢迎联系我们的客户经理',
+        'contact-now': '立即联系',
+        'input-placeholder': '请输入',
+        'telegram-label': 'Telegram',
+        'whatsapp-label': 'WhatsApp',
+        'telegram-placeholder': '@username 或 链接',
+        'whatsapp-placeholder': '电话号码(包含区号)或链接'
+      },
+      'en': {
+        'dashboard': 'Dashboard',
+        'servers': 'Servers',
+        'authorization': 'Authorization',
+        'auth-records': 'Auth Records',
+        'contact-us': 'Contact Us',
+        'auth-tutorial': 'Authorization Tutorial',
+        'fill-form': 'Please fill out the following form to apply for authorization',
+        'company-name': 'Company Name',
+        'contact-name': 'Contact Name',
+        'phone-number': 'Phone Number',
+        'email': 'Email',
+        'machine-code': 'Server Machine Code',
+        'input-company': 'Enter company name',
+        'input-email': 'Enter email',
+        'input-contact': 'Enter contact name',
+        'input-phone': 'Enter phone number',
+        'input-machine-code': 'Enter server machine code',
+        'submit-application': 'Submit Application',
+        'private-service': 'Private Service',
+        'saas-service': 'SAAS Service',
+        'logout': 'Logout',
+        'conditions-title': 'Application requirements',
+        'condition-1': 'Submitted information must be complete and valid',
+        'condition-2': 'Company information must be authentic',
+        'condition-3': 'Please ensure the email address is correct',
+        'customer-service': 'If you have any questions, please contact customer service:',
+        'apply-now': 'Apply Now',
+        'page-title': 'AIOChat - Free Authorization Application',
+        'auth-tutorial': 'Authorization Tutorial',
+        'private-service': 'Private Service',
+        'cloud-service': 'Cloud Service',
+        'settings-menu': 'Settings',
+        'logout': 'Logout',
+        'apply-auth-title': 'Free Authorization Application',
+        'contact-service': 'Contact Customer Service',
+        'get-auth-code': 'Get Authorization Code',
+        'preconditions': 'Prerequisites for Trial Application:',
+        'precondition-1': 'Server ready and local deployment completed',
+        'precondition-2': 'AIO Private Deployment Link: https://private.aiochat.im',
+        'precondition-3': 'After local deployment, log in to the management platform to get the unique machine code',
+        'server-code': 'Server Unique Code',
+        'server-code-tooltip': 'Get Machine Code:\n1. Go to "Private Service" page and use the locally installed private deployment:\nhttps://private.aiochat.im\n2. After local deployment, log in to the management platform to get the unique machine code:',
+        'apply-trial-button': 'Apply for Trial Authorization',
+        'code-already-applied': 'This machine code has already been authorized, please re-enter',
+        'contact-customer-service': 'Contact Customer Service',
+        'contact-description': 'If you have any questions or need further information, please contact our customer manager',
+        'contact-now': 'Contact Now',
+        'input-placeholder': 'Please enter',
+        'telegram-label': 'Telegram',
+        'whatsapp-label': 'WhatsApp',
+        'telegram-placeholder': '@username or link',
+        'whatsapp-placeholder': 'Phone number (with area code) or link'
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // 用户菜单下拉功能
+      const userMenuButton = document.getElementById('userMenuButton');
+      const userDropdownMenu = document.getElementById('userDropdownMenu');
+      
+      if (userMenuButton && userDropdownMenu) {
+        userMenuButton.addEventListener('click', function(e) {
+          e.stopPropagation();
+          userDropdownMenu.classList.toggle('hidden');
+        });
+        
+        // 点击文档其他地方关闭下拉菜单
+        document.addEventListener('click', function(e) {
+          if (!userMenuButton.contains(e.target) && !userDropdownMenu.contains(e.target)) {
+            userDropdownMenu.classList.add('hidden');
+          }
+        });
+        
+        // 语言选择功能
+        const langOptions = document.querySelectorAll('.lang-option');
+        const zhCheckmark = document.getElementById('zhCheckmark');
+        const enCheckmark = document.getElementById('enCheckmark');
+        
+        langOptions.forEach(option => {
+          option.addEventListener('click', function(e) {
+            e.preventDefault();
+            const lang = this.getAttribute('data-lang');
+            
+            // 更新选中状态
+            if (lang === 'zh') {
+              zhCheckmark.classList.remove('hidden');
+              enCheckmark.classList.add('hidden');
+            } else {
+              zhCheckmark.classList.add('hidden');
+              enCheckmark.classList.remove('hidden');
+            }
+            
+            // 保存语言选择
+            localStorage.setItem('selectedLanguage', lang);
+            
+            // 更新URL参数但不刷新页面
+            updateURLParameter('lang', lang);
+            
+            // 应用语言
+            applyLanguage(lang);
+          });
+        });
+      }
+
+      // 语言切换逻辑
+      const languageButton = document.getElementById('languageButton');
+      const languageDropdown = document.getElementById('languageDropdown');
+      const languageOptions = document.querySelectorAll('.language-option');
+      const currentLanguageText = document.getElementById('currentLanguage');
+      
+      // 显示/隐藏语言下拉菜单
+      if (languageButton && languageDropdown) {
+        languageButton.addEventListener('click', function() {
+          languageDropdown.classList.toggle('show');
+        });
+        
+        // 点击其他地方关闭下拉菜单
+        document.addEventListener('click', function(event) {
+          if (!languageButton.contains(event.target) && !languageDropdown.contains(event.target)) {
+            languageDropdown.classList.remove('show');
+          }
+        });
+        
+        // 选择语言
+        languageOptions.forEach(option => {
+          option.addEventListener('click', function() {
+            const lang = this.getAttribute('data-lang');
+            localStorage.setItem('selectedLanguage', lang);
+            
+            // 更新当前语言显示
+            if (currentLanguageText) {
+              currentLanguageText.textContent = lang === 'zh' ? '中文' : 'English';
+            }
+            
+            // 更新URL参数但不刷新页面
+            updateURLParameter('lang', lang);
+            
+            // 应用语言
+            applyLanguage(lang);
+            
+            // 关闭下拉菜单
+            languageDropdown.classList.remove('show');
+          });
+        });
+      }
+      
+      // 更新URL参数而不刷新页面
+      function updateURLParameter(key, value) {
+        const url = new URL(window.location.href);
+        url.searchParams.set(key, value);
+        window.history.replaceState({}, '', url);
+      }
+
+      // 从URL获取邮箱参数并显示
+      function getEmailFromURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('email') || '123@gmail.com'; // 默认值
+      }
+      
+      const userEmail = document.getElementById('userEmail');
+      const emailInput = document.getElementById('email');
+      const email = getEmailFromURL();
+      
+      // 设置顶部导航栏的邮箱显示
+      if (userEmail) {
+        userEmail.textContent = email;
+      }
+      
+      // 设置邮箱输入框的值
+      if (emailInput) {
+        emailInput.value = email;
+      }
+
+      // 个人资料下拉菜单
+      const profileButton = document.getElementById('profileButton');
+      const profileDropdown = document.getElementById('profileDropdown');
+      
+      if (profileButton && profileDropdown) {
+        profileButton.addEventListener('click', function() {
+          profileDropdown.classList.toggle('hidden');
+        });
+        
+        document.addEventListener('click', function(event) {
+          if (!profileButton.contains(event.target) && !profileDropdown.contains(event.target)) {
+            profileDropdown.classList.add('hidden');
+          }
+        });
+      }
+
+      // 从URL参数获取语言设置或使用localStorage
+      function getLanguageFromURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('lang') || localStorage.getItem('selectedLanguage') || 'zh';
+      }
+      
+      let currentLang = getLanguageFromURL();
+      localStorage.setItem('selectedLanguage', currentLang);
+      
+      // 更新当前语言显示
+      if (currentLanguageText) {
+        currentLanguageText.textContent = currentLang === 'zh' ? '中文' : 'English';
+      }
+      
+      // 更新语言选项的选中状态
+      if (zhCheckmark && enCheckmark) {
+        if (currentLang === 'zh') {
+          zhCheckmark.classList.remove('hidden');
+          enCheckmark.classList.add('hidden');
+        } else {
+          zhCheckmark.classList.add('hidden');
+          enCheckmark.classList.remove('hidden');
+        }
+      }
+      
+      // 应用初始语言
+      applyLanguage(currentLang);
+      
+      // 购买License授权按钮事件处理
+      const buyLicenseBtn = document.getElementById('buyLicenseBtn');
+      if (buyLicenseBtn) {
+        buyLicenseBtn.addEventListener('click', function() {
+          // 打开购买授权信息填写弹窗
+          document.getElementById('buyLicenseModal').classList.remove('hidden');
+          // 自动填充邮箱
+          document.getElementById('licenseEmail').value = email;
+        });
+      }
+
+      // 初始化购买License授权弹窗
+      initBuyLicenseModal();
+      
+      // 初始化购买授权弹窗
+      initPurchaseModal();
+      
+      // 初始化USDT支付弹窗
+      initUsdtPaymentModal();
+      
+      // 表单提交前添加所有参数
+      const form = document.querySelector('form');
+      const companyInput = document.getElementById('company');
+      const contactInput = document.getElementById('contact');
+      const phoneInput = document.getElementById('phone');
+      const phoneSelectElement = document.querySelector('select');
+      const telegramInput = document.getElementById('telegram');
+      const whatsappInput = document.getElementById('whatsapp');
+      const machineCodeInput = document.getElementById('machineCode');
+      
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // 获取当前URL中的语言参数
+        const currentLang = getLanguageFromURL();
+        
+        // 构建带有所有表单参数的URL
+        let targetUrl = `dashboard.html?email=${encodeURIComponent(emailInput.value)}&lang=${currentLang}`;
+        
+        // 添加企业名称
+        if (companyInput.value) {
+          targetUrl += `&company=${encodeURIComponent(companyInput.value)}`;
+        }
+        
+        // 添加联系人
+        if (contactInput.value) {
+          targetUrl += `&contact=${encodeURIComponent(contactInput.value)}`;
+        }
+        
+        // 添加电话信息
+        if (phoneInput.value) {
+          targetUrl += `&phone=${encodeURIComponent(phoneInput.value)}`;
+          // 添加电话区号
+          const phoneCode = phoneSelectElement.value;
+          targetUrl += `&phoneCode=${encodeURIComponent(phoneCode)}`;
+        }
+        
+        // 添加Telegram
+        if (telegramInput.value) {
+          targetUrl += `&telegram=${encodeURIComponent(telegramInput.value)}`;
+        }
+        
+        // 添加WhatsApp
+        if (whatsappInput.value) {
+          targetUrl += `&whatsapp=${encodeURIComponent(whatsappInput.value)}`;
+        }
+        
+        // 添加机器码
+        if (machineCodeInput.value) {
+          targetUrl += `&machineCode=${encodeURIComponent(machineCodeInput.value)}`;
+        }
+        
+        // 重定向到目标页面
+        window.location.href = targetUrl;
+      });
+      
+      // 应用语言翻译函数
+      function applyLanguage(lang) {
+        // 更新网页标题
+        document.title = translations[lang]['page-title'] || document.title;
+        
+        // 翻译所有带有data-lang-key的元素
+        document.querySelectorAll('[data-lang-key]').forEach(element => {
+          const key = element.getAttribute('data-lang-key');
+          if (translations[lang][key]) {
+            element.textContent = translations[lang][key];
+          }
+        });
+        
+        // 更新输入字段的 placeholder
+        document.querySelectorAll('[data-lang-key-placeholder]').forEach(element => {
+          const key = element.getAttribute('data-lang-key-placeholder');
+          if (translations[lang][key]) {
+            element.placeholder = translations[lang][key];
+          }
+        });
+        
+        // 更新HTML语言属性
+        document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+      }
+
+      // 购买License授权信息填写弹窗初始化
+      function initBuyLicenseModal() {
+        const modal = document.getElementById('buyLicenseModal');
+        const closeBtn = document.getElementById('closeBuyLicenseModal');
+        const cancelBtn = document.getElementById('cancelBuyLicense');
+        const nextBtn = document.getElementById('nextToPurchase');
+        
+        // 关闭弹窗
+        function closeModal() {
+          modal.classList.add('hidden');
+        }
+        
+        closeBtn.addEventListener('click', closeModal);
+        cancelBtn.addEventListener('click', closeModal);
+        
+        // 点击背景关闭弹窗
+        modal.addEventListener('click', function(e) {
+          if (e.target === modal) {
+            closeModal();
+          }
+        });
+        
+        // 下一步按钮
+        nextBtn.addEventListener('click', function() {
+          const companyName = document.getElementById('licenseCompanyName').value.trim();
+          const email = document.getElementById('licenseEmail').value.trim();
+          const machineCode = document.getElementById('licenseMachineCode').value.trim();
+          
+          // 验证必填字段
+          if (!companyName) {
+            alert('请输入企业名称');
+            return;
+          }
+          
+          if (!email) {
+            alert('请输入邮箱');
+            return;
+          }
+          
+          if (!machineCode) {
+            alert('请输入服务器机器码');
+            return;
+          }
+          
+          // 关闭当前弹窗，打开购买授权弹窗
+          closeModal();
+          document.getElementById('purchaseModal').classList.remove('hidden');
+        });
+      }
+
+      // 购买授权弹窗初始化
+      function initPurchaseModal() {
+        const modal = document.getElementById('purchaseModal');
+        const closeBtn = document.getElementById('closePurchaseModal');
+        
+        // 关闭弹窗
+        closeBtn.addEventListener('click', function() {
+          modal.classList.add('hidden');
+        });
+        
+        // 点击背景关闭弹窗
+        modal.addEventListener('click', function(e) {
+          if (e.target === modal) {
+            modal.classList.add('hidden');
+          }
+        });
+
+        // 基础服务费选择
+        const serviceOptions = document.querySelectorAll('.service-option');
+        serviceOptions.forEach(option => {
+          option.addEventListener('click', function() {
+            serviceOptions.forEach(opt => {
+              opt.classList.remove('border-blue-500');
+              opt.classList.add('border-gray-200');
+              opt.classList.remove('bg-white');
+              opt.classList.add('bg-gray-50');
+            });
+            this.classList.add('border-blue-500');
+            this.classList.remove('border-gray-200');
+            this.classList.add('bg-white');
+            this.classList.remove('bg-gray-50');
+            updateTotalAmount();
+          });
+        });
+
+        // 翻译字符费用选择
+        const charOptions = document.querySelectorAll('.char-option');
+        charOptions.forEach(option => {
+          option.addEventListener('click', function() {
+            charOptions.forEach(opt => {
+              opt.classList.remove('border-blue-500');
+              opt.classList.add('border-gray-200');
+              opt.classList.remove('bg-white');
+              opt.classList.add('bg-gray-50');
+            });
+            this.classList.add('border-blue-500');
+            this.classList.remove('border-gray-200');
+            this.classList.add('bg-white');
+            this.classList.remove('bg-gray-50');
+            updateTotalAmount();
+          });
+        });
+
+        // 支付方式选择
+        const paymentMethods = document.querySelectorAll('.payment-method');
+        paymentMethods.forEach(method => {
+          method.addEventListener('click', function() {
+            paymentMethods.forEach(pm => {
+              pm.classList.remove('border-blue-500');
+              pm.classList.add('border-gray-200');
+              pm.classList.remove('bg-white');
+              pm.classList.add('bg-gray-50');
+            });
+            this.classList.add('border-blue-500');
+            this.classList.remove('border-gray-200');
+            this.classList.add('bg-white');
+            this.classList.remove('bg-gray-50');
+          });
+        });
+
+        // 坐席数量输入
+        const seatQuantity = document.getElementById('seatQuantity');
+        seatQuantity.addEventListener('input', function() {
+          let value = parseInt(this.value) || 1;
+          if (value < 1) value = 1;
+          if (value > 500) value = 500;
+          this.value = value;
+          
+          const subtotal = value * 12;
+          document.getElementById('seatSubtotal').textContent = `¥${subtotal.toFixed(2)}`;
+          updateTotalAmount();
+        });
+
+        // 社媒账号数量输入
+        const socialQuantity = document.getElementById('socialQuantity');
+        socialQuantity.addEventListener('input', function() {
+          let value = parseInt(this.value) || 1;
+          if (value < 1) value = 1;
+          if (value > 500) value = 500;
+          this.value = value;
+          
+          const subtotal = value * 12;
+          document.getElementById('socialSubtotal').textContent = `¥${subtotal.toFixed(2)}`;
+          updateTotalAmount();
+        });
+
+        // 立即支付按钮
+        document.getElementById('payNowBtn').addEventListener('click', function() {
+          const selectedPayment = document.querySelector('.payment-method.border-blue-500');
+          const paymentMethod = selectedPayment ? selectedPayment.querySelector('span').textContent.trim() : 'USDT';
+          const totalAmount = document.getElementById('totalAmount').textContent;
+          
+          // 直接检查是否是USDT支付（包括默认情况）
+          if (paymentMethod === 'USDT' || !selectedPayment || selectedPayment.id === 'paymentUSDT') {
+            // 打开USDT支付弹窗
+            document.getElementById('usdtPaymentAmount').textContent = totalAmount;
+            document.getElementById('usdtPaymentModal').classList.remove('hidden');
+          } else {
+            alert(`即将使用${paymentMethod}支付 ${totalAmount}\n\n支付功能正在开发中...`);
+          }
+        });
+
+        // 初始化总金额计算
+        updateTotalAmount();
+      }
+
+      // 更新总金额
+      function updateTotalAmount() {
+        // 获取基础服务费
+        const selectedService = document.querySelector('.service-option.border-blue-500');
+        const serviceFee = selectedService?.id === 'service360' ? 88000 : 44000;
+        
+        // 获取坐席费用
+        const seatQuantity = parseInt(document.getElementById('seatQuantity').value) || 1;
+        const seatFee = seatQuantity * 12;
+        
+        // 获取社媒账号费用
+        const socialQuantity = parseInt(document.getElementById('socialQuantity').value) || 1;
+        const socialFee = socialQuantity * 12;
+        
+        // 获取翻译字符费用
+        const selectedChar = document.querySelector('.char-option.border-blue-500');
+        let charFee = 5000; // 默认100万字符
+        if (selectedChar) {
+          switch(selectedChar.id) {
+            case 'char1000w': charFee = 30000; break;
+            case 'char100w': charFee = 5000; break;
+            case 'char10w': charFee = 800; break;
+            case 'char1w': charFee = 100; break;
+          }
+        }
+        
+        // 更新显示
+        document.getElementById('serviceFeeDisplay').textContent = `¥${serviceFee.toLocaleString()}.00`;
+        document.getElementById('seatFeeDisplay').textContent = `¥${seatFee.toFixed(2)}`;
+        document.getElementById('socialFeeDisplay').textContent = `¥${socialFee.toFixed(2)}`;
+        document.getElementById('charFeeDisplay').textContent = `¥${charFee.toLocaleString()}.00`;
+        
+        // 计算总计
+        const total = serviceFee + seatFee + socialFee + charFee;
+        document.getElementById('totalAmount').textContent = `¥${total.toLocaleString()}.00`;
+      }
+
+      // USDT支付弹窗初始化
+      function initUsdtPaymentModal() {
+        const modal = document.getElementById('usdtPaymentModal');
+        const closeBtn = document.getElementById('closeUsdtPaymentModal');
+        const cancelBtn = document.getElementById('cancelUsdtPayment');
+        const confirmBtn = document.getElementById('confirmUsdtPayment');
+        const copyBtn = document.getElementById('copyAddressBtn');
+        
+        // 关闭弹窗
+        function closeModal() {
+          modal.classList.add('hidden');
+        }
+        
+        closeBtn.addEventListener('click', closeModal);
+        cancelBtn.addEventListener('click', closeModal);
+        
+        // 点击背景关闭弹窗
+        modal.addEventListener('click', function(e) {
+          if (e.target === modal) {
+            closeModal();
+          }
+        });
+        
+        // 复制地址
+        copyBtn.addEventListener('click', function() {
+          const address = document.getElementById('usdtAddress').textContent;
+          navigator.clipboard.writeText(address).then(function() {
+            // 临时改变按钮文字
+            const originalText = copyBtn.innerHTML;
+            copyBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>已复制';
+            copyBtn.classList.add('text-green-600');
+            
+            setTimeout(function() {
+              copyBtn.innerHTML = originalText;
+              copyBtn.classList.remove('text-green-600');
+            }, 2000);
+          }).catch(function() {
+            alert('复制失败，请手动复制地址');
+          });
+        });
+        
+        // 支付成功确认
+        confirmBtn.addEventListener('click', function() {
+          // 关闭USDT支付弹窗
+          closeModal();
+          
+          // 关闭购买授权弹窗
+          document.getElementById('purchaseModal').classList.add('hidden');
+          
+          // 显示成功提示
+          alert('支付确认成功！\n\n我们已收到您的支付确认，订单将在1-3个工作日内处理。\n处理完成后会通过邮件通知您。');
+        });
+      }
+    });
+  </script>
+</body>
+</html> 

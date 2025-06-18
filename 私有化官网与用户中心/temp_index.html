@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AIOChat - 企业私有化部署</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/@arco-design/web-react/dist/css/arco.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@arco-design/web-react/dist/arco.min.js"></script>
+  <style>
+    :root {
+      --primary-color: #0D9488;
+      --primary-hover: #0F766E;
+      --primary-light: #14B8A6;
+      --primary-lighter: #5EEAD4;
+      --primary-lightest: #F0FDFA;
+      --gray-50: #F9FAFB;
+      --gray-100: #F3F4F6;
+      --gray-200: #E5E7EB;
+      --gray-300: #D1D5DB;
+      --gray-400: #9CA3AF;
+      --gray-500: #6B7280;
+      --gray-600: #4B5563;
+      --gray-700: #374151;
+      --gray-800: #1F2937;
+      --gray-900: #111827;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      --border-radius-sm: 0.25rem;
+      --border-radius: 0.375rem;
+      --border-radius-md: 0.5rem;
+      --border-radius-lg: 0.75rem;
+      --border-radius-xl: 1rem;
+    }
+    
+    body {
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      color: var(--gray-800);
+      line-height: 1.6;
+    }
+    
+    /* 美化滚动条 */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: var(--gray-100);
+      border-radius: 8px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: var(--gray-300);
+      border-radius: 8px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--gray-400);
+    }
+    
+    /* 导航栏样式 */
+    header {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    }
+    
+    nav a {
+      position: relative;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      padding: 0.5rem 0;
+    }
+    
+    nav a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: 0;
+      left: 50%;
+      background-color: var(--primary-color);
+      transition: all 0.3s ease;
+      transform: translateX(-50%);
+    }
+    
+    nav a:hover::after {
+      width: 40%;
+    }
+    
+    nav a.active {
+      color: var(--primary-color);
+      font-weight: 600;
+    }
+    
+    nav a.active::after {
+      width: 70%;
+    }
+    
+    /* 按钮样式 */
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: white;
+      border-radius: var(--border-radius-md);
+      padding: 0.75rem 1.5rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow-sm);
+      border: none;
+    }
+    
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+    
+    .btn-outline {
+      background-color: transparent;
+      color: var(--primary-color);
+      border: 1px solid var(--primary-color);
+      border-radius: var(--border-radius-md);
+      padding: 0.75rem 1.5rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+    
+    .btn-outline:hover {
+      background-color: var(--primary-lightest);
+      color: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+    
+    /* 卡片样式 */
+    .card {
+      border-radius: var(--border-radius-lg);
+      transition: all 0.3s ease;
+      overflow: hidden;
+      border: 1px solid var(--gray-100);
+      box-shadow: var(--shadow);
+    }
+    
+    .card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-4px);
+    }
+    
+    /* 特性卡片 */
+    .feature-card {
+      border-radius: var(--border-radius-lg);
+      padding: 1.75rem;
+      transition: all 0.3s ease;
+      border: 1px solid var(--gray-200);
+      background-color: white;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .feature-card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+    }
+    
+    .feature-icon {
+      width: 3rem;
+      height: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--border-radius-lg);
+      background-color: var(--primary-lightest);
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+    }
+    
+    /* 表格样式 */
+    table {
+      border-collapse: separate;
+      border-spacing: 0;
+      width: 100%;
+      border-radius: var(--border-radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    
+    th {
+      background-color: var(--primary-lightest);
+      font-weight: 600;
+      text-align: left;
+      padding: 1.25rem;
+      border-bottom: 1px solid var(--gray-200);
+      color: var(--primary-hover);
+    }
+    
+    td {
+      padding: 1.25rem;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    
+    tr:last-child td {
+      border-bottom: none;
+    }
+    
+    tr:hover td {
+      background-color: var(--gray-50);
+    }
+    
+    /* FAQ样式 */
+    .faq-item {
+      border-radius: var(--border-radius-md);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+      transition: all 0.3s ease;
+      border: 1px solid var(--gray-200);
+      background-color: white;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .faq-item:hover {
+      box-shadow: var(--shadow-md);
+      border-color: var(--primary-lighter);
+    }
+    
+    /* 动画 */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .animate-fadeIn {
+      animation: fadeIn 0.5s ease-in-out;
+    }
+    
+    .animate-slideUp {
+      animation: slideUp 0.5s ease-out;
+    }
+    
+    /* Toast 样式 */
+    #toast {
+      border-radius: var(--border-radius-md);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    /* 代码块样式 */
+    .code-block {
+      border-radius: var(--border-radius-md);
+      background-color: var(--gray-900);
+      color: var(--gray-100);
+      font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .copy-button {
+      border-radius: var(--border-radius-sm);
+      transition: all 0.2s ease;
+      background-color: var(--gray-700);
+      color: var(--gray-200);
+    }
+    
+    .copy-button:hover {
+      background-color: var(--primary-light);
+      color: white;
+    }
+    
+    /* 下拉菜单样式 */
+    .dropdown {
+      border-radius: var(--border-radius-md);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--gray-100);
+      overflow: hidden;
+      transform-origin: top right;
+      transition: all 0.2s ease;
+    }
+    
+    .dropdown-item {
+      transition: all 0.15s ease;
+    }
+    
+    .dropdown-item:hover {
+      background-color: var(--primary-lightest);
+    }
+    
+    /* Logo悬停动画 */
+    .logo-hover {
+      transition: transform 0.3s ease;
+    }
+    
+    .logo-hover:hover {
+      transform: scale(1.05);
+    }
+    
+    /* 主横幅背景 */
+    .hero-bg {
+      background-image: linear-gradient(135deg, var(--primary-lightest) 0%, var(--gray-50) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero-bg::before {
+      content: '';
+      position: absolute;
+      top: -10%;
+      right: -10%;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(94,234,212,0.1) 0%, rgba(94,234,212,0) 70%);
+    }
+    
+    /* 页面加载动画 */
+    @keyframes pageLoad {
+      0% {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .page-load {
+      animation: pageLoad 0.6s ease-out;
+    }
+    
+    /* 系统要求卡片样式 */
+    .system-req-card {
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-sm);
+      transition: all 0.3s ease;
+      background: linear-gradient(to right, var(--gray-100), var(--gray-200));
+    }
+    
+    .system-req-item {
+      border-radius: var(--border-radius-md);
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s ease;
+    }
+    
+    .system-req-item:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    /* 底部CTA区域样式 */
+    .cta-section {
+      background: linear-gradient(135deg, var(--gray-800) 0%, var(--gray-900) 100%);
+    }
+    
+    .cta-button {
+      transition: all 0.3s ease;
+      overflow: hidden;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .cta-button::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: -100%;
+      background: rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+      z-index: -1;
+    }
+    
+    .cta-button:hover::after {
+      left: 0;
+    }
+  </style>
+</head>
+<body class="page-load">
+  <!-- 导航栏 -->
+  <header class="bg-white shadow-sm sticky top-0 z-50">
+    <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+      <div class="flex items-center">
+        <img src="../私有化官网与用户中心/images/aio-logo_kxblvp.png.png" alt="AIOChat Logo" class="h-9 w-9 mr-3 logo-hover">
+        <span class="text-xl font-bold text-gray-800">AIOChat</span>
+      </div>
+      <nav class="hidden md:flex space-x-10">
+        <a href="#" class="text-gray-600 hover:text-gray-900">首页</a>
+        <a href="#" class="text-gray-600 hover:text-gray-900">产品特点</a>
+        <a href="#" class="text-gray-600 hover:text-gray-900">产品定价</a>
+        <a href="#" class="text-gray-600 hover:text-gray-900">下载与部署</a>
+        <a href="#" class="text-teal-500 font-medium active">私有化服务</a>
+        <a href="#" class="text-gray-600 hover:text-gray-900">解决方案</a>
+      </nav>
+      <div class="flex items-center space-x-3">
+        <div class="relative">
+          <a href="#" id="loginButton" class="px-4 py-2.5 text-gray-600 hover:text-teal-600 transition duration-200 font-medium rounded-md hover:bg-gray-50">登录</a>
+          <div id="loginDropdown" class="absolute right-0 mt-2 w-52 bg-white rounded-lg shadow-lg py-2 hidden z-10 border border-gray-100 dropdown">
+            <a href="#" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-teal-600 transition duration-150 dropdown-item">SaaS 云服务</a>
+            <a href="private-login.html" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-teal-600 transition duration-150 dropdown-item">私有化服务</a>
+          </div>
+        </div>
+        <a href="private-login.html" class="px-5 py-2.5 bg-teal-500 text-white rounded-md hover:bg-teal-600 transition duration-200 shadow-sm hover:shadow-md font-medium btn-primary">免费试用</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主横幅 -->
+  <section class="py-24 hero-bg">
+    <div class="container mx-auto px-6 text-center animate-fadeIn">
+      <h1 class="text-5xl md:text-6xl font-bold mb-4 text-gray-900">AIOChat</h1>
+      <h2 class="text-3xl md:text-4xl font-bold mb-6 text-gray-800">企业私有化部署</h2>
+      <p class="text-xl text-gray-600 mb-10 max-w-3xl mx-auto">专属服务器，数据加密，更安全稳定；独享云资源，速度更快</p>
+      <!-- <div class="flex flex-wrap justify-center gap-4">
+        <a href="private-login.html" class="px-6 py-3 bg-teal-500 text-white rounded-md hover:bg-teal-600 transition">免费申请试用</a>
+        <button class="px-6 py-3 border border-teal-500 text-teal-500 rounded-md hover:bg-teal-500 hover:text-white transition">了解更多功能</button>
+      </div> -->
+    </div>
+  </section>
+
+  <!-- 信息区域 -->
+  <section class="py-16 bg-white">
+    <div class="container mx-auto px-6">
+      <div class="flex flex-wrap -mx-4">
+        <div class="w-full md:w-1/3 px-4 mb-8 md:mb-0">
+          <div class="feature-card h-full">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+            </div>
+            <h3 class="font-semibold text-lg mb-3">数据私密安全</h3>
+            <p class="text-gray-600">数据私有化隔离，本地存储，完全可控，保护客户隐私。</p>
+          </div>
+        </div>
+        <div class="w-full md:w-1/3 px-4 mb-8 md:mb-0">
+          <div class="feature-card h-full">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+              </svg>
+            </div>
+            <h3 class="font-semibold text-lg mb-3">企业自主掌控</h3>
+            <p class="text-gray-600">轻松实现成员、权限管理；入职迅速，离职安全，避免人为数据事故。</p>
+          </div>
+        </div>
+        <div class="w-full md:w-1/3 px-4">
+          <div class="feature-card h-full">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
+              </svg>
+            </div>
+            <h3 class="font-semibold text-lg mb-3">尊享客户服务</h3>
+            <p class="text-gray-600">专属团队及时响应，解决企业的各种问题，提供完整的部署方案，确保系统稳定运行。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 私有化部署专享服务权益 -->
+  <section class="py-16 bg-white">
+    <div class="container mx-auto px-6">
+      <h2 class="text-3xl font-bold text-center mb-6">私有化部署专享服务权益</h2>
+      <p class="text-center text-gray-600 mb-12 max-w-3xl mx-auto">私有化版本包含以下所有标准功能</p>
+      
+      <div class="overflow-x-auto bg-white rounded-xl shadow-md">
+        <table class="w-full border-collapse">
+          <thead>
+            <tr>
+              <th class="p-5 text-left rounded-tl-lg">功能类别</th>
+              <th class="p-5 text-center">社区版</th>
+              <th class="p-5 text-center rounded-tr-lg">私有化标准版</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-700">
+            <tr class="hover:bg-gray-50 transition-colors duration-150">
+              <td class="p-5 font-medium">API调用次数</td>
+              <td class="p-5 text-center text-gray-500">限制</td>
+              <td class="p-5 text-center">
+                <span class="inline-flex items-center justify-center w-8 h-8 bg-teal-50 text-teal-600 rounded-full">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                </span>
+              </td>
+            </tr>
+            <tr class="hover:bg-gray-50 transition-colors duration-150">
+              <td class="p-5 font-medium">可创建模型</td>
+              <td class="p-5 text-center text-gray-500">限制</td>
+              <td class="p-5 text-center">
+                <span class="inline-flex items-center justify-center w-8 h-8 bg-teal-50 text-teal-600 rounded-full">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                </span>
+              </td>
+            </tr>
+            <tr class="hover:bg-gray-50 transition-colors duration-150">
+              <td class="p-5 font-medium">数据集成</td>
+              <td class="p-5 text-center text-gray-500">-</td>
+              <td class="p-5 text-center">
+                <span class="inline-flex items-center justify-center w-8 h-8 bg-teal-50 text-teal-600 rounded-full">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                </span>
+              </td>
+            </tr>
+            <tr class="hover:bg-gray-50 transition-colors duration-150">
+              <td class="p-5 font-medium">文档管理</td>
+              <td class="p-5 text-center text-gray-500">限制</td>
+              <td class="p-5 text-center">
+                <span class="inline-flex items-center justify-center w-8 h-8 bg-teal-50 text-teal-600 rounded-full">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                </span>
+              </td>
+            </tr>
+            <tr class="hover:bg-gray-50 transition-colors duration-150">
+              <td class="p-5 font-medium">私有模型部署</td>
+              <td class="p-5 text-center text-gray-500">-</td>
+              <td class="p-5 text-center">
+                <span class="inline-flex items-center justify-center w-8 h-8 bg-teal-50 text-teal-600 rounded-full">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                </span>
+              </td>
+            </tr>
+            <tr class="hover:bg-gray-50 transition-colors duration-150">
+              <td class="p-5 font-medium">定制化开发</td>
+              <td class="p-5 text-center text-gray-500">-</td>
+              <td class="p-5 text-center">
+                <span class="inline-flex items-center justify-center w-8 h-8 bg-teal-50 text-teal-600 rounded-full">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                </span>
+              </td>
+            </tr>
+            <tr class="hover:bg-gray-50 transition-colors duration-150">
+              <td class="p-5 font-medium">多用户与权限管理</td>
+              <td class="p-5 text-center text-gray-500">-</td>
+              <td class="p-5 text-center">
+                <span class="inline-flex items-center justify-center w-8 h-8 bg-teal-50 text-teal-600 rounded-full">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                </span>
+              </td>
+            </tr>
+            <tr class="hover:bg-gray-50 transition-colors duration-150">
+              <td class="p-5 font-medium rounded-bl-lg">高级安全设置</td>
+              <td class="p-5 text-center text-gray-500">-</td>
+              <td class="p-5 text-center rounded-br-lg">
+                <span class="inline-flex items-center justify-center w-8 h-8 bg-teal-50 text-teal-600 rounded-full">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- 部署方案 -->
+  <section id="deployment-section" class="py-16 bg-gray-50">
+    <div class="container mx-auto px-6">
+      <h2 class="text-3xl font-bold text-center mb-12">部署方案</h2>
+      <div class="flex flex-wrap -mx-4">
+        <div class="w-full md:w-1/2 px-4 mb-8">
+          <div class="bg-white rounded-lg p-8 h-full shadow-sm hover:shadow-lg transition card">
+            <h3 class="text-xl font-semibold mb-6 flex items-center justify-between w-full">
+              <div class="flex items-center">
+                <div class="bg-teal-50 p-2 rounded-lg mr-3">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-teal-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  </svg>
+                </div>
+                <span>Linux 安装脚本</span>
+              </div>
+              <a href="#faq-section" class="text-teal-500 hover:text-teal-600 hover:underline text-sm flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                安装遇到问题？
+              </a>
+            </h3>
+            <div class="code-block p-4 mb-6 rounded-lg relative group">
+              <div class="overflow-x-auto pb-10 text-gray-100 text-sm font-mono">if [ -f /usr/bin/curl ];then curl -sSO https://download.aiochat.im/install/install_private.sh;else wget -O install_private.sh https://download.aiochat.im/install/install_private.sh;fi;bash install_private.sh ed8484bec</div>
+              <button id="copyScriptBtn" class="absolute bottom-3 right-3 px-3 py-1.5 bg-gray-700 text-gray-100 rounded hover:bg-teal-500 transition-all duration-200 flex items-center text-xs font-medium copy-button" title="复制代码">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                </svg>
+                复制脚本
+              </button>
+            </div>
+            <ul class="mb-6 space-y-4">
+              <li class="flex items-start">
+                <svg class="h-5 w-5 text-teal-500 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>完成注册后可免费申请试用授权文件</span>
+              </li>
+              <li class="flex items-start">
+                <svg class="h-5 w-5 text-teal-500 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>安装部署服务端输入人工授权文件即可使用</span>
+              </li>
+            </ul>
+            <div class="mt-6 bg-gray-50 p-5 rounded-lg">
+              <h4 class="font-medium mb-3 text-teal-700">试用说明</h4>
+              <ol class="text-sm text-gray-700 list-decimal pl-5 space-y-2">
+                <li>试用版与正式版功能相同，有效期 14 天</li>
+                <li>部分功能暂停及第三平台，可自行创建或联系客服产品经理</li>
+                <li>正式版支持月度年度续约，拥有专属服务限制与售后维护服务，可联系客户经理购买。</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+        <div class="w-full md:w-1/2 px-4 mb-8">
+          <div class="system-req-card p-8 h-full">
+            <h3 class="text-xl font-semibold mb-4 flex items-center">
+              <div class="bg-teal-50 p-2 rounded-lg mr-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-teal-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                </svg>
+              </div>
+              <span>系统要求</span>
+            </h3>
+            <p class="text-gray-600 mb-8">请确保您的系统满足以下最低要求</p>
+            
+            <div class="grid grid-cols-2 gap-6">
+              <div class="bg-white p-6 rounded-lg system-req-item">
+                <h4 class="font-medium mb-4 text-gray-800 flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-teal-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                  </svg>
+                  硬件配置
+                </h4>
+                <ul class="space-y-3">
+                  <li class="flex items-center">
+                    <svg class="h-5 w-5 text-teal-500 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span>CPU：4核以上</span>
+                  </li>
+                  <li class="flex items-center">
+                    <svg class="h-5 w-5 text-teal-500 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span>内存：16GB以上</span>
+                  </li>
+                  <li class="flex items-center">
+                    <svg class="h-5 w-5 text-teal-500 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span>存储：100GB以上</span>
+                  </li>
+                </ul>
+              </div>
+              <div class="bg-white p-6 rounded-lg system-req-item">
+                <h4 class="font-medium mb-4 text-gray-800 flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-teal-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  软件要求
+                </h4>
+                <ul class="space-y-3">
+                  <li class="flex items-center">
+                    <svg class="h-5 w-5 text-teal-500 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span>操作系统：Linux</span>
+                  </li>
+                  <li class="flex items-center">
+                    <svg class="h-5 w-5 text-teal-500 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span>数据库：MySQL(≥7)</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 常见问题 -->
+  <section id="faq-section" class="py-16 bg-gray-50">
+    <div class="container mx-auto px-6">
+      <h2 class="text-3xl font-bold text-center mb-6">常见问题</h2>
+      <p class="text-center text-gray-600 mb-12">如果未解决您的问题，可查看 <a href="#" class="text-teal-600 hover:text-teal-700 hover:underline font-medium">完整常见问题</a></p>
+      
+      <div class="max-w-3xl mx-auto">
+        <div class="faq-item mb-6">
+          <h3 class="font-semibold mb-3 text-gray-800 text-lg">如何申请免费试用？</h3>
+          <p class="text-gray-600">注册账号后，进入"私有化服务"页面，点击"免费试用"按钮，填写相关信息后提交申请即可。审核通过后会收到邮件通知。</p>
+        </div>
+        
+        <div class="faq-item mb-6">
+          <h3 class="font-semibold mb-3 text-gray-800 text-lg">部署环境有哪些要求？</h3>
+          <p class="text-gray-600">最低配置：4核CPU，16GB内存，100GB存储空间。操作系统推荐使用Linux，数据库需要MySQL 7或更高版本。</p>
+        </div>
+        
+        <div class="faq-item mb-6">
+          <h3 class="font-semibold mb-3 text-gray-800 text-lg">如何获取授权文件？</h3>
+          <p class="text-gray-600">登录到用户中心后，在"私有化部署"页面可以查看和下载已审核通过的授权文件。试用版授权有效期为14天。</p>
+        </div>
+        
+        <div class="faq-item mb-6">
+          <h3 class="font-semibold mb-3 text-gray-800 text-lg">私有化和云服务有什么区别？</h3>
+          <p class="text-gray-600">私有化部署将所有服务和数据保存在客户自己的服务器上，确保数据安全与隐私；云服务则是我们托管的SaaS服务，使用更加便捷但数据存储在云端。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 底部CTA -->
+  <section class="py-20 cta-section text-white">
+    <div class="container mx-auto px-6 text-center">
+      <h2 class="text-3xl md:text-4xl font-bold mb-8">准备开启私有化部署了吗？</h2>
+      <a href="#deployment-section" class="inline-block px-8 py-4 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition shadow-lg hover:shadow-xl transform hover:-translate-y-1 font-medium border-2 border-transparent hover:border-white cta-button">立即安装</a>
+    </div>
+  </section>
+
+  <!-- 页脚 -->
+  <footer class="py-12 bg-gray-50">
+    <div class="container mx-auto px-6">
+      <div class="flex flex-wrap justify-between">
+        <div class="w-full md:w-1/4 mb-10 md:mb-0">
+          <div class="flex items-center mb-6">
+            <img src="https://res.cloudinary.com/dvn9colre/image/upload/v1700000000/aio-logo_kxblvp.png" alt="AIOChat Logo" class="h-10 w-10 mr-3 logo-hover">
+            <span class="text-xl font-bold text-gray-800">AIOChat</span>
+          </div>
+          <p class="text-gray-600">专业的AI对话助手，为企业提供定制化智能对话解决方案</p>
+        </div>
+        
+        <div class="w-full md:w-2/3">
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div>
+              <h4 class="font-semibold mb-4 text-gray-800">产品</h4>
+              <ul class="space-y-3 text-gray-600">
+                <li><a href="#" class="hover:text-teal-600 transition-colors duration-200">AI对话</a></li>
+                <li><a href="#" class="hover:text-teal-600 transition-colors duration-200">数据集成</a></li>
+                <li><a href="#" class="hover:text-teal-600 transition-colors duration-200">API接口</a></li>
+                <li><a href="#" class="hover:text-teal-600 transition-colors duration-200">插件生态</a></li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 class="font-semibold mb-4 text-gray-800">解决方案</h4>
+              <ul class="space-y-3 text-gray-600">
+                <li><a href="#" class="hover:text-teal-600 transition-colors duration-200">金融行业</a></li>
+                <li><a href="#" class="hover:text-teal-600 transition-colors duration-200">医疗健康</a></li>
+                <li><a href="#" class="hover:text-teal-600 transition-colors duration-200">教育培训</a></li>
+                <li><a href="#" class="hover:text-teal-600 transition-colors duration-200">制造业</a></li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 class="font-semibold mb-4 text-gray-800">支持</h4>
+              <ul class="space-y-3 text-gray-600">
+                <li><a href="#" class="hover:text-teal-600 transition-colors duration-200">帮助中心</a></li>
+                <li><a href="#" class="hover:text-teal-600 transition-colors duration-200">部署文档</a></li>
+                <li><a href="#" class="hover:text-teal-600 transition-colors duration-200">API文档</a></li>
+                <li><a href="#" class="hover:text-teal-600 transition-colors duration-200">常见问题</a></li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 class="font-semibold mb-4 text-gray-800">关于我们</h4>
+              <ul class="space-y-3 text-gray-600">
+                <li><a href="#" class="hover:text-teal-600 transition-colors duration-200">公司简介</a></li>
+                <li><a href="#" class="hover:text-teal-600 transition-colors duration-200">联系我们</a></li>
+                <li><a href="#" class="hover:text-teal-600 transition-colors duration-200">加入我们</a></li>
+                <li><a href="#" class="hover:text-teal-600 transition-colors duration-200">隐私政策</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="mt-12 pt-8 border-t border-gray-200 text-center">
+        <p class="text-gray-600">© 2023 AIOChat. 保留所有权利</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast提示 -->
+  <div id="toast" class="fixed bottom-6 right-6 bg-teal-600 text-white px-6 py-3 rounded-lg shadow-lg transform transition-all duration-300 translate-y-20 opacity-0 flex items-center z-50">
+    <div class="mr-3 bg-white rounded-full p-1">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+      </svg>
+    </div>
+    <span class="font-medium">复制成功!</span>
+  </div>
+
+  <script>
+    // 页面加载完成后执行
+    document.addEventListener('DOMContentLoaded', function() {
+      // 平滑滚动
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+          document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+          });
+        });
+      });
+      
+      // 登录下拉菜单点击交互
+      const loginButton = document.getElementById('loginButton');
+      const loginDropdown = document.getElementById('loginDropdown');
+      
+      if (loginButton && loginDropdown) {
+        loginButton.addEventListener('click', function(e) {
+          e.preventDefault();
+          loginDropdown.classList.toggle('hidden');
+          loginButton.classList.toggle('text-teal-500');
+        });
+        
+        // 点击页面其他区域关闭下拉菜单
+        document.addEventListener('click', function(e) {
+          if (!loginButton.contains(e.target) && !loginDropdown.contains(e.target)) {
+            loginDropdown.classList.add('hidden');
+            loginButton.classList.remove('text-teal-500');
+          }
+        });
+      }
+
+      // 复制脚本代码功能
+      const copyScriptBtn = document.getElementById('copyScriptBtn');
+      const toast = document.getElementById('toast');
+      
+      if (copyScriptBtn && toast) {
+        copyScriptBtn.addEventListener('click', function() {
+          const scriptText = "if [ -f /usr/bin/curl ];then curl -sSO https://download.aiochat.im/install/install_private.sh;else wget -O install_private.sh https://download.aiochat.im/install/install_private.sh;fi;bash install_private.sh ed8484bec";
+          
+          try {
+            // 创建临时textarea元素来执行复制
+            const textarea = document.createElement('textarea');
+            textarea.value = scriptText;
+            textarea.setAttribute('readonly', '');
+            textarea.style.position = 'absolute';
+            textarea.style.left = '-9999px';
+            document.body.appendChild(textarea);
+            textarea.select();
+            const successful = document.execCommand('copy');
+            document.body.removeChild(textarea);
+            
+            console.log('复制操作执行结果:', successful ? '成功' : '失败');
+            
+            if (successful) {
+              // 显示Toast提示
+              toast.style.display = 'flex'; // 确保元素显示
+              toast.classList.remove('translate-y-20', 'opacity-0');
+              toast.classList.add('translate-y-0', 'opacity-100');
+              
+              // 3秒后隐藏Toast
+              setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+              }, 3000);
+            } else {
+              alert('复制失败，请手动复制命令');
+            }
+          } catch (err) {
+            console.error('复制失败:', err);
+            alert('复制失败，请手动复制命令');
+          }
+        });
+      } else {
+        console.error('复制按钮或Toast元素不存在');
+      }
+    });
+  </script>
+</body>
+</html>

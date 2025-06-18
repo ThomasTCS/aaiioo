@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>销售列表 - AIO 运营平台</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+  <div class="p-6">
+    <!-- 页面标题 -->
+    <div class="mb-6">
+      <div class="flex justify-between items-center">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900 mb-2">销售列表</h1>
+          <p class="text-gray-600">管理销售人员信息和业绩数据</p>
+        </div>
+        <button id="addSalesBtn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors">
+          <svg class="w-4 h-4 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+          </svg>
+          新增销售
+        </button>
+      </div>
+    </div>
+    
+    <!-- 统计卡片 -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+      <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex items-center">
+          <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm font-medium text-gray-500">销售总数</p>
+            <p class="text-2xl font-bold text-gray-900" id="totalSalesCount">0</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex items-center">
+          <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm font-medium text-gray-500">本月业绩</p>
+            <p class="text-2xl font-bold text-gray-900" id="monthlyRevenue">¥0</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex items-center">
+          <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm font-medium text-gray-500">本月订单</p>
+            <p class="text-2xl font-bold text-gray-900" id="monthlyOrders">0</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex items-center">
+          <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+            <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm font-medium text-gray-500">转化率</p>
+            <p class="text-2xl font-bold text-gray-900" id="conversionRate">0%</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 销售列表表格 -->
+    <div class="bg-white rounded-lg shadow">
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">销售人员</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">联系方式</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">负责区域</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">本月业绩</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">客户数量</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">状态</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">操作</th>
+            </tr>
+          </thead>
+          <tbody id="salesTableBody" class="bg-white divide-y divide-gray-200">
+            <!-- 销售数据将通过JavaScript动态生成 -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 销售管理弹窗 -->
+  <div id="salesModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+      <div class="mt-3">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-medium text-gray-900" id="salesModalTitle">新增销售</h3>
+          <button id="closeSalesModal" class="text-gray-400 hover:text-gray-600">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+        
+        <form id="salesForm" class="space-y-4">
+          <div>
+            <label for="salesName" class="block text-sm font-medium text-gray-700 mb-1">姓名 <span class="text-red-500">*</span></label>
+            <input type="text" id="salesName" name="name" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="请输入销售姓名">
+          </div>
+          
+          <div>
+            <label for="salesPhone" class="block text-sm font-medium text-gray-700 mb-1">联系电话 <span class="text-red-500">*</span></label>
+            <input type="tel" id="salesPhone" name="phone" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="请输入联系电话">
+          </div>
+          
+          <div>
+            <label for="salesEmail" class="block text-sm font-medium text-gray-700 mb-1">邮箱</label>
+            <input type="email" id="salesEmail" name="email" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="请输入邮箱地址">
+          </div>
+          
+          <div>
+            <label for="salesRegion" class="block text-sm font-medium text-gray-700 mb-1">负责区域 <span class="text-red-500">*</span></label>
+            <select id="salesRegion" name="region" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <option value="">请选择区域</option>
+              <option value="华北">华北</option>
+              <option value="华东">华东</option>
+              <option value="华南">华南</option>
+              <option value="华中">华中</option>
+              <option value="西北">西北</option>
+              <option value="西南">西南</option>
+              <option value="东北">东北</option>
+            </select>
+          </div>
+          
+          <div>
+            <label for="salesRemark" class="block text-sm font-medium text-gray-700 mb-1">备注</label>
+            <textarea id="salesRemark" name="remark" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="请输入备注信息"></textarea>
+          </div>
+          
+          <div class="flex justify-end space-x-3 pt-4">
+            <button type="button" id="cancelSalesBtn" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500">
+              取消
+            </button>
+            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+              保存
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 初始化销售数据
+    let salesList = [
+      {
+        id: 1,
+        name: '张三',
+        phone: '13800138001',
+        email: 'zhangsan@example.com',
+        region: '华北',
+        monthlyRevenue: 150000,
+        customerCount: 12,
+        status: '在职',
+        remark: '资深销售，业绩优秀',
+        updateTime: '2024-01-15 10:30:00'
+      },
+      {
+        id: 2,
+        name: '李四',
+        phone: '13800138002',
+        email: 'lisi@example.com',
+        region: '华东',
+        monthlyRevenue: 120000,
+        customerCount: 8,
+        status: '在职',
+        remark: '新入职销售，潜力很大',
+        updateTime: '2024-01-20 14:20:00'
+      },
+      {
+        id: 3,
+        name: '王五',
+        phone: '13800138003',
+        email: 'wangwu@example.com',
+        region: '华南',
+        monthlyRevenue: 180000,
+        customerCount: 15,
+        status: '在职',
+        remark: '区域销售经理',
+        updateTime: '2024-01-10 09:15:00'
+      }
+    ];
+    
+    let currentEditingSales = null;
+    
+    // 更新统计数据
+    function updateSalesStats() {
+      const totalSales = salesList.length;
+      const monthlyRevenue = salesList.reduce((sum, sales) => sum + sales.monthlyRevenue, 0);
+      const monthlyOrders = salesList.reduce((sum, sales) => sum + sales.customerCount, 0);
+      const conversionRate = monthlyOrders > 0 ? ((monthlyOrders / (monthlyOrders * 1.5)) * 100).toFixed(1) : 0;
+      
+      document.getElementById('totalSalesCount').textContent = totalSales;
+      document.getElementById('monthlyRevenue').textContent = `¥${monthlyRevenue.toLocaleString()}`;
+      document.getElementById('monthlyOrders').textContent = monthlyOrders;
+      document.getElementById('conversionRate').textContent = `${conversionRate}%`;
+    }
+    
+    // 渲染销售列表
+    function renderSalesTable() {
+      const tbody = document.getElementById('salesTableBody');
+      tbody.innerHTML = '';
+      
+      salesList.forEach(sales => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td class="px-6 py-4 whitespace-nowrap">
+            <div class="flex items-center">
+              <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center mr-3">
+                <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                </svg>
+              </div>
+              <div class="text-sm font-medium text-gray-900">${sales.name}</div>
+            </div>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            <div>
+              <div>${sales.phone}</div>
+              ${sales.email ? `<div class="text-xs text-gray-400">${sales.email}</div>` : ''}
+            </div>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+              ${sales.region}
+            </span>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+            ¥${sales.monthlyRevenue.toLocaleString()}
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+            ${sales.customerCount}
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${sales.status === '在职' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+              ${sales.status}
+            </span>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+            <div class="flex space-x-2">
+              <button onclick="editSales(${sales.id})" class="text-blue-600 hover:text-blue-900">
+                编辑
+              </button>
+              <button onclick="toggleSalesStatus(${sales.id})" class="text-${sales.status === '在职' ? 'yellow' : 'green'}-600 hover:text-${sales.status === '在职' ? 'yellow' : 'green'}-900">
+                ${sales.status === '在职' ? '离职' : '复职'}
+              </button>
+              <button onclick="deleteSales(${sales.id})" class="text-red-600 hover:text-red-900">
+                删除
+              </button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+      
+      updateSalesStats();
+    }
+    
+    // 销售管理弹窗控制
+    const salesModal = document.getElementById('salesModal');
+    const salesForm = document.getElementById('salesForm');
+    const salesModalTitle = document.getElementById('salesModalTitle');
+    
+    // 显示销售弹窗
+    function showSalesModal(isEdit = false, sales = null) {
+      currentEditingSales = sales;
+      salesModalTitle.textContent = isEdit ? '编辑销售' : '新增销售';
+      
+      if (isEdit && sales) {
+        document.getElementById('salesName').value = sales.name;
+        document.getElementById('salesPhone').value = sales.phone;
+        document.getElementById('salesEmail').value = sales.email || '';
+        document.getElementById('salesRegion').value = sales.region;
+        document.getElementById('salesRemark').value = sales.remark || '';
+      } else {
+        salesForm.reset();
+      }
+      
+      salesModal.classList.remove('hidden');
+    }
+    
+    // 关闭销售弹窗
+    function closeSalesModal() {
+      salesModal.classList.add('hidden');
+      currentEditingSales = null;
+    }
+    
+    // 全局函数定义
+    window.editSales = function(id) {
+      const sales = salesList.find(s => s.id === id);
+      if (sales) {
+        showSalesModal(true, sales);
+      }
+    };
+    
+    window.toggleSalesStatus = function(id) {
+      const sales = salesList.find(s => s.id === id);
+      if (sales) {
+        sales.status = sales.status === '在职' ? '离职' : '在职';
+        sales.updateTime = new Date().toLocaleString('zh-CN');
+        renderSalesTable();
+        alert(`销售状态已更新为${sales.status}`);
+      }
+    };
+    
+    window.deleteSales = function(id) {
+      const sales = salesList.find(s => s.id === id);
+      if (sales) {
+        if (confirm(`确定要删除销售"${sales.name}"吗？`)) {
+          salesList = salesList.filter(s => s.id !== id);
+          renderSalesTable();
+          alert('销售删除成功');
+        }
+      }
+    };
+    
+    // 事件监听器
+    document.getElementById('addSalesBtn').addEventListener('click', () => showSalesModal());
+    document.getElementById('closeSalesModal').addEventListener('click', closeSalesModal);
+    document.getElementById('cancelSalesBtn').addEventListener('click', closeSalesModal);
+    
+    // 销售表单提交
+    salesForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(salesForm);
+      const name = formData.get('name').trim();
+      const phone = formData.get('phone').trim();
+      const email = formData.get('email').trim();
+      const region = formData.get('region');
+      const remark = formData.get('remark').trim();
+      
+      if (!name || !phone || !region) {
+        alert('请填写必填字段');
+        return;
+      }
+      
+      // 检查手机号是否重复
+      const existingSales = salesList.find(s => s.phone === phone && s.id !== (currentEditingSales?.id || 0));
+      if (existingSales) {
+        alert('手机号已存在');
+        return;
+      }
+      
+      if (currentEditingSales) {
+        // 编辑销售
+        currentEditingSales.name = name;
+        currentEditingSales.phone = phone;
+        currentEditingSales.email = email;
+        currentEditingSales.region = region;
+        currentEditingSales.remark = remark;
+        currentEditingSales.updateTime = new Date().toLocaleString('zh-CN');
+        alert('销售信息更新成功');
+      } else {
+        // 新增销售
+        const newSales = {
+          id: Math.max(...salesList.map(s => s.id)) + 1,
+          name,
+          phone,
+          email,
+          region,
+          monthlyRevenue: 0,
+          customerCount: 0,
+          status: '在职',
+          remark,
+          updateTime: new Date().toLocaleString('zh-CN')
+        };
+        salesList.push(newSales);
+        alert('销售创建成功');
+      }
+      
+      renderSalesTable();
+      closeSalesModal();
+    });
+    
+    // 点击弹窗背景关闭
+    salesModal.addEventListener('click', function(e) {
+      if (e.target === salesModal) {
+        closeSalesModal();
+      }
+    });
+    
+    // 初始化渲染
+    renderSalesTable();
+  </script>
+</body>
+</html> 

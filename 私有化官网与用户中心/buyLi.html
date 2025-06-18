@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AIOChat - 购买授权</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* 隐藏number输入框的增减按钮 */
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
+    
+    /* 支付选项样式 */
+    .payment-option {
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    /* 未选中状态的默认样式 */
+    .payment-option:not(.selected) {
+      background: white;
+      border-color: #e5e7eb;
+    }
+    
+    /* hover状态 */
+    .payment-option:hover:not(.selected) {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border-color: #93c5fd;
+      background: #eff6ff;
+    }
+    
+    /* 选中状态 */
+    .payment-option.selected,
+    .payment-option[class*="border-blue-500"] {
+      background: #eff6ff;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+    
+    /* 支付选项logo动画 */
+    .payment-option .payment-logo {
+      transition: transform 0.2s ease;
+    }
+    
+    .payment-option:hover .payment-logo {
+      transform: scale(1.05);
+    }
+    
+    .payment-option.selected .payment-logo {
+      transform: scale(1.1);
+    }
+    
+    /* 支付选项文字渐变动画 */
+    .payment-option .payment-title {
+      transition: color 0.2s ease;
+    }
+    
+    .payment-option:hover .payment-title,
+    .payment-option.selected .payment-title {
+      color: #1d4ed8;
+    }
+    
+    /* 自定义单选圈动画 */
+    .payment-radio-circle {
+      transition: all 0.3s ease;
+    }
+    
+    .payment-option:hover .payment-radio-circle {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <!-- 顶部导航栏 -->
+  <header class="bg-white shadow-sm sticky top-0 z-50 transition-shadow duration-300">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+      <div class="flex items-center">
+        <img src="../私有化官网与用户中心/images/aio-logo_kxblvp.png.png" alt="AIOChat Logo" class="h-8 w-8 mr-2 logo">
+        <a href="index.html" class="text-xl font-bold text-gray-800 hover:text-primary-color transition-colors duration-300">AIOChat</a>
+      </div>
+      <div class="flex items-center">
+        <a href="dashboard.html" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200">
+          返回控制台
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主要内容区域 -->
+  <main class="container mx-auto px-4 py-8">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">购买授权</h1>
+        <p class="text-gray-600">选择适合您的服务配置，开始您的AIOChat之旅</p>
+      </div>
+    </div>
+
+    <!-- 购买授权主体内容 -->
+    <div id="purchaseContent" class="bg-white rounded-lg shadow-lg p-8">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- 左侧：服务配置 -->
+        <div class="lg:col-span-2 space-y-6">
+          <!-- 基础服务费 -->
+          <div class="bg-gray-50 p-6 rounded-lg">
+            <h4 class="text-lg font-semibold mb-4 text-gray-800">基础服务费</h4>
+            <div class="flex space-x-4">
+              <button type="button" id="yearlyBtn" class="base-service-btn flex-1 bg-blue-600 text-white border border-blue-600 px-6 py-3 rounded-lg text-center font-medium transition-all duration-200 hover:bg-blue-700" data-value="yearly">
+                年付<br><span class="text-lg font-bold">¥88,000.00</span>
+              </button>
+              <button type="button" id="halfyearlyBtn" class="base-service-btn flex-1 bg-white text-gray-700 border border-gray-300 px-6 py-3 rounded-lg text-center font-medium transition-all duration-200 hover:bg-gray-50" data-value="halfyearly">
+                半年付<br><span class="text-lg font-bold">¥48,000.00</span>
+              </button>
+            </div>
+          </div>
+          
+          <!-- 权益服务费 -->
+          <div class="bg-gray-50 p-6 rounded-lg">
+            <h4 class="text-lg font-semibold mb-4 text-gray-800">权益服务费</h4>
+            
+            <!-- 坐席费用 -->
+            <div class="mb-6 p-4 bg-white rounded-lg border">
+              <h5 class="font-medium mb-3 text-gray-800">坐席费用</h5>
+              
+              <!-- 坐席费用选项 -->
+              <div class="grid grid-cols-3 gap-3 mb-4">
+                <button type="button" class="seat-option-btn bg-white text-gray-700 border border-gray-300 px-4 py-3 rounded-lg text-center text-sm font-medium transition-all duration-200 hover:bg-gray-50" data-value="100" data-price="900">
+                  100 个<br><span class="text-blue-600 font-bold">¥900</span>
+                </button>
+                <button type="button" class="seat-option-btn bg-white text-gray-700 border border-gray-300 px-4 py-3 rounded-lg text-center text-sm font-medium transition-all duration-200 hover:bg-gray-50" data-value="300" data-price="2400">
+                  300 个<br><span class="text-blue-600 font-bold">¥2,400</span>
+                </button>
+                <button type="button" class="seat-option-btn bg-blue-600 text-white border border-blue-600 px-4 py-3 rounded-lg text-center text-sm font-medium transition-all duration-200 hover:bg-blue-700" data-value="500" data-price="3500">
+                  500 个<br><span class="text-white font-bold">¥3,500</span>
+                </button>
+              </div>
+              
+              <!-- 扩展坐席 -->
+              <div class="flex items-center space-x-4 mb-2">
+                <label class="text-gray-600">扩展：</label>
+                <div class="relative">
+                  <input type="number" id="seatExtend" min="0" max="400" value="0" 
+                         class="border border-gray-300 rounded px-3 py-2 w-24 text-center focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+                         placeholder="0">
+                  <div id="seatExtendError" class="hidden absolute top-full left-0 mt-1 text-red-600 text-xs whitespace-nowrap z-10">扩展数量无效</div>
+                </div>
+                <div class="text-gray-600 text-sm">× ¥10 = </div>
+                <div id="seatExtendPriceDisplay" class="text-blue-600 font-medium text-sm">¥0</div>
+              </div>
+              
+              <div class="flex items-center space-x-4 mb-2">
+                <div class="flex items-center">
+                  <span class="text-gray-600 text-sm mr-2">总计：</span>
+                  <div class="text-gray-600 text-sm mr-2">(<span id="seatTotalCount">500</span> 个)</div>
+                  <div id="seatPriceDisplay" class="text-blue-600 font-medium text-sm">¥3,500</div>
+                </div>
+              </div>
+              
+              <div class="text-sm text-gray-600 space-y-1">
+                <div class="text-gray-500">优惠套餐：100个 ¥900，300个 ¥2,400，500个 ¥3,500</div>
+                <div class="text-gray-500">扩展单价：¥10/个，总量不超过500个</div>
+              </div>
+            </div>
+            
+            <!-- 社媒账号费用 -->
+            <div class="mb-6 p-4 bg-white rounded-lg border">
+              <h5 class="font-medium mb-3 text-gray-800">社媒账号费用</h5>
+              
+              <!-- 社媒账号费用选项 -->
+              <div class="grid grid-cols-2 gap-3 mb-4">
+                <button type="button" class="social-option-btn bg-white text-gray-700 border border-gray-300 px-4 py-3 rounded-lg text-center text-sm font-medium transition-all duration-200 hover:bg-gray-50" data-value="10" data-price="800">
+                  10 个<br><span class="text-blue-600 font-bold">¥800</span>
+                </button>
+                <button type="button" class="social-option-btn bg-white text-gray-700 border border-gray-300 px-4 py-3 rounded-lg text-center text-sm font-medium transition-all duration-200 hover:bg-gray-50" data-value="30" data-price="2100">
+                  30 个<br><span class="text-blue-600 font-bold">¥2,100</span>
+                </button>
+                <button type="button" class="social-option-btn bg-blue-600 text-white border border-blue-600 px-4 py-3 rounded-lg text-center text-sm font-medium transition-all duration-200 hover:bg-blue-700" data-value="50" data-price="3000">
+                  50 个<br><span class="text-white font-bold">¥3,000</span>
+                </button>
+                <button type="button" class="social-option-btn bg-white text-gray-700 border border-gray-300 px-4 py-3 rounded-lg text-center text-sm font-medium transition-all duration-200 hover:bg-gray-50" data-value="100" data-price="5000">
+                  100 个<br><span class="text-blue-600 font-bold">¥5,000</span>
+                </button>
+              </div>
+              
+              <!-- 扩展社媒账号 -->
+              <div class="flex items-center space-x-4 mb-2">
+                <label class="text-gray-600">扩展：</label>
+                <div class="relative">
+                  <input type="number" id="socialExtend" min="0" max="50" value="0" 
+                         class="border border-gray-300 rounded px-3 py-2 w-24 text-center focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+                         placeholder="0">
+                  <div id="socialExtendError" class="hidden absolute top-full left-0 mt-1 text-red-600 text-xs whitespace-nowrap z-10">扩展数量无效</div>
+                </div>
+                <div class="text-gray-600 text-sm">× ¥10 = </div>
+                <div id="socialExtendPriceDisplay" class="text-blue-600 font-medium text-sm">¥0</div>
+              </div>
+              
+              <div class="flex items-center space-x-4 mb-2">
+                <div class="flex items-center">
+                  <span class="text-gray-600 text-sm mr-2">总计：</span>
+                  <div class="text-gray-600 text-sm mr-2">(<span id="socialTotalCount">50</span> 个)</div>
+                  <div id="socialPriceDisplay" class="text-blue-600 font-medium text-sm">¥3,000</div>
+                </div>
+              </div>
+              
+              <div class="text-sm text-gray-600 space-y-1">
+                <div class="text-gray-500">优惠套餐：10个 ¥800，30个 ¥2,100，50个 ¥3,000，100个 ¥5,000</div>
+                <div class="text-gray-500">扩展单价：¥10/个，总量不超过100个</div>
+              </div>
+            </div>
+            
+            <!-- 翻译字符费用 -->
+            <div class="p-4 bg-white rounded-lg border">
+              <h5 class="font-medium mb-3 text-gray-800">翻译字符费用</h5>
+              <div class="grid grid-cols-2 gap-3 mb-2">
+                <button type="button" class="translation-btn bg-white text-gray-700 border border-gray-300 px-4 py-3 rounded-lg text-center text-sm font-medium transition-all duration-200 hover:bg-gray-50" data-value="100">
+                  1 万个字符<br><span class="text-blue-600 font-bold">¥100</span>
+                </button>
+                <button type="button" class="translation-btn bg-white text-gray-700 border border-gray-300 px-4 py-3 rounded-lg text-center text-sm font-medium transition-all duration-200 hover:bg-gray-50" data-value="800">
+                  10 万个字符<br><span class="text-blue-600 font-bold">¥800</span>
+                </button>
+                <button type="button" class="translation-btn bg-blue-600 text-white border border-blue-600 px-4 py-3 rounded-lg text-center text-sm font-medium transition-all duration-200 hover:bg-blue-700" data-value="5000">
+                  100 万个字符<br><span class="text-white font-bold">¥5,000</span>
+                </button>
+                <button type="button" class="translation-btn bg-white text-gray-700 border border-gray-300 px-4 py-3 rounded-lg text-center text-sm font-medium transition-all duration-200 hover:bg-gray-50" data-value="30000">
+                  1000 万个字符<br><span class="text-blue-600 font-bold">¥30,000</span>
+                </button>
+              </div>
+              <div class="text-sm text-gray-500">更多字符数，请联系客户经理</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 右侧：费用汇总和支付 -->
+        <div class="space-y-6">
+          <!-- 费用汇总 -->
+          <div class="bg-blue-50 p-6 rounded-lg">
+            <h4 class="text-lg font-semibold mb-4 text-gray-800">费用汇总</h4>
+            <div class="space-y-3 text-sm">
+              <div class="flex justify-between">
+                <span class="text-gray-600">基础服务费：</span>
+                <span class="font-medium">¥<span id="baseServiceAmount">88,000</span></span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600">坐席费用：</span>
+                <span class="font-medium">¥<span id="seatAmount">3,500</span></span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600">社媒账号费用：</span>
+                <span class="font-medium">¥<span id="socialAmount">3,000</span></span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600">翻译字符费用：</span>
+                <span class="font-medium">¥<span id="translationAmount">5,000</span></span>
+              </div>
+              <hr class="border-gray-300">
+                              <div class="flex justify-between text-lg font-semibold text-blue-600">
+                  <span>总计：</span>
+                  <span>¥<span id="totalAmount">99,500</span></span>
+                </div>
+            </div>
+          </div>
+          
+          <!-- 支付渠道 -->
+          <div class="bg-gray-50 p-6 rounded-lg">
+            <h4 class="text-lg font-semibold mb-4 text-gray-800">支付渠道</h4>
+            <div class="space-y-3">
+              <!-- USDT 支付选项 -->
+              <label class="payment-option selected relative flex items-center cursor-pointer p-4 border-2 border-blue-500 bg-blue-50 rounded-lg">
+                <input type="radio" name="paymentMethod" value="usdt" checked class="hidden">
+                <div class="flex items-center space-x-4 w-full">
+                  <div class="payment-logo w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center shadow-lg">
+                    <svg class="w-7 h-7 text-white" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 9.75h-2.438v1.5h2.25v1.125h-2.25v1.5h2.438v1.125H10.5v-1.125h1.125v-1.5H10.5V10.5h1.125v-1.5H10.5V7.875h7.062V9.75z"/>
+                    </svg>
+                  </div>
+                  <div class="flex-1">
+                    <div class="payment-title text-lg font-semibold text-gray-800">USDT</div>
+                    <div class="text-sm text-gray-600">稳定币支付，安全便捷</div>
+                  </div>
+                  <div class="payment-radio-circle w-5 h-5 border-2 border-blue-500 rounded-full bg-blue-500 flex items-center justify-center">
+                    <div class="w-2 h-2 bg-white rounded-full"></div>
+                  </div>
+                </div>
+              </label>
+              
+              <!-- PayPal 支付选项 -->
+              <label class="payment-option relative flex items-center cursor-pointer p-4 border-2 border-gray-200 bg-white rounded-lg">
+                <input type="radio" name="paymentMethod" value="paypal" class="hidden">
+                <div class="flex items-center space-x-4 w-full">
+                  <div class="payment-logo w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center shadow-lg">
+                    <svg class="w-7 h-7 text-white" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a9.182 9.182 0 0 1-.014.25c-.14.73-.33 1.449-.571 2.156-1.675 4.934-6.016 6.505-10.738 6.505H6.412c-.524 0-.968.382-1.05.9l-1.12 7.106-.32 2.027a.641.641 0 0 0 .633.74h3.94c.459 0 .85-.334.925-.787l.038-.25 1.02-6.46.065-.435c.074-.453.466-.787.925-.787h.582c3.874 0 6.905-1.572 7.786-6.118.368-1.896.177-3.478-.78-4.665-.26-.322-.57-.608-.92-.857z"/>
+                    </svg>
+                  </div>
+                  <div class="flex-1">
+                    <div class="payment-title text-lg font-semibold text-gray-800">PayPal</div>
+                    <div class="text-sm text-gray-600">全球领先的在线支付平台</div>
+                  </div>
+                  <div class="payment-radio-circle w-5 h-5 border-2 border-gray-300 rounded-full bg-white flex items-center justify-center">
+                    <div class="w-2 h-2 bg-transparent rounded-full"></div>
+                  </div>
+                </div>
+              </label>
+            </div>
+          </div>
+          
+          <!-- 操作按钮 -->
+          <div class="space-y-3">
+            <button id="immediatePayBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg font-medium transition-colors duration-200">
+              立即支付
+            </button>
+            <button class="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 py-3 px-4 rounded-lg font-medium transition-colors duration-200">
+              联系客户经理
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- USDT支付页面内容 -->
+    <div id="usdtPaymentContent" class="hidden bg-white rounded-lg shadow-lg p-8">
+      <div class="max-w-2xl mx-auto">
+        <!-- 返回按钮 -->
+        <div class="mb-6">
+          <button id="backToPurchase" class="flex items-center text-gray-500 hover:text-gray-700 transition-colors duration-200">
+            <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+            返回购买配置
+          </button>
+        </div>
+        
+        <div class="text-center mb-8">
+          <h2 class="text-2xl font-bold text-gray-900 mb-2">USDT 支付</h2>
+          <p class="text-gray-600">请按照以下信息完成USDT转账</p>
+        </div>
+        
+        <!-- 支付金额显示 -->
+        <div class="text-center mb-8">
+          <div class="bg-gradient-to-r from-green-50 to-blue-50 rounded-2xl p-8 border border-green-200">
+            <div class="text-gray-600 text-lg mb-2">需要支付</div>
+                         <div class="text-4xl font-bold text-green-600 mb-2">
+               <span id="usdtAmount">99,500</span> USDT
+             </div>
+             <div class="text-gray-500 text-sm">
+               约合 ¥<span id="usdtAmountCny">99,500</span>
+             </div>
+          </div>
+        </div>
+        
+        <!-- 支付信息区域 -->
+        <div class="space-y-6">
+          <!-- USDT地址 -->
+          <div class="bg-gray-50 rounded-lg p-6">
+            <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+              <svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4zM18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z"/>
+              </svg>
+              平台USDT收款地址
+            </h4>
+            <div class="bg-white rounded-lg border p-4">
+              <div class="flex items-center justify-between">
+                <div class="font-mono text-sm break-all mr-4" id="usdtAddress">TQn9Y2khEsLMWiMBhVTjmMnrU3fWzFk4jL</div>
+                <button id="copyAddressBtn" class="flex-shrink-0 bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded text-sm font-medium transition-colors duration-200 flex items-center">
+                  <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                  </svg>
+                  复制
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 二维码区域 -->
+          <div class="bg-gray-50 rounded-lg p-6">
+            <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+              <svg class="w-5 h-5 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
+              </svg>
+              扫码支付
+            </h4>
+            <div class="flex justify-center">
+              <div class="bg-white p-4 rounded-lg border">
+                <div id="qrcode" class="w-48 h-48 bg-gray-100 rounded flex items-center justify-center">
+                  <!-- 这里可以放置实际的二维码图片或使用QR码生成库 -->
+                  <div class="text-center text-gray-500">
+                    <svg class="w-16 h-16 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
+                    </svg>
+                    <div class="text-sm">USDT支付二维码</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 重要提示 -->
+          <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+            <div class="flex items-start">
+              <svg class="w-5 h-5 text-yellow-500 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+              </svg>
+              <div>
+                <h5 class="font-medium text-yellow-800 mb-1">重要提示</h5>
+                <ul class="text-sm text-yellow-700 space-y-1">
+                  <li>• 请仔细核对收款地址，确保地址准确无误</li>
+                  <li>• 转账网络请选择 <strong>TRC20</strong> 网络</li>
+                  <li>• 转账金额需要精确到小数点后6位</li>
+                  <li>• 转账完成后请点击下方"支付完成"按钮</li>
+                  <li>• 如遇到问题，请联系客服处理</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 操作按钮 -->
+          <div class="flex space-x-4 pt-4">
+            <button id="cancelPaymentBtn" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 py-3 px-4 rounded-lg font-medium transition-colors duration-200">
+              取消
+            </button>
+            <button id="paymentCompletedBtn" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-lg font-medium transition-colors duration-200">
+              支付完成
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 全局变量存储选中的值
+      let selectedBaseService = 'yearly';
+      let selectedTranslation = '5000';
+      let selectedSeatOption = '500';  // 默认选中500个坐席
+      let selectedSocialOption = '50'; // 默认选中50个社媒账号
+
+      // 获取坐席和社媒的套餐价格
+      function getPackagePrice(type, count) {
+        const prices = {
+          seat: { 100: 900, 300: 2400, 500: 3500 },
+          social: { 10: 800, 30: 2100, 50: 3000, 100: 5000 }
+        };
+        return prices[type][count] || 0;
+      }
+
+      // 计算坐席总费用
+      function calculateSeatTotalPrice() {
+        const packagePrice = getPackagePrice('seat', parseInt(selectedSeatOption));
+        const extendInput = document.getElementById('seatExtend');
+        const extendCount = parseInt(extendInput?.value || 0);
+        const extendPrice = extendCount * 10;
+        
+        // 更新显示
+        document.getElementById('seatExtendPriceDisplay').textContent = `¥${extendPrice}`;
+        document.getElementById('seatTotalCount').textContent = (parseInt(selectedSeatOption) + extendCount).toString();
+        document.getElementById('seatPriceDisplay').textContent = `¥${(packagePrice + extendPrice).toLocaleString()}`;
+        
+        return packagePrice + extendPrice;
+      }
+
+      // 计算社媒账号总费用
+      function calculateSocialTotalPrice() {
+        const packagePrice = getPackagePrice('social', parseInt(selectedSocialOption));
+        const extendInput = document.getElementById('socialExtend');
+        const extendCount = parseInt(extendInput?.value || 0);
+        const extendPrice = extendCount * 10;
+        
+        // 更新显示
+        document.getElementById('socialExtendPriceDisplay').textContent = `¥${extendPrice}`;
+        document.getElementById('socialTotalCount').textContent = (parseInt(selectedSocialOption) + extendCount).toString();
+        document.getElementById('socialPriceDisplay').textContent = `¥${(packagePrice + extendPrice).toLocaleString()}`;
+        
+        return packagePrice + extendPrice;
+      }
+
+      // 验证坐席扩展数量
+      function validateSeatExtend() {
+        const extendInput = document.getElementById('seatExtend');
+        const errorElement = document.getElementById('seatExtendError');
+        const extendCount = parseInt(extendInput.value || 0);
+        const baseCount = parseInt(selectedSeatOption);
+        const maxExtend = 500 - baseCount;
+        
+        if (baseCount >= 500) {
+          // 如果选择了500个套餐，禁用扩展输入
+          extendInput.disabled = true;
+          extendInput.value = '0';
+          errorElement.classList.add('hidden');
+          extendInput.classList.remove('border-red-500');
+          return true;
+        } else {
+          extendInput.disabled = false;
+          extendInput.max = maxExtend;
+        }
+        
+        if (extendCount < 0 || extendCount > maxExtend || isNaN(extendCount)) {
+          errorElement.textContent = `坐席总量不能超过500个，最多可扩展${maxExtend}个`;
+          errorElement.classList.remove('hidden');
+          extendInput.classList.add('border-red-500');
+          return false;
+        } else {
+          errorElement.classList.add('hidden');
+          extendInput.classList.remove('border-red-500');
+          return true;
+        }
+      }
+
+      // 验证社媒账号扩展数量
+      function validateSocialExtend() {
+        const extendInput = document.getElementById('socialExtend');
+        const errorElement = document.getElementById('socialExtendError');
+        const extendCount = parseInt(extendInput.value || 0);
+        const baseCount = parseInt(selectedSocialOption);
+        const maxExtend = 100 - baseCount;
+        
+        if (baseCount >= 100) {
+          // 如果选择了100个套餐，禁用扩展输入
+          extendInput.disabled = true;
+          extendInput.value = '0';
+          errorElement.classList.add('hidden');
+          extendInput.classList.remove('border-red-500');
+          return true;
+        } else {
+          extendInput.disabled = false;
+          extendInput.max = maxExtend;
+        }
+        
+        if (extendCount < 0 || extendCount > maxExtend || isNaN(extendCount)) {
+          errorElement.textContent = `社媒总量不能超过100个，最多可扩展${maxExtend}个`;
+          errorElement.classList.remove('hidden');
+          extendInput.classList.add('border-red-500');
+          return false;
+        } else {
+          errorElement.classList.add('hidden');
+          extendInput.classList.remove('border-red-500');
+          return true;
+        }
+      }
+
+      // 限制扩展输入框只能输入非负整数
+      function restrictExtendInput(input) {
+        let value = input.value;
+        
+        // 移除非数字字符
+        value = value.replace(/[^0-9]/g, '');
+        
+        // 确保不是负数
+        if (value !== '') {
+          const num = parseInt(value);
+          if (num < 0) {
+            value = '0';
+          } else {
+            value = num.toString();
+          }
+        }
+        
+        input.value = value;
+      }
+
+      // 计算总费用
+      function calculateTotal() {
+        // 基础服务费
+        const baseServiceAmount = selectedBaseService === 'yearly' ? 88000 : 48000;
+        document.getElementById('baseServiceAmount').textContent = baseServiceAmount.toLocaleString() + '.00';
+
+        // 坐席费用
+        const seatAmount = calculateSeatTotalPrice();
+        document.getElementById('seatAmount').textContent = seatAmount.toLocaleString() + '.00';
+
+        // 社媒账号费用
+        const socialAmount = calculateSocialTotalPrice();
+        document.getElementById('socialAmount').textContent = socialAmount.toLocaleString() + '.00';
+
+        // 翻译字符费用
+        const translationAmount = parseInt(selectedTranslation) || 0;
+        document.getElementById('translationAmount').textContent = translationAmount.toLocaleString() + '.00';
+
+        // 总计
+        const total = baseServiceAmount + seatAmount + socialAmount + translationAmount;
+        document.getElementById('totalAmount').textContent = total.toLocaleString() + '.00';
+      }
+
+      // 基础服务费按钮事件
+      document.querySelectorAll('.base-service-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          // 移除所有按钮的选中状态
+          document.querySelectorAll('.base-service-btn').forEach(b => {
+            b.classList.remove('bg-blue-600', 'text-white');
+            b.classList.add('bg-white', 'text-gray-700', 'border-gray-300');
+          });
+          
+          // 设置当前按钮为选中状态
+          this.classList.remove('bg-white', 'text-gray-700', 'border-gray-300');
+          this.classList.add('bg-blue-600', 'text-white', 'border-blue-600');
+          
+          selectedBaseService = this.dataset.value;
+          calculateTotal();
+        });
+      });
+
+      // 坐席选项按钮事件
+      document.querySelectorAll('.seat-option-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          // 移除所有按钮的选中状态
+          document.querySelectorAll('.seat-option-btn').forEach(b => {
+            b.classList.remove('bg-blue-600', 'text-white', 'border-blue-600');
+            b.classList.add('bg-white', 'text-gray-700', 'border-gray-300');
+            // 更新价格颜色
+            const priceSpan = b.querySelector('span');
+            if (priceSpan) {
+              priceSpan.classList.remove('text-white');
+              priceSpan.classList.add('text-blue-600');
+            }
+          });
+          
+          // 设置当前按钮为选中状态
+          this.classList.remove('bg-white', 'text-gray-700', 'border-gray-300');
+          this.classList.add('bg-blue-600', 'text-white', 'border-blue-600');
+          
+          // 更新价格颜色为白色
+          const priceSpan = this.querySelector('span');
+          if (priceSpan) {
+            priceSpan.classList.remove('text-blue-600');
+            priceSpan.classList.add('text-white');
+          }
+          
+          selectedSeatOption = this.dataset.value;
+          
+          // 重置扩展数量
+          const extendInput = document.getElementById('seatExtend');
+          if (extendInput) {
+            extendInput.value = '0';
+          }
+          
+          validateSeatExtend();
+          calculateTotal();
+        });
+      });
+
+      // 社媒账号选项按钮事件
+      document.querySelectorAll('.social-option-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          // 移除所有按钮的选中状态
+          document.querySelectorAll('.social-option-btn').forEach(b => {
+            b.classList.remove('bg-blue-600', 'text-white', 'border-blue-600');
+            b.classList.add('bg-white', 'text-gray-700', 'border-gray-300');
+            // 更新价格颜色
+            const priceSpan = b.querySelector('span');
+            if (priceSpan) {
+              priceSpan.classList.remove('text-white');
+              priceSpan.classList.add('text-blue-600');
+            }
+          });
+          
+          // 设置当前按钮为选中状态
+          this.classList.remove('bg-white', 'text-gray-700', 'border-gray-300');
+          this.classList.add('bg-blue-600', 'text-white', 'border-blue-600');
+          
+          // 更新价格颜色为白色
+          const priceSpan = this.querySelector('span');
+          if (priceSpan) {
+            priceSpan.classList.remove('text-blue-600');
+            priceSpan.classList.add('text-white');
+          }
+          
+          selectedSocialOption = this.dataset.value;
+          
+          // 重置扩展数量
+          const extendInput = document.getElementById('socialExtend');
+          if (extendInput) {
+            extendInput.value = '0';
+          }
+          
+          validateSocialExtend();
+          calculateTotal();
+        });
+      });
+
+      // 翻译字符费用按钮事件
+      document.querySelectorAll('.translation-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          // 移除所有按钮的选中状态
+          document.querySelectorAll('.translation-btn').forEach(b => {
+            b.classList.remove('bg-blue-600', 'text-white', 'border-blue-600');
+            b.classList.add('bg-white', 'text-gray-700', 'border-gray-300');
+            // 更新价格颜色
+            const priceSpan = b.querySelector('span');
+            if (priceSpan) {
+              priceSpan.classList.remove('text-white');
+              priceSpan.classList.add('text-blue-600');
+            }
+          });
+          
+          // 设置当前按钮为选中状态
+          this.classList.remove('bg-white', 'text-gray-700', 'border-gray-300');
+          this.classList.add('bg-blue-600', 'text-white', 'border-blue-600');
+          
+          // 更新价格颜色为白色
+          const priceSpan = this.querySelector('span');
+          if (priceSpan) {
+            priceSpan.classList.remove('text-blue-600');
+            priceSpan.classList.add('text-white');
+          }
+          
+          selectedTranslation = this.dataset.value;
+          calculateTotal();
+        });
+      });
+
+      // 支付方式选择事件监听
+      document.querySelectorAll('.payment-option').forEach(option => {
+        option.addEventListener('click', function() {
+          // 移除所有选项的选中状态
+          document.querySelectorAll('.payment-option').forEach(opt => {
+            opt.classList.remove('selected', 'border-blue-500', 'bg-blue-50');
+            opt.classList.add('border-gray-200', 'bg-white');
+            
+            // 更新未选中状态的圆圈
+            const circle = opt.querySelector('.payment-radio-circle');
+            if (circle) {
+              circle.classList.remove('border-blue-500', 'bg-blue-500');
+              circle.classList.add('border-gray-300', 'bg-white');
+              const innerCircle = circle.querySelector('div');
+              if (innerCircle) {
+                innerCircle.classList.remove('bg-white');
+                innerCircle.classList.add('bg-transparent');
+              }
+            }
+            
+            // 取消radio选中状态
+            const radio = opt.querySelector('input[type="radio"]');
+            if (radio) {
+              radio.checked = false;
+            }
+          });
+          
+          // 设置当前选项为选中状态
+          this.classList.remove('border-gray-200', 'bg-white');
+          this.classList.add('selected', 'border-blue-500', 'bg-blue-50');
+          
+          // 更新选中状态的圆圈
+          const circle = this.querySelector('.payment-radio-circle');
+          if (circle) {
+            circle.classList.remove('border-gray-300', 'bg-white');
+            circle.classList.add('border-blue-500', 'bg-blue-500');
+            const innerCircle = circle.querySelector('div');
+            if (innerCircle) {
+              innerCircle.classList.remove('bg-transparent');
+              innerCircle.classList.add('bg-white');
+            }
+          }
+          
+          // 设置radio选中状态
+          const radio = this.querySelector('input[type="radio"]');
+          if (radio) {
+            radio.checked = true;
+          }
+        });
+      });
+
+      // 坐席扩展输入框事件监听
+      const seatExtendInput = document.getElementById('seatExtend');
+      if (seatExtendInput) {
+        seatExtendInput.addEventListener('input', function() {
+          restrictExtendInput(this);
+          validateSeatExtend();
+          calculateTotal();
+        });
+        seatExtendInput.addEventListener('keypress', function(e) {
+          // 只允许数字键
+          if (!/[0-9]/.test(String.fromCharCode(e.which))) {
+            e.preventDefault();
+          }
+        });
+      }
+
+      // 社媒账号扩展输入框事件监听
+      const socialExtendInput = document.getElementById('socialExtend');
+      if (socialExtendInput) {
+        socialExtendInput.addEventListener('input', function() {
+          restrictExtendInput(this);
+          validateSocialExtend();
+          calculateTotal();
+        });
+        socialExtendInput.addEventListener('keypress', function(e) {
+          // 只允许数字键
+          if (!/[0-9]/.test(String.fromCharCode(e.which))) {
+            e.preventDefault();
+          }
+        });
+      }
+
+      // USDT支付页面相关功能
+      const immediatePayBtn = document.getElementById('immediatePayBtn');
+      const usdtPaymentContent = document.getElementById('usdtPaymentContent');
+      const purchaseContent = document.getElementById('purchaseContent');
+      const backToPurchase = document.getElementById('backToPurchase');
+      const cancelPaymentBtn = document.getElementById('cancelPaymentBtn');
+      const paymentCompletedBtn = document.getElementById('paymentCompletedBtn');
+      const copyAddressBtn = document.getElementById('copyAddressBtn');
+      
+      // 立即支付按钮点击事件
+      if (immediatePayBtn) {
+        immediatePayBtn.addEventListener('click', function() {
+          // 检查选中的支付方式
+          const selectedPayment = document.querySelector('input[name="paymentMethod"]:checked');
+          if (selectedPayment && selectedPayment.value === 'usdt') {
+            // 切换到USDT支付页面
+            showUsdtPaymentPage();
+          } else if (selectedPayment && selectedPayment.value === 'paypal') {
+            // PayPal支付逻辑
+            alert('PayPal支付功能正在开发中...');
+          } else {
+            alert('请选择支付方式');
+          }
+        });
+      }
+      
+      // 显示USDT支付页面
+      function showUsdtPaymentPage() {
+        // 隐藏购买授权页面内容
+        purchaseContent.classList.add('hidden');
+        
+        // 显示USDT支付页面内容
+        usdtPaymentContent.classList.remove('hidden');
+        
+        // 更新USDT支付金额
+        updateUsdtPaymentAmount();
+      }
+      
+      // 显示购买授权页面
+      function showPurchasePage() {
+        // 显示购买授权页面内容
+        purchaseContent.classList.remove('hidden');
+        
+        // 隐藏USDT支付页面内容
+        usdtPaymentContent.classList.add('hidden');
+      }
+      
+      // 更新USDT支付金额
+      function updateUsdtPaymentAmount() {
+        const totalAmountElement = document.getElementById('totalAmount');
+        const usdtAmountElement = document.getElementById('usdtAmount');
+        const usdtAmountCnyElement = document.getElementById('usdtAmountCny');
+        
+        if (totalAmountElement && usdtAmountElement && usdtAmountCnyElement) {
+          const totalAmount = totalAmountElement.textContent.replace(/,/g, '');
+          // 假设1 USDT = 1 CNY (实际应该根据实时汇率)
+          const usdtAmount = totalAmount;
+          
+          usdtAmountElement.textContent = Number(usdtAmount).toLocaleString();
+          usdtAmountCnyElement.textContent = Number(totalAmount).toLocaleString();
+        }
+      }
+      
+      // 返回购买授权页面
+      if (backToPurchase) {
+        backToPurchase.addEventListener('click', function() {
+          showPurchasePage();
+        });
+      }
+      
+      // 取消支付按钮
+      if (cancelPaymentBtn) {
+        cancelPaymentBtn.addEventListener('click', function() {
+          showPurchasePage();
+        });
+      }
+      
+      // 支付完成按钮
+      if (paymentCompletedBtn) {
+        paymentCompletedBtn.addEventListener('click', function() {
+          // 显示确认对话框
+          if (confirm('请确认您已完成USDT转账？\n\n转账完成后，我们将在1-24小时内处理您的订单。')) {
+            alert('支付确认成功！\n\n您的订单已提交处理，我们将在1-24小时内为您激活授权。\n请注意查看邮箱通知。');
+            // 可以在这里添加跳转到成功页面或其他逻辑
+            showPurchasePage();
+          }
+        });
+      }
+      
+      // 复制USDT地址功能
+      if (copyAddressBtn) {
+        copyAddressBtn.addEventListener('click', async function() {
+          const addressElement = document.getElementById('usdtAddress');
+          const address = addressElement.textContent;
+          
+          try {
+            // 使用现代的 Clipboard API
+            await navigator.clipboard.writeText(address);
+            
+            // 显示复制成功的反馈
+            const originalText = this.innerHTML;
+            this.innerHTML = `
+              <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              已复制
+            `;
+            this.classList.remove('bg-blue-500', 'hover:bg-blue-600');
+            this.classList.add('bg-green-500');
+            
+            // 2秒后恢复原样
+            setTimeout(() => {
+              this.innerHTML = originalText;
+              this.classList.remove('bg-green-500');
+              this.classList.add('bg-blue-500', 'hover:bg-blue-600');
+            }, 2000);
+            
+          } catch (err) {
+            // 降级方案：使用传统的复制方法
+            const textArea = document.createElement('textarea');
+            textArea.value = address;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            alert('USDT地址已复制到剪贴板');
+          }
+        });
+      }
+      
+      // 初始化：设置默认选中状态和计算费用
+      validateSeatExtend();   // 初始验证坐席扩展
+      validateSocialExtend(); // 初始验证社媒扩展
+      calculateTotal();       // 初始计算费用
+    });
+  </script>
+</body>
+</html> 

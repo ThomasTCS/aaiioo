@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>首页 - AIO 运营平台</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+  <div class="p-6">
+    <!-- 页面标题 -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">欢迎使用 AIO 运营平台</h1>
+      <p class="text-gray-600">全面管理您的业务运营，提升工作效率</p>
+    </div>
+
+    <!-- 统计卡片 -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex items-center">
+          <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm font-medium text-gray-500">总客户数</p>
+            <p class="text-2xl font-bold text-gray-900">1,234</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex items-center">
+          <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm font-medium text-gray-500">本月订单</p>
+            <p class="text-2xl font-bold text-gray-900">567</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex items-center">
+          <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm font-medium text-gray-500">销售人员</p>
+            <p class="text-2xl font-bold text-gray-900">12</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex items-center">
+          <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+            <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm font-medium text-gray-500">本月收入</p>
+            <p class="text-2xl font-bold text-gray-900">¥89.2万</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 快捷操作 -->
+    <div class="mb-8">
+      <h2 class="text-xl font-semibold text-gray-900 mb-4">快捷操作</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white rounded-lg shadow p-4 hover:shadow-md transition-shadow cursor-pointer" onclick="switchToPage('sales')">
+          <div class="flex items-center">
+            <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
+              <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+              </svg>
+            </div>
+            <div>
+              <h3 class="font-medium text-gray-900">销售管理</h3>
+              <p class="text-sm text-gray-500">管理销售团队</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow p-4 hover:shadow-md transition-shadow cursor-pointer" onclick="switchToPage('account-management')">
+          <div class="flex items-center">
+            <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-3">
+              <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+              </svg>
+            </div>
+            <div>
+              <h3 class="font-medium text-gray-900">账号管理</h3>
+              <p class="text-sm text-gray-500">管理平台账号</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow p-4 hover:shadow-md transition-shadow cursor-pointer" onclick="switchToPage('role-management')">
+          <div class="flex items-center">
+            <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mr-3">
+              <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+              </svg>
+            </div>
+            <div>
+              <h3 class="font-medium text-gray-900">角色管理</h3>
+              <p class="text-sm text-gray-500">配置用户权限</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow p-4 hover:shadow-md transition-shadow cursor-pointer" onclick="switchToPage('benefits')">
+          <div class="flex items-center">
+            <div class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center mr-3">
+              <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"></path>
+              </svg>
+            </div>
+            <div>
+              <h3 class="font-medium text-gray-900">权益管理</h3>
+              <p class="text-sm text-gray-500">配置服务权益</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 最近活动 -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="bg-white rounded-lg shadow">
+        <div class="p-6 border-b border-gray-200">
+          <h3 class="text-lg font-medium text-gray-900">最近订单</h3>
+        </div>
+        <div class="p-6">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center">
+                <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                  <span class="text-xs font-medium text-blue-600">A</span>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-900">ABC科技有限公司</p>
+                  <p class="text-xs text-gray-500">私有化部署订单</p>
+                </div>
+              </div>
+              <span class="text-sm font-medium text-green-600">¥50,000</span>
+            </div>
+            
+            <div class="flex items-center justify-between">
+              <div class="flex items-center">
+                <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-3">
+                  <span class="text-xs font-medium text-green-600">B</span>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-900">XYZ企业集团</p>
+                  <p class="text-xs text-gray-500">SaaS服务订单</p>
+                </div>
+              </div>
+              <span class="text-sm font-medium text-green-600">¥12,000</span>
+            </div>
+            
+            <div class="flex items-center justify-between">
+              <div class="flex items-center">
+                <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center mr-3">
+                  <span class="text-xs font-medium text-purple-600">C</span>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-900">DEF创新公司</p>
+                  <p class="text-xs text-gray-500">增值服务订单</p>
+                </div>
+              </div>
+              <span class="text-sm font-medium text-green-600">¥8,500</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-white rounded-lg shadow">
+        <div class="p-6 border-b border-gray-200">
+          <h3 class="text-lg font-medium text-gray-900">销售排行</h3>
+        </div>
+        <div class="p-6">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center">
+                <div class="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center mr-3">
+                  <span class="text-xs font-medium text-yellow-600">1</span>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-900">王五</p>
+                  <p class="text-xs text-gray-500">华南区域</p>
+                </div>
+              </div>
+              <span class="text-sm font-medium text-gray-900">¥180,000</span>
+            </div>
+            
+            <div class="flex items-center justify-between">
+              <div class="flex items-center">
+                <div class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center mr-3">
+                  <span class="text-xs font-medium text-gray-600">2</span>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-900">张三</p>
+                  <p class="text-xs text-gray-500">华北区域</p>
+                </div>
+              </div>
+              <span class="text-sm font-medium text-gray-900">¥150,000</span>
+            </div>
+            
+            <div class="flex items-center justify-between">
+              <div class="flex items-center">
+                <div class="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center mr-3">
+                  <span class="text-xs font-medium text-orange-600">3</span>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-900">李四</p>
+                  <p class="text-xs text-gray-500">华东区域</p>
+                </div>
+              </div>
+              <span class="text-sm font-medium text-gray-900">¥120,000</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 页面切换函数
+    function switchToPage(pageName) {
+      // 通知父窗口切换页面
+      window.parent.postMessage({
+        type: 'switchPage',
+        page: pageName
+      }, '*');
+    }
+  </script>
+</body>
+</html> 

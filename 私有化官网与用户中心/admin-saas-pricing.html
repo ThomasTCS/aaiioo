@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaaS 费用 - AIO 运营平台</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-6">
+    <div class="max-w-[90%] mx-auto">
+        <!-- 筛选栏 -->
+        <div class="bg-white rounded-lg shadow-sm p-4 mb-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">配置类型</label>
+                        <select class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">全部</option>
+                            <option value="单价配置">单价配置</option>
+                            <option value="套餐配置">套餐配置</option>
+                            <option value="官网配置">官网配置</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">权益类型</label>
+                        <select class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">全部</option>
+                            <option value="坐席成员">坐席成员</option>
+                            <option value="社媒账号">社媒账号</option>
+                            <option value="翻译字符">翻译字符</option>
+                            <option value="存储空间">存储空间</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">套餐名称</label>
+                        <input type="text" placeholder="搜索套餐名称" class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button class="bg-blue-500 text-white px-4 py-2 rounded text-sm hover:bg-blue-600 transition duration-200">
+                        搜索
+                    </button>
+                    <button class="bg-gray-500 text-white px-4 py-2 rounded text-sm hover:bg-gray-600 transition duration-200">
+                        重置
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 导航 -->
+        <div class="bg-white rounded-lg shadow-sm mb-6">
+            <div class="border-b border-gray-200">
+                <nav class="-mb-px flex space-x-8 px-6">
+                    <button class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm tab-button active" 
+                            onclick="switchTab('pricing')" id="pricing-tab">
+                        单价配置
+                    </button>
+                    <button class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm tab-button" 
+                            onclick="switchTab('packages')" id="packages-tab">
+                        套餐配置
+                    </button>
+                    <button class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm tab-button" 
+                            onclick="switchTab('website')" id="website-tab">
+                        官网费用配置
+                    </button>
+                </nav>
+            </div>
+        </div>
+
+        <!-- 单价配置 Tab -->
+        <div id="pricing-content" class="tab-content">
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-lg font-semibold text-gray-800">权益单价配置</h2>
+                    <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-200" onclick="openPricingModal()">
+                        编辑单价
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="border rounded-lg p-4">
+                        <div class="flex items-center mb-3">
+                            <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mr-2">
+                                <span class="text-sm">👤</span>
+                            </div>
+                            <h3 class="font-medium text-gray-800">坐席成员</h3>
+                        </div>
+                        <div class="text-xl font-bold text-blue-600">¥80</div>
+                        <div class="text-sm text-gray-500">/个/月</div>
+                    </div>
+
+                    <div class="border rounded-lg p-4">
+                        <div class="flex items-center mb-3">
+                            <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center mr-2">
+                                <span class="text-sm">📱</span>
+                            </div>
+                            <h3 class="font-medium text-gray-800">社媒账号</h3>
+                        </div>
+                        <div class="text-xl font-bold text-green-600">¥20</div>
+                        <div class="text-sm text-gray-500">/个/月</div>
+                    </div>
+
+                    <div class="border rounded-lg p-4">
+                        <div class="flex items-center mb-3">
+                            <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center mr-2">
+                                <span class="text-sm">🌐</span>
+                            </div>
+                            <h3 class="font-medium text-gray-800">翻译字符</h3>
+                        </div>
+                        <div class="text-xl font-bold text-purple-600">¥0.5</div>
+                        <div class="text-sm text-gray-500">/1K字符</div>
+                    </div>
+
+                    <div class="border rounded-lg p-4">
+                        <div class="flex items-center mb-3">
+                            <div class="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center mr-2">
+                                <span class="text-sm">📝</span>
+                            </div>
+                            <h3 class="font-medium text-gray-800">聊天记录时长</h3>
+                        </div>
+                        <div class="text-xl font-bold text-orange-600">¥10</div>
+                        <div class="text-sm text-gray-500">/30天/月</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 套餐配置 Tab -->
+        <div id="packages-content" class="tab-content hidden">
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-lg font-semibold text-gray-800">套餐配置管理</h2>
+                    <button class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-200" onclick="openPackageModal()">
+                        添加套餐
+                    </button>
+                </div>
+
+                <div class="space-y-4">
+                        <!-- 基础版套餐 -->
+                        <div class="border rounded-lg p-4">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-4">
+                                    <div>
+                                        <h3 class="text-lg font-semibold text-gray-800">基础版</h3>
+                                        <div class="text-2xl font-bold text-blue-600">¥299<span class="text-sm text-gray-500">/月</span></div>
+                                    </div>
+                                    <div class="flex space-x-6 text-sm text-gray-600">
+                                        <span>3个坐席成员</span>
+                                        <span>10个社媒账号</span>
+                                        <span>100K翻译字符</span>
+                                        <span>7天聊天记录</span>
+                                    </div>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button class="text-blue-600 border border-blue-600 px-3 py-1 rounded text-sm hover:bg-blue-50" onclick="editPackage('基础版')">编辑</button>
+                                    <button class="text-red-600 border border-red-600 px-3 py-1 rounded text-sm hover:bg-red-50" onclick="deletePackage('基础版')">删除</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 标准版套餐 -->
+                        <div class="border rounded-lg p-4">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-4">
+                                    <div>
+                                        <h3 class="text-lg font-semibold text-gray-800">标准版</h3>
+                                        <div class="text-2xl font-bold text-blue-600">¥699<span class="text-sm text-gray-500">/月</span></div>
+                                    </div>
+                                    <div class="flex space-x-6 text-sm text-gray-600">
+                                        <span>10个坐席成员</span>
+                                        <span>50个社媒账号</span>
+                                        <span>500K翻译字符</span>
+                                        <span>30天聊天记录</span>
+                                    </div>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button class="text-blue-600 border border-blue-600 px-3 py-1 rounded text-sm hover:bg-blue-50" onclick="editPackage('标准版')">编辑</button>
+                                    <button class="text-red-600 border border-red-600 px-3 py-1 rounded text-sm hover:bg-red-50" onclick="deletePackage('标准版')">删除</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 企业版套餐 -->
+                        <div class="border rounded-lg p-4">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-4">
+                                    <div>
+                                        <h3 class="text-lg font-semibold text-gray-800">企业版</h3>
+                                        <div class="text-2xl font-bold text-blue-600">¥1,999<span class="text-sm text-gray-500">/月</span></div>
+                                    </div>
+                                    <div class="flex space-x-6 text-sm text-gray-600">
+                                        <span>无限坐席成员</span>
+                                        <span>无限社媒账号</span>
+                                        <span>2M翻译字符</span>
+                                        <span>360天聊天记录</span>
+                                    </div>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button class="text-blue-600 border border-blue-600 px-3 py-1 rounded text-sm hover:bg-blue-50" onclick="editPackage('企业版')">编辑</button>
+                                    <button class="text-red-600 border border-red-600 px-3 py-1 rounded text-sm hover:bg-red-50" onclick="deletePackage('企业版')">删除</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 官网费用配置 Tab -->
+        <div id="website-content" class="tab-content hidden">
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-lg font-semibold text-gray-800">官网费用配置</h2>
+                    <button class="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600 transition duration-200" onclick="openWebsiteModal()">
+                        配置官网展示
+                    </button>
+                </div>
+
+
+
+                <!-- 官网套餐展示 -->
+                <div class="mb-6">
+                    <h3 class="text-md font-semibold text-gray-700 mb-3">官网套餐展示</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- 基础版套餐 -->
+                        <div class="border rounded-lg p-6">
+                            <div class="text-center mb-4">
+                                <h3 class="text-lg font-semibold text-gray-800">基础版</h3>
+                                <div class="text-3xl font-bold text-blue-600 mt-2">¥299</div>
+                                <div class="text-sm text-gray-500">/月</div>
+                            </div>
+                            
+                            <div class="space-y-3 mb-6">
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span class="text-sm text-gray-600">3个坐席成员</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span class="text-sm text-gray-600">10个社媒账号</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span class="text-sm text-gray-600">100K翻译字符</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span class="text-sm text-gray-600">7天聊天记录</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 标准版套餐 -->
+                        <div class="border-2 border-blue-500 rounded-lg p-6 relative">
+                            <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                                <span class="bg-blue-500 text-white px-3 py-1 rounded-full text-xs">推荐</span>
+                            </div>
+                            
+                            <div class="text-center mb-4">
+                                <h3 class="text-lg font-semibold text-gray-800">标准版</h3>
+                                <div class="text-3xl font-bold text-blue-600 mt-2">¥699</div>
+                                <div class="text-sm text-gray-500">/月</div>
+                            </div>
+                            
+                            <div class="space-y-3 mb-6">
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span class="text-sm text-gray-600">10个坐席成员</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span class="text-sm text-gray-600">50个社媒账号</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span class="text-sm text-gray-600">500K翻译字符</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span class="text-sm text-gray-600">30天聊天记录</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 企业版套餐 -->
+                        <div class="border rounded-lg p-6">
+                            <div class="text-center mb-4">
+                                <h3 class="text-lg font-semibold text-gray-800">企业版</h3>
+                                <div class="text-3xl font-bold text-blue-600 mt-2">¥1,999</div>
+                                <div class="text-sm text-gray-500">/月</div>
+                            </div>
+                            
+                            <div class="space-y-3 mb-6">
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span class="text-sm text-gray-600">无限坐席成员</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span class="text-sm text-gray-600">无限社媒账号</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span class="text-sm text-gray-600">2M翻译字符</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span class="text-sm text-gray-600">360天聊天记录</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 编辑套餐弹窗 -->
+    <div id="editPackageModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen">
+            <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800">编辑套餐</h3>
+                    <button onclick="closeEditPackageModal()" class="text-gray-400 hover:text-gray-600">✕</button>
+                </div>
+                
+                <form class="space-y-6">
+                    <!-- 基本信息 -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600 mb-1">套餐名称</label>
+                            <input type="text" id="editPackageName" placeholder="例如：高级版" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600 mb-1">套餐费用(¥/月)</label>
+                            <input type="number" id="editPackagePrice" placeholder="例如：999" step="0.01" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                    </div>
+
+                    <!-- 权益配置 -->
+                    <div>
+                        <h4 class="text-md font-semibold text-gray-700 mb-3">权益配置</h4>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600 mb-1">坐席成员数</label>
+                                <input type="text" id="editPackageSeats" placeholder="例如：20个 或 无限" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600 mb-1">社媒账号数</label>
+                                <input type="text" id="editPackageAccounts" placeholder="例如：100个 或 无限" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600 mb-1">翻译字符数</label>
+                                <input type="text" id="editPackageTranslation" placeholder="例如：1M 或 无限" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600 mb-1">聊天记录时长</label>
+                                <select id="editPackageChatHistory" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option value="">请选择时长</option>
+                                    <option value="7天">7天</option>
+                                    <option value="30天">30天</option>
+                                    <option value="360天">360天</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button onclick="closeEditPackageModal()" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">取消</button>
+                    <button onclick="updatePackage()" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">更新套餐</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加套餐弹窗 -->
+    <div id="packageModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen">
+            <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800">添加套餐</h3>
+                    <button onclick="closePackageModal()" class="text-gray-400 hover:text-gray-600">✕</button>
+                </div>
+                
+                <form class="space-y-6">
+                    <!-- 基本信息 -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600 mb-1">套餐名称</label>
+                            <input type="text" id="packageName" placeholder="例如：高级版" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600 mb-1">套餐费用(¥/月)</label>
+                            <input type="number" id="packagePrice" placeholder="例如：999" step="0.01" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                    </div>
+
+                    <!-- 权益配置 -->
+                    <div>
+                        <h4 class="text-md font-semibold text-gray-700 mb-3">权益配置</h4>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600 mb-1">坐席成员数</label>
+                                <input type="text" id="packageSeats" placeholder="例如：20个 或 无限" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600 mb-1">社媒账号数</label>
+                                <input type="text" id="packageAccounts" placeholder="例如：100个 或 无限" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600 mb-1">翻译字符数</label>
+                                <input type="text" id="packageTranslation" placeholder="例如：1M 或 无限" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600 mb-1">聊天记录时长</label>
+                                <select id="packageChatHistory" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option value="">请选择时长</option>
+                                    <option value="7天">7天</option>
+                                    <option value="30天">30天</option>
+                                    <option value="360天">360天</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button onclick="closePackageModal()" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">取消</button>
+                    <button onclick="savePackage()" class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">添加套餐</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 单价配置弹窗 -->
+    <div id="pricingModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen">
+            <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800">编辑权益单价</h3>
+                    <button onclick="closePricingModal()" class="text-gray-400 hover:text-gray-600">✕</button>
+                </div>
+                
+                <form class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">坐席成员(¥/个/月)</label>
+                        <input type="number" value="80" step="0.01" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">社媒账号(¥/个/月)</label>
+                        <input type="number" value="20" step="0.01" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">翻译字符(¥/1K字符)</label>
+                        <input type="number" value="0.5" step="0.01" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">聊天记录时长(¥/30天/月)</label>
+                        <input type="number" value="10" step="0.01" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </form>
+
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button onclick="closePricingModal()" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">取消</button>
+                    <button onclick="savePricing()" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #3B82F6;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+
+        .tab-button.active {
+            border-color: #3B82F6;
+            color: #3B82F6;
+        }
+    </style>
+
+    <script>
+        // 切换Tab
+        function switchTab(tabName) {
+            // 隐藏所有内容
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            
+            // 移除所有Tab的active状态
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // 显示选中的内容
+            document.getElementById(tabName + '-content').classList.remove('hidden');
+            document.getElementById(tabName + '-tab').classList.add('active');
+        }
+
+        // 单价配置相关
+        function openPricingModal() {
+            document.getElementById('pricingModal').classList.remove('hidden');
+        }
+
+        function closePricingModal() {
+            document.getElementById('pricingModal').classList.add('hidden');
+        }
+
+        function savePricing() {
+            alert('单价配置已保存！');
+            closePricingModal();
+        }
+
+        // 套餐配置相关
+        function openPackageModal() {
+            document.getElementById('packageModal').classList.remove('hidden');
+        }
+
+        function closePackageModal() {
+            document.getElementById('packageModal').classList.add('hidden');
+            // 清空表单
+            document.getElementById('packageName').value = '';
+            document.getElementById('packagePrice').value = '';
+            document.getElementById('packageSeats').value = '';
+            document.getElementById('packageAccounts').value = '';
+            document.getElementById('packageTranslation').value = '';
+            document.getElementById('packageChatHistory').value = '';
+        }
+
+        function savePackage() {
+            const name = document.getElementById('packageName').value;
+            const price = document.getElementById('packagePrice').value;
+            const seats = document.getElementById('packageSeats').value;
+            const accounts = document.getElementById('packageAccounts').value;
+            const translation = document.getElementById('packageTranslation').value;
+            const chatHistory = document.getElementById('packageChatHistory').value;
+
+            if (!name || !price || !seats || !accounts || !translation || !chatHistory) {
+                alert('请填写完整的套餐信息！');
+                return;
+            }
+
+            // 创建新套餐元素
+            const packageContainer = document.querySelector('#packages-content .space-y-4');
+            const newPackageHtml = `
+                <div class="border rounded-lg p-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-800">${name}</h3>
+                                <div class="text-2xl font-bold text-blue-600">¥${price}<span class="text-sm text-gray-500">/月</span></div>
+                            </div>
+                            <div class="flex space-x-6 text-sm text-gray-600">
+                                <span>${seats}坐席成员</span>
+                                <span>${accounts}社媒账号</span>
+                                <span>${translation}翻译字符</span>
+                                <span>${chatHistory}聊天记录</span>
+                            </div>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="text-blue-600 border border-blue-600 px-3 py-1 rounded text-sm hover:bg-blue-50" onclick="editPackage('${name}')">编辑</button>
+                            <button class="text-red-600 border border-red-600 px-3 py-1 rounded text-sm hover:bg-red-50" onclick="deletePackage('${name}')">删除</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            packageContainer.insertAdjacentHTML('beforeend', newPackageHtml);
+            
+            alert('套餐添加成功！');
+            closePackageModal();
+        }
+
+        let currentEditingPackage = null;
+
+        function editPackage(packageName) {
+            currentEditingPackage = packageName;
+            
+            // 找到对应的套餐元素
+            const packageElements = document.querySelectorAll('#packages-content .border.rounded-lg');
+            let packageData = null;
+            
+            packageElements.forEach(element => {
+                const nameElement = element.querySelector('h3');
+                if (nameElement && nameElement.textContent === packageName) {
+                    // 提取套餐信息
+                    const priceElement = element.querySelector('.text-2xl.font-bold');
+                    const priceText = priceElement.textContent;
+                    const price = priceText.match(/¥(\d+(?:\.\d+)?)/)[1];
+                    
+                    const spans = element.querySelectorAll('.text-sm.text-gray-600 span');
+                    packageData = {
+                        name: packageName,
+                        price: price,
+                        seats: spans[0].textContent,
+                        accounts: spans[1].textContent,
+                        translation: spans[2].textContent,
+                        chatHistory: spans[3].textContent
+                    };
+                }
+            });
+            
+            if (packageData) {
+                // 填充编辑表单
+                document.getElementById('editPackageName').value = packageData.name;
+                document.getElementById('editPackagePrice').value = packageData.price;
+                document.getElementById('editPackageSeats').value = packageData.seats;
+                document.getElementById('editPackageAccounts').value = packageData.accounts;
+                document.getElementById('editPackageTranslation').value = packageData.translation;
+                document.getElementById('editPackageChatHistory').value = packageData.chatHistory;
+                
+                // 显示编辑弹窗
+                document.getElementById('editPackageModal').classList.remove('hidden');
+            }
+        }
+
+        function closeEditPackageModal() {
+            document.getElementById('editPackageModal').classList.add('hidden');
+            currentEditingPackage = null;
+            // 清空表单
+            document.getElementById('editPackageName').value = '';
+            document.getElementById('editPackagePrice').value = '';
+            document.getElementById('editPackageSeats').value = '';
+            document.getElementById('editPackageAccounts').value = '';
+            document.getElementById('editPackageTranslation').value = '';
+            document.getElementById('editPackageChatHistory').value = '';
+        }
+
+        function updatePackage() {
+            const name = document.getElementById('editPackageName').value;
+            const price = document.getElementById('editPackagePrice').value;
+            const seats = document.getElementById('editPackageSeats').value;
+            const accounts = document.getElementById('editPackageAccounts').value;
+            const translation = document.getElementById('editPackageTranslation').value;
+            const chatHistory = document.getElementById('editPackageChatHistory').value;
+
+            if (!name || !price || !seats || !accounts || !translation || !chatHistory) {
+                alert('请填写完整的套餐信息！');
+                return;
+            }
+
+            // 找到并更新对应的套餐元素
+            const packageElements = document.querySelectorAll('#packages-content .border.rounded-lg');
+            packageElements.forEach(element => {
+                const nameElement = element.querySelector('h3');
+                if (nameElement && nameElement.textContent === currentEditingPackage) {
+                    // 更新套餐信息
+                    nameElement.textContent = name;
+                    
+                    const priceElement = element.querySelector('.text-2xl.font-bold');
+                    priceElement.innerHTML = `¥${price}<span class="text-sm text-gray-500">/月</span>`;
+                    
+                    const spans = element.querySelectorAll('.text-sm.text-gray-600 span');
+                    spans[0].textContent = seats;
+                    spans[1].textContent = accounts;
+                    spans[2].textContent = translation;
+                    spans[3].textContent = chatHistory;
+                    
+                    // 更新按钮的onclick事件
+                    const editBtn = element.querySelector('.text-blue-600');
+                    const deleteBtn = element.querySelector('.text-red-600');
+                    editBtn.setAttribute('onclick', `editPackage('${name}')`);
+                    deleteBtn.setAttribute('onclick', `deletePackage('${name}')`);
+                }
+            });
+            
+            alert('套餐更新成功！');
+            closeEditPackageModal();
+        }
+
+        function deletePackage(packageType) {
+            if (confirm(`确定要删除${packageType}套餐吗？`)) {
+                // 找到并删除对应的套餐元素
+                const packageElements = document.querySelectorAll('#packages-content .border.rounded-lg');
+                packageElements.forEach(element => {
+                    const nameElement = element.querySelector('h3');
+                    if (nameElement && nameElement.textContent === packageType) {
+                        element.remove();
+                    }
+                });
+                alert('套餐已删除！');
+            }
+        }
+
+        // 官网配置相关
+        function openWebsiteModal() {
+            alert('官网配置功能开发中...');
+        }
+    </script>
+</body>
+</html> 

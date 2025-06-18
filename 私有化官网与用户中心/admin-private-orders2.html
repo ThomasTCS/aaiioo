@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>私有化订单 - AIO 运营平台</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-6">
+    <div class="max-w-[90%] mx-auto">
+        <!-- 筛选栏 -->
+        <div class="bg-white rounded-lg shadow-sm p-4 mb-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">订单类型</label>
+                        <select class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">全部</option>
+                            <option value="正式版">正式版</option>
+                            <option value="试用版">试用版</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">审核状态</label>
+                        <select class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">全部</option>
+                            <option value="待审核">待审核</option>
+                            <option value="审核通过">审核通过</option>
+                            <option value="审核失败">审核失败</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">支付方式</label>
+                        <select class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">全部</option>
+                            <option value="USDT">USDT</option>
+                            <option value="Paypal">Paypal</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">企业名称</label>
+                        <input type="text" placeholder="搜索企业名称" class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button class="bg-blue-500 text-white px-4 py-2 rounded text-sm hover:bg-blue-600 transition duration-200">
+                        搜索
+                    </button>
+                    <button class="bg-gray-500 text-white px-4 py-2 rounded text-sm hover:bg-gray-600 transition duration-200">
+                        重置
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 订单列表 -->
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">订单编号</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">企业标识码</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">企业名称</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">订单类型</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">支付方式</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">订单金额</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">支付时间</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">审核</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">操作</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200" id="orderTable">
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">#20241201001</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">TX001</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">腾讯科技</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">正式版</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">USDT</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">¥89,800</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2024-12-01 14:30:00</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">审核通过</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                            <button class="text-blue-600 hover:text-blue-900" onclick="openDetailModal('20241201001')">详情</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">#20241202002</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">AL001</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">阿里巴巴</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">试用版</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Paypal</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">¥0</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2024-12-02 09:15:00</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">审核通过</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                            <button class="text-blue-600 hover:text-blue-900" onclick="openDetailModal('20241202002')">详情</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">#20241203003</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">BD001</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">百度科技</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">正式版</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">USDT</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">¥198,000</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2024-12-03 16:20:00</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">审核失败</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                            <button class="text-blue-600 hover:text-blue-900" onclick="openDetailModal('20241203003')">详情</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">#20241204004</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">HW001</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">华为技术</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">正式版</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">USDT</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">¥156,800</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2024-12-04 10:45:00</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">待审核</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                            <button class="text-blue-600 hover:text-blue-900" onclick="openDetailModal('20241204004')">详情</button>
+                            <button class="text-purple-600 hover:text-purple-900" onclick="openAuditModal('20241204004')">审核</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">#20241205005</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">XM001</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">小米科技</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">正式版</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Paypal</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">¥132,500</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2024-12-05 15:30:00</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">审核通过</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                            <button class="text-blue-600 hover:text-blue-900" onclick="openDetailModal('20241205005')">详情</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">#20241206006</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">DJI001</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">大疆创新</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">正式版</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">USDT</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">¥245,600</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2024-12-06 11:20:00</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">待审核</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                            <button class="text-blue-600 hover:text-blue-900" onclick="openDetailModal('20241206006')">详情</button>
+                            <button class="text-purple-600 hover:text-purple-900" onclick="openAuditModal('20241206006')">审核</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 订单详情弹窗 -->
+    <div id="detailModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen">
+            <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-4xl max-h-screen overflow-y-auto">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800">订单详情</h3>
+                    <button onclick="closeModal('detailModal')" class="text-gray-400 hover:text-gray-600">✕</button>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- 订单基本信息 -->
+                    <div>
+                        <h4 class="font-semibold text-gray-700 mb-3">订单信息</h4>
+                        <div class="space-y-3">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-600">订单编号</label>
+                                    <div class="mt-1 text-sm text-gray-900" id="orderNumber"></div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-600">订单类型</label>
+                                    <div class="mt-1 text-sm text-gray-900" id="orderType"></div>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-600">企业名称</label>
+                                    <div class="mt-1 text-sm text-gray-900" id="companyName"></div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-600">企业标识码</label>
+                                    <div class="mt-1 text-sm text-gray-900" id="companyCode"></div>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-600">支付方式</label>
+                                    <div class="mt-1 text-sm text-gray-900" id="paymentMethod"></div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-600">订单金额</label>
+                                    <div class="mt-1 text-sm font-medium text-gray-900" id="orderAmount"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600">支付时间</label>
+                                <div class="mt-1 text-sm text-gray-900" id="paymentTime"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 服务周期和权益信息 -->
+                    <div>
+                        <h4 class="font-semibold text-gray-700 mb-3">服务周期</h4>
+                        <div class="space-y-3 mb-6">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-600">开始时间</label>
+                                    <div class="mt-1 text-sm text-gray-900" id="serviceStart"></div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-600">结束时间</label>
+                                    <div class="mt-1 text-sm text-gray-900" id="serviceEnd"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600">服务时长</label>
+                                <div class="mt-1 text-sm text-gray-900" id="serviceDuration"></div>
+                            </div>
+                        </div>
+
+                        <h4 class="font-semibold text-gray-700 mb-3">权益信息</h4>
+                        <div class="space-y-2">
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">坐席成员</span>
+                                <span class="text-sm text-gray-900" id="seats"></span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">社媒账号</span>
+                                <span class="text-sm text-gray-900" id="socialAccounts"></span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">翻译字符</span>
+                                <span class="text-sm text-gray-900" id="translationChars"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 费用信息 -->
+                <div class="mt-6">
+                    <h4 class="font-semibold text-gray-700 mb-3">费用信息</h4>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <div class="space-y-2">
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">基础服务费</span>
+                                <span class="text-sm text-gray-900" id="baseServiceFee"></span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">坐席费用</span>
+                                <span class="text-sm text-gray-900" id="seatFee"></span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">社媒账号费用</span>
+                                <span class="text-sm text-gray-900" id="socialFee"></span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">翻译字符费用</span>
+                                <span class="text-sm text-gray-900" id="translationFee"></span>
+                            </div>
+                            <hr class="my-2">
+                            <div class="flex justify-between font-semibold">
+                                <span class="text-sm text-gray-900">总计</span>
+                                <span class="text-sm text-gray-900" id="totalFee"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end mt-6">
+                    <button onclick="closeModal('detailModal')" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 审核弹窗 -->
+    <div id="auditModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen">
+            <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800">订单审核</h3>
+                    <button onclick="closeModal('auditModal')" class="text-gray-400 hover:text-gray-600">✕</button>
+                </div>
+                
+                <div id="auditOrderInfo" class="mb-6">
+                    <!-- 订单信息将在这里动态显示 -->
+                </div>
+
+                <div class="flex justify-end space-x-3">
+                    <button onclick="closeModal('auditModal')" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">取消</button>
+                    <button onclick="auditOrder('reject')" class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">审核失败</button>
+                    <button onclick="auditOrder('approve')" class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">审核通过</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentOrderId = '';
+
+        // 全局数据管理
+        const DataManager = {
+            // 获取订单数据
+            getOrderData: function() {
+                const data = localStorage.getItem('private_orders');
+                return data ? JSON.parse(data) : [];
+            },
+            
+            // 保存订单数据
+            saveOrderData: function(orders) {
+                localStorage.setItem('private_orders', JSON.stringify(orders));
+            },
+            
+            // 更新订单状态
+            updateOrderStatus: function(orderId, status) {
+                const orders = this.getOrderData();
+                const order = orders.find(o => o.id === orderId);
+                if (order) {
+                    order.auditStatus = status;
+                    this.saveOrderData(orders);
+                    return order;
+                }
+                return null;
+            },
+            
+            // 更新License状态
+            updateLicenseStatus: function(companyCode, licenseId, status) {
+                const key = `license_${companyCode}`;
+                const data = localStorage.getItem(key);
+                if (data) {
+                    const licenses = JSON.parse(data);
+                    const license = licenses.find(l => l.id === licenseId);
+                    if (license) {
+                        license.status = status;
+                        localStorage.setItem(key, JSON.stringify(licenses));
+                        
+                        // 触发License数据变化事件
+                        window.dispatchEvent(new CustomEvent('licenseDataChanged', {
+                            detail: { companyCode: companyCode }
+                        }));
+                    }
+                }
+            }
+        };
+
+        // 页面加载时刷新订单列表
+        document.addEventListener('DOMContentLoaded', function() {
+            refreshOrderTable();
+        });
+
+        // 刷新订单表格
+        function refreshOrderTable() {
+            const dynamicOrders = DataManager.getOrderData();
+            const orderTable = document.getElementById('orderTable');
+            
+            // 生成动态订单行
+            let dynamicOrderRows = '';
+            dynamicOrders.forEach(order => {
+                const statusColor = order.auditStatus === '待审核' ? 'bg-yellow-100 text-yellow-800' : 
+                                  order.auditStatus === '审核通过' ? 'bg-green-100 text-green-800' : 
+                                  'bg-red-100 text-red-800';
+                
+                const auditButton = order.auditStatus === '待审核' ? 
+                    `<button class="text-purple-600 hover:text-purple-900" onclick="openAuditModal('${order.id}')">审核</button>` : 
+                    '';
+                
+                dynamicOrderRows += `
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">${order.orderNumber}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${order.companyCode}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${order.companyName}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">${order.orderType}</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${order.paymentMethod}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">¥${order.amount}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${order.paymentTime}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${statusColor}">${order.auditStatus}</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                            <button class="text-blue-600 hover:text-blue-900" onclick="openDetailModal('${order.id}')">详情</button>
+                            ${auditButton}
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            // 将动态订单添加到现有订单前面
+            const existingRows = orderTable.innerHTML;
+            orderTable.innerHTML = dynamicOrderRows + existingRows;
+        }
+
+        // 订单数据
+        const orderData = {
+            '20241201001': {
+                orderNumber: '#20241201001',
+                orderType: '正式版',
+                companyName: '腾讯科技',
+                companyCode: 'TX001',
+                paymentMethod: 'USDT',
+                orderAmount: '¥89,800',
+                paymentTime: '2024-12-01 14:30:00',
+                serviceStart: '2024-12-01',
+                serviceEnd: '2025-11-30',
+                serviceDuration: '360天',
+                seats: '10个',
+                socialAccounts: '50个',
+                translationChars: '10M',
+                baseServiceFee: '¥44,000',
+                seatFee: '¥12,000',
+                socialFee: '¥7,500',
+                translationFee: '¥26,300',
+                totalFee: '¥89,800'
+            },
+            '20241202002': {
+                orderNumber: '#20241202002',
+                orderType: '试用版',
+                companyName: '阿里巴巴',
+                companyCode: 'AL001',
+                paymentMethod: 'Paypal',
+                orderAmount: '¥0',
+                paymentTime: '2024-12-02 09:15:00',
+                serviceStart: '2024-12-02',
+                serviceEnd: '2024-12-16',
+                serviceDuration: '14天',
+                seats: '3个',
+                socialAccounts: '10个',
+                translationChars: '1M',
+                baseServiceFee: '¥0',
+                seatFee: '¥0',
+                socialFee: '¥0',
+                translationFee: '¥0',
+                totalFee: '¥0'
+            },
+            '20241203003': {
+                orderNumber: '#20241203003',
+                orderType: '正式版',
+                companyName: '百度科技',
+                companyCode: 'BD001',
+                paymentMethod: 'USDT',
+                orderAmount: '¥198,000',
+                paymentTime: '2024-12-03 16:20:00',
+                serviceStart: '2024-12-03',
+                serviceEnd: '2025-12-02',
+                serviceDuration: '360天',
+                seats: '20个',
+                socialAccounts: '100个',
+                translationChars: '50M',
+                baseServiceFee: '¥88,000',
+                seatFee: '¥24,000',
+                socialFee: '¥15,000',
+                translationFee: '¥71,000',
+                totalFee: '¥198,000'
+            },
+            '20241204004': {
+                orderNumber: '#20241204004',
+                orderType: '正式版',
+                companyName: '华为技术',
+                companyCode: 'HW001',
+                paymentMethod: 'USDT',
+                orderAmount: '¥156,800',
+                paymentTime: '2024-12-04 10:45:00',
+                serviceStart: '2024-12-04',
+                serviceEnd: '2025-12-03',
+                serviceDuration: '360天',
+                seats: '15个',
+                socialAccounts: '80个',
+                translationChars: '30M',
+                baseServiceFee: '¥88,000',
+                seatFee: '¥18,000',
+                socialFee: '¥12,000',
+                translationFee: '¥38,800',
+                totalFee: '¥156,800'
+            },
+            '20241205005': {
+                orderNumber: '#20241205005',
+                orderType: '正式版',
+                companyName: '小米科技',
+                companyCode: 'XM001',
+                paymentMethod: 'Paypal',
+                orderAmount: '¥132,500',
+                paymentTime: '2024-12-05 15:30:00',
+                serviceStart: '2024-12-05',
+                serviceEnd: '2025-12-04',
+                serviceDuration: '360天',
+                seats: '12个',
+                socialAccounts: '60个',
+                translationChars: '20M',
+                baseServiceFee: '¥88,000',
+                seatFee: '¥14,400',
+                socialFee: '¥9,000',
+                translationFee: '¥21,100',
+                totalFee: '¥132,500'
+            },
+            '20241206006': {
+                orderNumber: '#20241206006',
+                orderType: '正式版',
+                companyName: '大疆创新',
+                companyCode: 'DJI001',
+                paymentMethod: 'USDT',
+                orderAmount: '¥245,600',
+                paymentTime: '2024-12-06 11:20:00',
+                serviceStart: '2024-12-06',
+                serviceEnd: '2025-12-05',
+                serviceDuration: '360天',
+                seats: '25个',
+                socialAccounts: '120个',
+                translationChars: '80M',
+                baseServiceFee: '¥88,000',
+                seatFee: '¥30,000',
+                socialFee: '¥18,000',
+                translationFee: '¥109,600',
+                totalFee: '¥245,600'
+            }
+        };
+
+        // 打开详情弹窗
+        function openDetailModal(orderId) {
+            const data = orderData[orderId] || {};
+            
+            Object.keys(data).forEach(key => {
+                const element = document.getElementById(key);
+                if (element) {
+                    element.textContent = data[key];
+                }
+            });
+
+            document.getElementById('detailModal').classList.remove('hidden');
+        }
+
+        // 打开审核弹窗
+        function openAuditModal(orderId) {
+            currentOrderId = orderId;
+            
+            // 先查找动态订单数据
+            const dynamicOrders = DataManager.getOrderData();
+            const dynamicOrder = dynamicOrders.find(o => o.id === orderId);
+            
+            let data = {};
+            if (dynamicOrder) {
+                // 动态订单数据
+                data = {
+                    orderNumber: dynamicOrder.orderNumber,
+                    companyName: dynamicOrder.companyName,
+                    orderType: dynamicOrder.orderType,
+                    orderAmount: `¥${dynamicOrder.amount}`,
+                    serviceDuration: dynamicOrder.serviceTime ? `${dynamicOrder.serviceTime}天` : '未知',
+                    serviceStart: dynamicOrder.startDate || '未知',
+                    serviceEnd: dynamicOrder.endDate || '未知',
+                    seats: dynamicOrder.seats ? `${dynamicOrder.seats}个` : '未知',
+                    socialAccounts: dynamicOrder.socialAccounts ? `${dynamicOrder.socialAccounts}个` : '未知',
+                    translationChars: dynamicOrder.translationChars ? `${dynamicOrder.translationChars}M` : '未知'
+                };
+            } else {
+                // 静态订单数据
+                data = orderData[orderId] || {};
+            }
+            
+            const auditInfo = `
+                <div class="space-y-4">
+                    <!-- 订单基本信息 -->
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-gray-700 mb-3">订单信息</h4>
+                        <div class="grid grid-cols-2 gap-4 text-sm">
+                            <div>订单编号：${data.orderNumber || orderId}</div>
+                            <div>企业名称：${data.companyName || ''}</div>
+                            <div>订单类型：${data.orderType || ''}</div>
+                            <div>订单金额：${data.orderAmount || ''}</div>
+                        </div>
+                    </div>
+
+                    <!-- 服务时长信息 -->
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-gray-700 mb-3">服务时长</h4>
+                        <div class="grid grid-cols-3 gap-4 text-sm">
+                            <div>服务时长：${data.serviceDuration || ''}</div>
+                            <div>开始时间：${data.serviceStart || ''}</div>
+                            <div>结束时间：${data.serviceEnd || ''}</div>
+                        </div>
+                    </div>
+
+                    <!-- 权益数量信息 -->
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-gray-700 mb-3">权益数量</h4>
+                        <div class="grid grid-cols-3 gap-4 text-sm">
+                            <div>坐席成员：${data.seats || ''}</div>
+                            <div>社媒账号：${data.socialAccounts || ''}</div>
+                            <div>翻译字符：${data.translationChars || ''}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('auditOrderInfo').innerHTML = auditInfo;
+            document.getElementById('auditModal').classList.remove('hidden');
+        }
+
+        // 关闭弹窗
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        // 审核订单
+        function auditOrder(action) {
+            const actionText = action === 'approve' ? '审核通过' : '审核失败';
+            
+            if (confirm(`确定要${actionText}订单 ${currentOrderId} 吗？`)) {
+                // 更新订单状态
+                const updatedOrder = DataManager.updateOrderStatus(currentOrderId, actionText);
+                
+                if (updatedOrder && action === 'approve') {
+                    // 如果审核通过，同时更新对应的License状态
+                    DataManager.updateLicenseStatus(updatedOrder.companyCode, updatedOrder.licenseId, '审核通过');
+                }
+                
+                alert(`订单已${actionText}`);
+                closeModal('auditModal');
+                
+                // 刷新订单表格
+                refreshOrderTable();
+            }
+        }
+    </script>
+</body>
+</html> 

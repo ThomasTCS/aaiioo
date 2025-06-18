@@ -1,0 +1,1949 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-lang-key="page-title">AIOChat - 授权申请管理</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/@arco-design/web-react/dist/css/arco.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@arco-design/web-react/dist/arco.min.js"></script>
+  <style>
+    .language-switch {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+    }
+    .language-dropdown {
+      display: none;
+      position: absolute;
+      right: 0;
+      background: white;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .language-dropdown.show {
+      display: block;
+    }
+    .language-option {
+      padding: 8px 16px;
+      cursor: pointer;
+    }
+    .language-option:hover {
+      background-color: #f0f0f0;
+    }
+    /* 隐藏number输入框的增减按钮 */
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
+    
+    /* 支付选项样式 */
+    .payment-option {
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    /* 未选中状态的默认样式 */
+    .payment-option:not(.selected) {
+      background: white;
+      border-color: #e5e7eb;
+    }
+    
+    /* hover状态 */
+    .payment-option:hover:not(.selected) {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border-color: #93c5fd;
+      background: #eff6ff;
+    }
+    
+    /* 选中状态 */
+    .payment-option.selected,
+    .payment-option[class*="border-blue-500"] {
+      background: #eff6ff;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+    
+    /* 支付选项logo动画 */
+    .payment-option .payment-logo {
+      transition: transform 0.2s ease;
+    }
+    
+    .payment-option:hover .payment-logo {
+      transform: scale(1.05);
+    }
+    
+    .payment-option.selected .payment-logo {
+      transform: scale(1.1);
+    }
+    
+    /* 支付选项文字渐变动画 */
+    .payment-option .payment-title {
+      transition: color 0.2s ease;
+    }
+    
+    .payment-option:hover .payment-title,
+    .payment-option.selected .payment-title {
+      color: #1d4ed8;
+    }
+    
+    /* 自定义单选圈动画 */
+    .payment-radio-circle {
+      transition: all 0.3s ease;
+    }
+    
+    .payment-option:hover .payment-radio-circle {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <!-- 顶部导航栏 -->
+  <header class="bg-white shadow-sm sticky top-0 z-50 transition-shadow duration-300">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+      <div class="flex items-center">
+        <img src="../私有化官网与用户中心/images/aio-logo_kxblvp.png.png" alt="AIOChat Logo" class="h-8 w-8 mr-2 logo">
+        <a href="index.html" class="text-xl font-bold text-gray-800 hover:text-primary-color transition-colors duration-300">AIOChat</a>
+        
+        <a href="private-admin-login.html" class="ml-4 bg-white border border-gray-300 text-gray-600 hover:text-gray-800 hover:border-gray-400 px-3 py-1.5 rounded-md text-sm font-medium transition-colors duration-200">
+          私有化客户后台(demo)
+        </a>
+      </div>
+      <div class="flex items-center">
+        <button class="mx-2 text-gray-600 hover:text-gray-900 nav-link">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span data-lang-key="auth-tutorial">授权使用教程</span>
+        </button>
+        
+        <div class="relative ml-4">
+          <div class="flex items-center text-gray-700 cursor-pointer rounded-full hover:bg-gray-100 px-3 py-2 transition-colors duration-300" id="userMenuButton">
+            <div class="user-avatar mr-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <span id="userEmail" class="font-medium">123@gmail.com</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+          
+          <!-- 用户下拉菜单 -->
+          <div id="userDropdownMenu" class="hidden absolute right-0 mt-2 w-56 dropdown-menu animate-slideDown">
+            <!-- 切换服务 -->
+            <div class="px-4 py-2 text-xs font-semibold text-gray-500 border-b" data-lang-key="switch-service">切换服务</div>
+            <a href="#" class="dropdown-item">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2H5z" />
+              </svg>
+              <span data-lang-key="private-service">私有化服务</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-auto text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+            </a>
+            <a href="saas-login.html" class="dropdown-item">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+              </svg>
+              <span data-lang-key="saas-service">SAAS 服务</span>
+            </a>
+            
+            <!-- 语言设置 -->
+            <div class="dropdown-divider"></div>
+            <div class="px-4 py-2 text-xs font-semibold text-gray-500" data-lang-key="language">语言</div>
+            <a href="#" data-lang="zh" class="lang-option dropdown-item">
+              <span class="mr-2">🇨🇳</span>
+              <span>中文</span>
+              <svg id="zhCheckmark" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-auto text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+            </a>
+            <a href="#" data-lang="en" class="lang-option dropdown-item">
+              <span class="mr-2">🇬🇧</span>
+              <span>English</span>
+              <svg id="enCheckmark" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-auto text-blue-500 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+            </a>
+            
+            <!-- 退出选项 -->
+            <div class="dropdown-divider"></div>
+            <a href="private-login.html" class="dropdown-item text-red-600 hover:bg-red-50">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+              </svg>
+              <span data-lang-key="logout">退出</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主要内容区域 -->
+  <main class="container mx-auto px-4 py-8 animate-fadeIn">
+    <!-- 企业信息卡片 -->
+    <div class="bg-white rounded-lg shadow card p-6 mb-8 animate-slideUp">
+      <!-- 隐藏标题 -->
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="bg-gray-50 rounded-md p-4 flex flex-col">
+          <span class="text-sm text-gray-500 mb-1" data-lang-key="company-name">企业名称：</span>
+          <span id="companyName" class="font-semibold text-gray-800">-</span>
+        </div>
+        <div class="bg-gray-50 rounded-md p-4 flex flex-col">
+          <span class="text-sm text-gray-500 mb-1" data-lang-key="email-label">邮箱：</span>
+          <span id="userEmailInfo" class="font-semibold text-gray-800">123@gmail.com</span>
+        </div>
+        <div class="bg-gray-50 rounded-md p-4 flex flex-col">
+          <span class="text-sm text-gray-500 mb-1" data-lang-key="contact-name-label">联系人：</span>
+          <span id="contactName" class="font-semibold text-gray-800">-</span>
+        </div>
+        <div class="bg-gray-50 rounded-md p-4 flex flex-col">
+          <span class="text-sm text-gray-500 mb-1" data-lang-key="contact-phone-label">联系电话：</span>
+          <span id="contactPhone" class="font-semibold text-gray-800">-</span>
+        </div>
+        <div class="bg-gray-50 rounded-md p-4 flex flex-col">
+          <span class="text-sm text-gray-500 mb-1" data-lang-key="telegram-label">Telegram：</span>
+          <span id="telegramNumber" class="font-semibold text-gray-800">-</span>
+        </div>
+        <div class="bg-gray-50 rounded-md p-4 flex flex-col">
+          <span class="text-sm text-gray-500 mb-1" data-lang-key="whatsapp-label">WhatsApp：</span>
+          <span id="whatsappNumber" class="font-semibold text-gray-800">-</span>
+        </div>
+        <div class="bg-gray-50 rounded-md p-4 flex flex-col">
+          <span class="text-sm text-gray-500 mb-1" data-lang-key="license-label">License 授权：</span>
+          <div class="flex items-center mt-1">
+            <div id="licenseAuthorization" class="inline-block rounded-lg text-sm font-semibold text-white shadow-sm" style="background: linear-gradient(135deg, #10b981 0%, #f59e0b 100%); padding: 4px 8px; width: max-content;">
+              体验版
+            </div>
+            <span id="licenseStatus" class="ml-2 text-sm font-semibold"></span>
+          </div>
+        </div>
+        <div class="bg-gray-50 rounded-md p-4 flex flex-col md:col-span-2">
+          <span class="text-sm text-gray-500 mb-1" data-lang-key="server-code-label">服务器机器码：</span>
+          <span id="machineCode" class="font-mono text-xs bg-gray-100 p-2 rounded border border-gray-200 mt-1 overflow-auto">AIOC-XXXX-XXXX-XXXX-XXXX</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 授权申请列表 -->
+    <div class="bg-white rounded-lg shadow card overflow-hidden animate-slideUp" style="animation-delay: 200ms;">
+      <div class="card-header flex justify-between items-center">
+        <h2 class="text-lg font-semibold text-gray-800 flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          </svg>
+          <span data-lang-key="auth-application-list">授权申请列表</span>
+        </h2>
+        <div>
+          <button id="purchaseAuthBtn" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+            </svg>
+            购买授权
+          </button>
+        </div>
+      </div>
+      
+      <!-- 主体内容区域：左侧状态切换按钮 + 右侧表格 -->
+      <div class="flex">
+        <!-- 左侧状态切换按钮 -->
+        <div class="w-64 bg-gray-50 border-r border-gray-200 p-4">
+          <h3 class="text-sm font-medium text-gray-700 mb-4" data-lang-key="status-filter">状态筛选</h3>
+          <div class="space-y-2">
+            <button class="status-filter-btn w-full text-left px-3 py-2 text-sm rounded-md bg-white border border-gray-200 text-gray-700 transition-colors duration-200 hover:bg-gray-50" data-status="no-auth" data-lang-key="no-auth">
+              未上传授权
+            </button>
+            <button class="status-filter-btn w-full text-left px-3 py-2 text-sm rounded-md bg-blue-50 border border-blue-200 text-blue-700 font-medium transition-colors duration-200 hover:bg-blue-100" data-status="trial-only" data-lang-key="trial-only">
+              只有试用版
+            </button>
+            <button class="status-filter-btn w-full text-left px-3 py-2 text-sm rounded-md bg-white border border-gray-200 text-gray-700 transition-colors duration-200 hover:bg-gray-50" data-status="trial-expiring" data-lang-key="trial-expiring">
+              试用版即将过期
+            </button>
+            <button class="status-filter-btn w-full text-left px-3 py-2 text-sm rounded-md bg-white border border-gray-200 text-gray-700 transition-colors duration-200 hover:bg-gray-50" data-status="trial-expired" data-lang-key="trial-expired">
+              试用版已过期
+            </button>
+            <button class="status-filter-btn w-full text-left px-3 py-2 text-sm rounded-md bg-white border border-gray-200 text-gray-700 transition-colors duration-200 hover:bg-gray-50" data-status="official-active" data-lang-key="official-active">
+              拥有正式版
+            </button>
+            <button class="status-filter-btn w-full text-left px-3 py-2 text-sm rounded-md bg-white border border-gray-200 text-gray-700 transition-colors duration-200 hover:bg-gray-50" data-status="official-expiring" data-lang-key="official-expiring">
+              正式版即将过期
+            </button>
+            <button class="status-filter-btn w-full text-left px-3 py-2 text-sm rounded-md bg-white border border-gray-200 text-gray-700 transition-colors duration-200 hover:bg-gray-50" data-status="official-expired" data-lang-key="official-expired">
+              正式版已过期
+            </button>
+            <button class="status-filter-btn w-full text-left px-3 py-2 text-sm rounded-md bg-white border border-gray-200 text-gray-700 transition-colors duration-200 hover:bg-gray-50" data-status="multiple-official" data-lang-key="multiple-official">
+              正式版-多个正式版
+            </button>
+          </div>
+        </div>
+        
+        <!-- 右侧表格 -->
+        <div class="flex-1 overflow-x-auto">
+        <table class="w-full">
+          <thead>
+            <tr>
+              <th class="px-4 py-3 text-left text-sm font-medium text-gray-600" data-lang-key="table-company-name">企业名称</th>
+              <th class="px-4 py-3 text-left text-sm font-medium text-gray-600" data-lang-key="table-auth-type">授权类型</th>
+              <th class="px-4 py-3 text-left text-sm font-medium text-gray-600" data-lang-key="table-apply-time">申请时间</th>
+              <th class="px-4 py-3 text-left text-sm font-medium text-gray-600" data-lang-key="table-benefits">权益</th>
+              <th class="px-4 py-3 text-left text-sm font-medium text-gray-600" data-lang-key="table-expire-time">到期时间</th>
+              <th class="px-4 py-3 text-left text-sm font-medium text-gray-600" data-lang-key="table-status">审核状态</th>
+              <th class="px-4 py-3 text-left text-sm font-medium text-gray-600" data-lang-key="table-operation">操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr id="officialRow" class="border-t border-gray-200 hover:bg-gray-50 transition-colors duration-150" style="display: none;">
+              <td class="px-4 py-4 text-sm text-gray-800" id="tableCompanyNameOfficial">-</td>
+              <td class="px-4 py-4 text-sm">
+                <span class="badge badge-primary" data-lang-key="official-version">正式版</span>
+              </td>
+              <td class="px-4 py-4 text-sm text-gray-800">
+                <div class="flex flex-col">
+                  <span>2025-06-01</span>
+                  <span class="text-gray-500 text-xs">12:30:00</span>
+                </div>
+              </td>
+              <td class="px-4 py-4 text-sm text-gray-800">
+                <div class="space-y-1">
+                  <div class="flex items-center justify-between">
+                    <span data-lang-key="member-count">成员数</span>
+                    <span class="font-semibold">101-300</span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span data-lang-key="social-accounts">社媒账号数</span>
+                    <span class="font-semibold">10</span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span data-lang-key="translation-chars">翻译字符数</span>
+                    <span class="font-semibold">1,000,000</span>
+                  </div>
+                </div>
+              </td>
+              <td class="px-4 py-4 text-sm">
+                <div class="flex flex-col">
+                  <span class="font-medium">2025-11-30</span>
+                  <span class="text-gray-500 text-xs">23:59:59</span>
+                </div>
+              </td>
+              <td class="px-4 py-4 text-sm">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800" data-lang-key="approved">
+                  <svg class="mr-1 h-2 w-2 text-green-500" fill="currentColor" viewBox="0 0 8 8">
+                    <circle cx="4" cy="4" r="3" />
+                  </svg>
+                  审核通过
+                </span>
+              </td>
+              <td class="px-4 py-4">
+                <button class="btn-primary text-sm px-3 py-1 inline-flex items-center rounded" data-lang-key="download-file">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  </svg>
+                  下载文件
+                </button>
+              </td>
+            </tr>
+            <tr id="officialRow2" class="border-t border-gray-200 hover:bg-gray-50 transition-colors duration-150" style="display: none;">
+              <td class="px-4 py-4 text-sm text-gray-800" id="tableCompanyNameOfficial2">-</td>
+              <td class="px-4 py-4 text-sm">
+                <span class="badge badge-primary" data-lang-key="official-version">正式版</span>
+              </td>
+              <td class="px-4 py-4 text-sm text-gray-800">
+                <div class="flex flex-col">
+                  <span>2025-03-01</span>
+                  <span class="text-gray-500 text-xs">10:45:30</span>
+                </div>
+              </td>
+              <td class="px-4 py-4 text-sm text-gray-800">
+                <div class="space-y-1">
+                  <div class="flex items-center justify-between">
+                    <span data-lang-key="member-count">成员数</span>
+                    <span class="font-semibold">101-300</span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span data-lang-key="social-accounts">社媒账号数</span>
+                    <span class="font-semibold">10</span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span data-lang-key="translation-chars">翻译字符数</span>
+                    <span class="font-semibold">1,000,000</span>
+                  </div>
+                </div>
+              </td>
+              <td class="px-4 py-4 text-sm">
+                <div class="flex flex-col">
+                  <span class="font-medium" id="officialRow2ExpireDate">2025-05-30</span>
+                  <span class="text-gray-500 text-xs">23:59:59</span>
+                </div>
+              </td>
+              <td class="px-4 py-4 text-sm">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800" data-lang-key="approved">
+                  <svg class="mr-1 h-2 w-2 text-green-500" fill="currentColor" viewBox="0 0 8 8">
+                    <circle cx="4" cy="4" r="3" />
+                  </svg>
+                  审核通过
+                </span>
+              </td>
+              <td class="px-4 py-4">
+                <button class="btn-primary text-sm px-3 py-1 inline-flex items-center rounded" data-lang-key="download-file">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  </svg>
+                  下载文件
+                </button>
+              </td>
+            </tr>
+            <tr id="trialRow" class="border-t border-gray-200 hover:bg-gray-50 transition-colors duration-150">
+              <td class="px-4 py-4 text-sm text-gray-800" id="tableCompanyName">-</td>
+              <td class="px-4 py-4 text-sm">
+                <span class="badge badge-secondary" data-lang-key="trial-version">试用版</span>
+              </td>
+              <td class="px-4 py-4 text-sm text-gray-800">
+                <div class="flex flex-col">
+                  <span>2025-02-13</span>
+                  <span class="text-gray-500 text-xs">10:45:30</span>
+                </div>
+              </td>
+              <td class="px-4 py-4 text-sm text-gray-800">
+                <div class="space-y-1">
+                  <div class="flex items-center justify-between">
+                    <span data-lang-key="member-count">成员数</span>
+                    <span class="font-semibold">2</span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span data-lang-key="social-accounts">社媒账号数</span>
+                    <span class="font-semibold">3</span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span data-lang-key="translation-chars">翻译字符数</span>
+                    <span class="font-semibold">1,000</span>
+                  </div>
+                </div>
+              </td>
+              <td class="px-4 py-4 text-sm">
+                <div class="flex flex-col">
+                  <span class="font-medium" id="trialRowExpireDate">2025-02-28</span>
+                  <span class="text-gray-500 text-xs">23:59:59</span>
+                </div>
+              </td>
+              <td class="px-4 py-4 text-sm">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800" data-lang-key="approved">
+                  <svg class="mr-1 h-2 w-2 text-green-500" fill="currentColor" viewBox="0 0 8 8">
+                    <circle cx="4" cy="4" r="3" />
+                  </svg>
+                  审核通过
+                </span>
+              </td>
+              <td class="px-4 py-4">
+                <button class="btn-primary text-sm px-3 py-1 inline-flex items-center rounded" data-lang-key="download-file">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  </svg>
+                  下载文件
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 历史授权申请记录 -->
+    <!-- <div class="mt-10">
+      <h2 class="text-lg font-semibold mb-4">历史授权申请记录</h2>
+      
+      <div class="bg-white rounded-lg shadow overflow-hidden">
+        <table class="w-full border-collapse">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="px-4 py-3 text-left text-sm font-medium text-gray-600">企业名称</th>
+              <th class="px-4 py-3 text-left text-sm font-medium text-gray-600">授权类型</th>
+              <th class="px-4 py-3 text-left text-sm font-medium text-gray-600">申请时间</th>
+              <th class="px-4 py-3 text-left text-sm font-medium text-gray-600">权益</th>
+              <th class="px-4 py-3 text-left text-sm font-medium text-gray-600">到期时间</th>
+              <th class="px-4 py-3 text-left text-sm font-medium text-gray-600">审核状态</th>
+              <th class="px-4 py-3 text-left text-sm font-medium text-gray-600">操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-t border-gray-200">
+              <td class="px-4 py-4 text-sm text-gray-800" id="tableCompanyName">天鹅集团</td>
+              <td class="px-4 py-4 text-sm text-gray-800">试用版</td>
+              <td class="px-4 py-4 text-sm text-gray-800">2025-05-01<br>13:02:24</td>
+              <td class="px-4 py-4 text-sm text-gray-800">
+                成员数：2<br>
+                并发连接数：3<br>
+                翻译字符数：1,000
+              </td>
+              <td class="px-4 py-4 text-sm text-gray-800">2025-05-15<br>23:59:59</td>
+              <td class="px-4 py-4 text-sm text-gray-800">审核通过</td>
+              <td class="px-4 py-4 text-sm text-gray-800">已过期</td>
+            </tr>
+            <tr class="border-t border-gray-200">
+              <td class="px-4 py-4 text-sm text-gray-800" id="tableCompanyName">天鹅集团</td>
+              <td class="px-4 py-4 text-sm text-gray-800">正式版 1</td>
+              <td class="px-4 py-4 text-sm text-gray-800">2025-06-01<br>12:12:56</td>
+              <td class="px-4 py-4 text-sm text-gray-800">
+                成员数：5<br>
+                并发连接数：3<br>
+                翻译字符数：1,000
+              </td>
+              <td class="px-4 py-4 text-sm text-gray-800">2025-06-30<br>23:59:59</td>
+              <td class="px-4 py-4 text-sm text-gray-800">审核通过</td>
+              <td class="px-4 py-4 text-sm text-gray-800">已使用</td>
+            </tr>
+            <tr class="border-t border-gray-200">
+              <td class="px-4 py-4 text-sm text-gray-800" id="tableCompanyName">天鹅集团</td>
+              <td class="px-4 py-4 text-sm text-gray-800">正式版 2</td>
+              <td class="px-4 py-4 text-sm text-gray-800">2025-06-28<br>13:02:24</td>
+              <td class="px-4 py-4 text-sm text-gray-800">
+                成员数：10<br>
+                并发连接数：3<br>
+                翻译字符数：1,000,000
+              </td>
+              <td class="px-4 py-4 text-sm text-gray-800">2025-12-30<br>23:59:59</td>
+              <td class="px-4 py-4 text-sm text-gray-800">审核通过</td>
+              <td class="px-4 py-4">
+                <button class="text-blue-500 hover:text-blue-700 text-sm">
+                  下载文件
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div> -->
+  </main>
+
+  <script>
+    // 中英文对照表
+    const translations = {
+      'zh': {
+        'page-title': 'AIOChat - 授权申请管理',
+        'auth-tutorial': '授权使用教程',
+        'switch-service': '切换服务',
+        'private-service': '私有化服务',
+        'saas-service': 'SAAS 服务',
+        'language': '语言',
+        'logout': '退出',
+        'user-info': '用户信息',
+        'auth-application-list': '授权申请列表',
+        'company-name': '企业名称：',
+        'email-label': '邮箱：',
+        'contact-name-label': '联系人：',
+        'contact-phone-label': '联系电话：',
+        'telegram-label': 'Telegram：',
+        'whatsapp-label': 'WhatsApp：',
+        'server-code-label': '服务器机器码：',
+        'table-company-name': '企业名称',
+        'table-auth-type': '授权类型',
+        'table-apply-time': '申请时间',
+        'table-benefits': '权益',
+        'table-expire-time': '到期时间',
+        'table-status': '审核状态',
+        'table-operation': '操作',
+        'trial-version': '试用版',
+        'member-count': '成员数',
+        'concurrent-connections': '并发连接数',
+        'translation-chars': '翻译字符数',
+        'approved': '审核通过',
+        'download-file': '下载文件',
+        'status-filter': '状态筛选',
+        'trial-only': '只有试用版',
+        'trial-expiring': '试用版即将过期',
+        'trial-expired': '试用版已过期',
+        'official-active': '拥有正式版',
+        'official-expiring': '正式版即将过期',
+        'official-expired': '正式版已过期',
+        'multiple-official': '正式版-多个正式版',
+        'license-label': 'License 授权：',
+        'no-auth': '未上传授权',
+        'official-version': '正式版',
+        'social-accounts': '社媒账号数'
+      },
+      'en': {
+        'page-title': 'AIOChat - Authorization Management',
+        'auth-tutorial': 'Authorization Tutorial',
+        'switch-service': 'Switch Service',
+        'private-service': 'Private Service',
+        'saas-service': 'SAAS Service',
+        'language': 'Language',
+        'logout': 'Logout',
+        'user-info': 'User Information',
+        'auth-application-list': 'Authorization Application List',
+        'company-name': 'Company Name:',
+        'email-label': 'Email:',
+        'contact-name-label': 'Contact Name:',
+        'contact-phone-label': 'Contact Phone:',
+        'telegram-label': 'Telegram:',
+        'whatsapp-label': 'WhatsApp:',
+        'license-label': 'License Authorization:',
+        'server-code-label': 'Server Code:',
+        'table-company-name': 'Company Name',
+        'table-auth-type': 'Auth Type',
+        'table-apply-time': 'Apply Time',
+        'table-benefits': 'Benefits',
+        'table-expire-time': 'Expiry Time',
+        'table-status': 'Status',
+        'table-operation': 'Operation',
+        'trial-version': 'Trial Version',
+        'member-count': 'Members',
+        'concurrent-connections': 'Social Accounts',
+        'translation-chars': 'Translation Characters',
+        'approved': 'Approved',
+        'download-file': 'Download File',
+        'status-filter': 'Status Filter',
+        'trial-only': 'Trial Only',
+        'trial-expiring': 'Trial Expiring',
+        'trial-expired': 'Trial Expired',
+        'official-active': 'Official Active',
+        'official-expiring': 'Official Expiring',
+        'official-expired': 'Official Expired',
+        'multiple-official': 'Multiple Official',
+        'no-auth': 'No Authorization Uploaded',
+        'official-version': 'Official Version',
+        'social-accounts': 'Social Accounts'
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // 用户菜单下拉功能
+      const userMenuButton = document.getElementById('userMenuButton');
+      const userDropdownMenu = document.getElementById('userDropdownMenu');
+      
+      if (userMenuButton && userDropdownMenu) {
+        userMenuButton.addEventListener('click', function(e) {
+          e.stopPropagation();
+          userDropdownMenu.classList.toggle('hidden');
+        });
+        
+        // 点击文档其他地方关闭下拉菜单
+        document.addEventListener('click', function(e) {
+          if (!userMenuButton.contains(e.target) && !userDropdownMenu.contains(e.target)) {
+            userDropdownMenu.classList.add('hidden');
+          }
+        });
+        
+        // 语言选择功能
+        const langOptions = document.querySelectorAll('.lang-option');
+        const zhCheckmark = document.getElementById('zhCheckmark');
+        const enCheckmark = document.getElementById('enCheckmark');
+        
+        langOptions.forEach(option => {
+          option.addEventListener('click', function(e) {
+            e.preventDefault();
+            const lang = this.getAttribute('data-lang');
+            
+            // 更新选中状态
+            if (lang === 'zh') {
+              zhCheckmark.classList.remove('hidden');
+              enCheckmark.classList.add('hidden');
+            } else {
+              zhCheckmark.classList.add('hidden');
+              enCheckmark.classList.remove('hidden');
+            }
+            
+            // 保存语言选择
+            localStorage.setItem('selectedLanguage', lang);
+            
+            // 更新URL参数但不刷新页面
+            updateURLParameter('lang', lang);
+            
+            // 应用语言
+            applyLanguage(lang);
+          });
+        });
+      }
+
+      // 从URL获取参数
+      function getParamFromURL(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+      }
+      
+      // 更新用户邮箱显示
+      const userEmail = document.getElementById('userEmail');
+      const email = getParamFromURL('email') || '123@gmail.com';
+      if (userEmail) {
+        userEmail.textContent = email;
+      }
+      
+      // 更新用户信息卡片
+      document.getElementById('userEmailInfo').textContent = email;
+      
+      // 尝试获取并填充其他参数
+      const company = getParamFromURL('company');
+      if (company) {
+        document.getElementById('companyName').textContent = company;
+        // 同步更新表格中的企业名称
+        const tableCompanyNameElements = document.querySelectorAll('#tableCompanyName');
+        tableCompanyNameElements.forEach(element => {
+          element.textContent = company;
+        });
+      }
+      
+      const contact = getParamFromURL('contact');
+      if (contact) {
+        document.getElementById('contactName').textContent = contact;
+      }
+      
+      const phoneCode = getParamFromURL('phoneCode');
+      const phone = getParamFromURL('phone');
+      if (phone) {
+        const fullPhone = phoneCode ? `${phoneCode} ${phone}` : phone;
+        document.getElementById('contactPhone').textContent = fullPhone;
+      }
+      
+      // 获取并显示Telegram号码
+      const telegram = getParamFromURL('telegram');
+      if (telegram) {
+        document.getElementById('telegramNumber').textContent = telegram;
+      }
+      
+      // 获取并显示WhatsApp号码
+      const whatsapp = getParamFromURL('whatsapp');
+      if (whatsapp) {
+        document.getElementById('whatsappNumber').textContent = whatsapp;
+      }
+      
+      // 显示机器码
+      const machineCode = getParamFromURL('machineCode');
+      if (machineCode) {
+        document.getElementById('machineCode').textContent = machineCode;
+      }
+
+      // 下载文件按钮功能
+      const downloadButtons = document.querySelectorAll('button.text-blue-500');
+      downloadButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          alert('授权文件下载中...');
+          // 模拟下载延迟
+          setTimeout(() => {
+            alert('授权文件已下载成功！');
+          }, 1500);
+        });
+      });
+      
+      // 更新URL参数而不刷新页面
+      function updateURLParameter(key, value) {
+        const url = new URL(window.location.href);
+        url.searchParams.set(key, value);
+        window.history.replaceState({}, '', url);
+      }
+      
+      // 从URL参数获取语言设置或使用localStorage
+      function getLanguageFromURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('lang') || localStorage.getItem('selectedLanguage') || 'zh';
+      }
+      
+      let currentLang = getLanguageFromURL();
+      localStorage.setItem('selectedLanguage', currentLang);
+      
+      // 更新语言选项的选中状态
+      if (zhCheckmark && enCheckmark) {
+        if (currentLang === 'zh') {
+          zhCheckmark.classList.remove('hidden');
+          enCheckmark.classList.add('hidden');
+        } else {
+          zhCheckmark.classList.add('hidden');
+          enCheckmark.classList.remove('hidden');
+        }
+      }
+      
+      // 应用初始语言
+      applyLanguage(currentLang);
+      
+      // 应用语言翻译函数
+      function applyLanguage(lang) {
+        // 更新网页标题
+        document.title = translations[lang]['page-title'] || document.title;
+        
+        // 翻译所有带有data-lang-key的元素
+        document.querySelectorAll('[data-lang-key]').forEach(element => {
+          const key = element.getAttribute('data-lang-key');
+          if (translations[lang][key]) {
+            element.textContent = translations[lang][key];
+          }
+        });
+        
+        // 更新HTML语言属性
+        document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+        
+        // 重新应用当前状态的显示（语言切换后）
+        const currentStatus = localStorage.getItem('selectedStatus') || 'trial-only';
+        updateStatusDisplay(currentStatus);
+      }
+      
+      // 状态筛选按钮点击事件
+      const statusFilterButtons = document.querySelectorAll('.status-filter-btn');
+      statusFilterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const status = this.getAttribute('data-status');
+          
+          // 更新按钮选中状态
+          statusFilterButtons.forEach(btn => {
+            btn.classList.remove('bg-blue-50', 'border-blue-200', 'text-blue-700', 'font-medium');
+            btn.classList.add('bg-white', 'border-gray-200', 'text-gray-700');
+          });
+          
+          this.classList.remove('bg-white', 'border-gray-200', 'text-gray-700');
+          this.classList.add('bg-blue-50', 'border-blue-200', 'text-blue-700', 'font-medium');
+          
+          // 保存选中状态
+          localStorage.setItem('selectedStatus', status);
+          
+          // 更新显示
+          updateStatusDisplay(status);
+        });
+      });
+      
+      // 更新状态显示函数
+      function updateStatusDisplay(status) {
+        const licenseAuthDiv = document.getElementById('licenseAuthorization');
+        const licenseStatusSpan = document.getElementById('licenseStatus');
+        const downloadButton = document.querySelector('[data-lang-key="download-file"]');
+        const currentLang = localStorage.getItem('selectedLanguage') || 'zh';
+        
+        // 重置状态显示
+        licenseStatusSpan.textContent = '';
+        licenseStatusSpan.className = 'ml-2 text-sm font-semibold';
+        
+                 // 重置下载按钮
+         const trialDownloadButton = document.querySelector('#trialRow [data-lang-key="download-file"]');
+         const officialDownloadButton = document.querySelector('#officialRow [data-lang-key="download-file"]');
+         const officialDownloadButton2 = document.querySelector('#officialRow2 [data-lang-key="download-file"]');
+         
+         if (trialDownloadButton) {
+           trialDownloadButton.innerHTML = `
+             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+             </svg>
+             ${currentLang === 'zh' ? '下载文件' : 'Download File'}
+           `;
+           trialDownloadButton.className = 'btn-primary text-sm px-3 py-1 inline-flex items-center rounded';
+         }
+         
+         if (officialDownloadButton) {
+           officialDownloadButton.innerHTML = `
+             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+             </svg>
+             ${currentLang === 'zh' ? '下载文件' : 'Download File'}
+           `;
+           officialDownloadButton.className = 'btn-primary text-sm px-3 py-1 inline-flex items-center rounded';
+         }
+         
+         if (officialDownloadButton2) {
+           officialDownloadButton2.innerHTML = `
+             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+             </svg>
+             ${currentLang === 'zh' ? '下载文件' : 'Download File'}
+           `;
+           officialDownloadButton2.className = 'btn-primary text-sm px-3 py-1 inline-flex items-center rounded';
+         }
+        
+                          // 控制表格行显示
+         const officialRow = document.getElementById('officialRow');
+         const officialRow2 = document.getElementById('officialRow2');
+         const trialRow = document.getElementById('trialRow');
+         
+         // 默认隐藏正式版行，显示试用版行
+         if (officialRow) officialRow.style.display = 'none';
+         if (officialRow2) officialRow2.style.display = 'none';
+         if (trialRow) trialRow.style.display = 'table-row';
+         
+         switch (status) {
+           case 'no-auth':
+             // 未上传授权
+             licenseAuthDiv.innerHTML = currentLang === 'zh' ? '未授权' : 'Unauthorized';
+             licenseAuthDiv.style.background = 'linear-gradient(135deg, #6b7280 0%, #374151 100%)'; // 灰色渐变
+             break;
+             
+           case 'trial-only':
+             // 只有试用版 - 重置为默认体验版样式
+             licenseAuthDiv.innerHTML = currentLang === 'zh' ? '体验版' : 'Trial Version';
+             licenseAuthDiv.style.background = 'linear-gradient(135deg, #10b981 0%, #f59e0b 100%)'; // 绿橙渐变
+             break;
+             
+           case 'trial-expiring':
+             // 试用版即将过期
+             licenseAuthDiv.innerHTML = currentLang === 'zh' ? '体验版' : 'Trial Version';
+             licenseAuthDiv.style.background = 'linear-gradient(135deg, #10b981 0%, #f59e0b 100%)';
+             licenseStatusSpan.textContent = currentLang === 'zh' ? '即将过期' : 'Expiring Soon';
+             licenseStatusSpan.classList.add('text-red-600');
+             break;
+             
+                      case 'trial-expired':
+             // 试用版已过期
+              licenseAuthDiv.innerHTML = currentLang === 'zh' ? '体验版' : 'Trial Version';
+              licenseAuthDiv.style.background = 'linear-gradient(135deg, #10b981 0%, #f59e0b 100%)';
+             licenseStatusSpan.textContent = currentLang === 'zh' ? '已过期' : 'Expired';
+             licenseStatusSpan.classList.add('text-red-600');
+             
+             // 更新下载按钮为已过期状态
+             if (trialDownloadButton) {
+               trialDownloadButton.textContent = currentLang === 'zh' ? '已过期' : 'Expired';
+               trialDownloadButton.className = 'text-sm px-3 py-1 inline-flex items-center rounded bg-gray-100 text-gray-500 cursor-not-allowed';
+             }
+             break;
+             
+           case 'official-active':
+             // 拥有正式版
+             licenseAuthDiv.innerHTML = currentLang === 'zh' ? '正式版' : 'Official Version';
+             licenseAuthDiv.style.background = 'linear-gradient(135deg, #06b6d4 0%, #10b981 100%)'; // 蓝绿渐变
+             
+             // 显示正式版行和试用版行，隐藏第二个正式版行
+             if (officialRow) officialRow.style.display = 'table-row';
+             if (officialRow2) officialRow2.style.display = 'none';
+             if (trialRow) trialRow.style.display = 'table-row';
+             
+             // 更新正式版行的企业名称
+             const tableCompanyNameOfficial = document.getElementById('tableCompanyNameOfficial');
+             if (tableCompanyNameOfficial) {
+               const company = getParamFromURL('company') || '-';
+               tableCompanyNameOfficial.textContent = company;
+             }
+             
+             // 更新试用版行的企业名称
+             const tableCompanyNameTrial = document.getElementById('tableCompanyName');
+             if (tableCompanyNameTrial) {
+               const company = getParamFromURL('company') || '-';
+               tableCompanyNameTrial.textContent = company;
+             }
+             
+             // 更新试用版行的下载按钮为已过期状态
+             if (trialDownloadButton) {
+               trialDownloadButton.textContent = currentLang === 'zh' ? '已过期' : 'Expired';
+               trialDownloadButton.className = 'text-sm px-3 py-1 inline-flex items-center rounded bg-gray-100 text-gray-500 cursor-not-allowed';
+             }
+             break;
+             
+           case 'official-expiring':
+             // 正式版即将过期
+             licenseAuthDiv.innerHTML = currentLang === 'zh' ? '正式版' : 'Official Version';
+             licenseAuthDiv.style.background = 'linear-gradient(135deg, #06b6d4 0%, #10b981 100%)'; // 蓝绿渐变
+             licenseStatusSpan.textContent = currentLang === 'zh' ? '即将过期' : 'Expiring Soon';
+             licenseStatusSpan.classList.add('text-red-600');
+             
+             // 显示正式版行和试用版行，隐藏第二个正式版行
+             if (officialRow) officialRow.style.display = 'table-row';
+             if (officialRow2) officialRow2.style.display = 'none';
+             if (trialRow) trialRow.style.display = 'table-row';
+             
+             // 更新正式版行的企业名称
+             const tableCompanyNameOfficialExpiring = document.getElementById('tableCompanyNameOfficial');
+             if (tableCompanyNameOfficialExpiring) {
+               const company = getParamFromURL('company') || '-';
+               tableCompanyNameOfficialExpiring.textContent = company;
+             }
+             
+             // 更新试用版行的企业名称
+             const tableCompanyNameTrialExpiring = document.getElementById('tableCompanyName');
+             if (tableCompanyNameTrialExpiring) {
+               const company = getParamFromURL('company') || '-';
+               tableCompanyNameTrialExpiring.textContent = company;
+             }
+             
+             // 更新试用版行的下载按钮为已过期状态
+             if (trialDownloadButton) {
+               trialDownloadButton.textContent = currentLang === 'zh' ? '已过期' : 'Expired';
+               trialDownloadButton.className = 'text-sm px-3 py-1 inline-flex items-center rounded bg-gray-100 text-gray-500 cursor-not-allowed';
+             }
+             break;
+             
+           case 'official-expired':
+             // 正式版已过期
+             licenseAuthDiv.innerHTML = currentLang === 'zh' ? '正式版' : 'Official Version';
+             licenseAuthDiv.style.background = 'linear-gradient(135deg, #06b6d4 0%, #10b981 100%)'; // 蓝绿渐变
+             licenseStatusSpan.textContent = currentLang === 'zh' ? '已过期' : 'Expired';
+             licenseStatusSpan.classList.add('text-red-600');
+             
+             // 显示正式版行和试用版行，隐藏第二个正式版行
+             if (officialRow) officialRow.style.display = 'table-row';
+             if (officialRow2) officialRow2.style.display = 'none';
+             if (trialRow) trialRow.style.display = 'table-row';
+             
+             // 更新正式版行的企业名称
+             const tableCompanyNameOfficialExpired = document.getElementById('tableCompanyNameOfficial');
+             if (tableCompanyNameOfficialExpired) {
+               const company = getParamFromURL('company') || '-';
+               tableCompanyNameOfficialExpired.textContent = company;
+             }
+             
+             // 更新试用版行的企业名称
+             const tableCompanyNameTrialExpired = document.getElementById('tableCompanyName');
+             if (tableCompanyNameTrialExpired) {
+               const company = getParamFromURL('company') || '-';
+               tableCompanyNameTrialExpired.textContent = company;
+             }
+             
+             // 更新正式版行的下载按钮为已过期状态
+             if (officialDownloadButton) {
+               officialDownloadButton.textContent = currentLang === 'zh' ? '已过期' : 'Expired';
+               officialDownloadButton.className = 'text-sm px-3 py-1 inline-flex items-center rounded bg-gray-100 text-gray-500 cursor-not-allowed';
+             }
+             
+             // 更新试用版行的下载按钮为已过期状态
+             if (trialDownloadButton) {
+               trialDownloadButton.textContent = currentLang === 'zh' ? '已过期' : 'Expired';
+               trialDownloadButton.className = 'text-sm px-3 py-1 inline-flex items-center rounded bg-gray-100 text-gray-500 cursor-not-allowed';
+             }
+             break;
+             
+           case 'multiple-official':
+             // 正式版-多个正式版
+             licenseAuthDiv.innerHTML = currentLang === 'zh' ? '正式版' : 'Official Version';
+             licenseAuthDiv.style.background = 'linear-gradient(135deg, #06b6d4 0%, #10b981 100%)'; // 蓝绿渐变
+             
+             // 显示所有三行
+             if (officialRow) officialRow.style.display = 'table-row';
+             if (officialRow2) officialRow2.style.display = 'table-row';
+             if (trialRow) trialRow.style.display = 'table-row';
+             
+             // 更新第一个正式版行的企业名称
+             const tableCompanyNameOfficialMultiple = document.getElementById('tableCompanyNameOfficial');
+             if (tableCompanyNameOfficialMultiple) {
+               const company = getParamFromURL('company') || '-';
+               tableCompanyNameOfficialMultiple.textContent = company;
+             }
+             
+             // 更新第二个正式版行的企业名称
+             const tableCompanyNameOfficial2Multiple = document.getElementById('tableCompanyNameOfficial2');
+             if (tableCompanyNameOfficial2Multiple) {
+               const company = getParamFromURL('company') || '-';
+               tableCompanyNameOfficial2Multiple.textContent = company;
+             }
+             
+             // 更新试用版行的企业名称
+             const tableCompanyNameTrialMultiple = document.getElementById('tableCompanyName');
+             if (tableCompanyNameTrialMultiple) {
+               const company = getParamFromURL('company') || '-';
+               tableCompanyNameTrialMultiple.textContent = company;
+             }
+             
+             // 第二个正式版行的下载按钮设为已过期状态
+             if (officialDownloadButton2) {
+               officialDownloadButton2.textContent = currentLang === 'zh' ? '已过期' : 'Expired';
+               officialDownloadButton2.className = 'text-sm px-3 py-1 inline-flex items-center rounded bg-gray-100 text-gray-500 cursor-not-allowed';
+             }
+             
+             // 试用版行的下载按钮设为已过期状态
+             if (trialDownloadButton) {
+               trialDownloadButton.textContent = currentLang === 'zh' ? '已过期' : 'Expired';
+               trialDownloadButton.className = 'text-sm px-3 py-1 inline-flex items-center rounded bg-gray-100 text-gray-500 cursor-not-allowed';
+             }
+             break;
+             
+           default:
+             // 其他状态保持默认显示
+             licenseAuthDiv.innerHTML = currentLang === 'zh' ? '体验版' : 'Trial Version';
+             licenseAuthDiv.style.background = 'linear-gradient(135deg, #10b981 0%, #f59e0b 100%)';
+             break;
+         }
+      }
+      
+      // 初始化状态显示
+      const initialStatus = localStorage.getItem('selectedStatus') || 'trial-only';
+      updateStatusDisplay(initialStatus);
+
+      // 购买授权模态框功能
+      const purchaseAuthBtn = document.getElementById('purchaseAuthBtn');
+      const purchaseAuthModal = document.getElementById('purchaseAuthModal');
+      const closePurchaseModal = document.getElementById('closePurchaseModal');
+
+      // 打开购买授权模态框
+      if (purchaseAuthBtn) {
+        purchaseAuthBtn.addEventListener('click', function() {
+          purchaseAuthModal.classList.remove('hidden');
+          calculateTotal(); // 初始计算一次费用
+        });
+      }
+
+      // 关闭购买授权模态框
+      if (closePurchaseModal) {
+        closePurchaseModal.addEventListener('click', function() {
+          purchaseAuthModal.classList.add('hidden');
+        });
+      }
+
+      // 点击模态框背景关闭
+      purchaseAuthModal.addEventListener('click', function(e) {
+        if (e.target === purchaseAuthModal) {
+          purchaseAuthModal.classList.add('hidden');
+        }
+      });
+
+      // 计算坐席费用
+      function calculateSeatPrice(count) {
+        let total = 0;
+        if (count <= 100) {
+          total = count * 20;
+        } else if (count <= 300) {
+          total = 100 * 20 + (count - 100) * 16;
+        } else if (count <= 500) {
+          total = 100 * 20 + 200 * 16 + (count - 300) * 12;
+        }
+        return total;
+      }
+
+      // 计算社媒账号费用（与坐席费用相同的计算逻辑）
+      function calculateSocialPrice(count) {
+        return calculateSeatPrice(count);
+      }
+
+
+
+      // 全局变量存储选中的值
+      let selectedBaseService = 'yearly';
+      let selectedTranslation = '5000';
+
+      // 限制输入框只能输入1-500的整数
+      function restrictInput(input) {
+        let value = input.value;
+        
+        // 移除非数字字符
+        value = value.replace(/[^0-9]/g, '');
+        
+        // 转换为数字并限制范围
+        if (value !== '') {
+          const num = parseInt(value);
+          if (num > 500) {
+            value = '500';
+          } else if (num < 1) {
+            value = '1';
+          } else {
+            value = num.toString();
+          }
+        }
+        
+        input.value = value;
+      }
+
+      // 验证输入框的值
+      function validateInput(inputId, errorId) {
+        const input = document.getElementById(inputId);
+        const error = document.getElementById(errorId);
+        const value = parseInt(input.value);
+        
+        if (!input.value || value < 1 || value > 500 || isNaN(value)) {
+          error.classList.remove('hidden');
+          input.classList.add('border-red-500');
+          return false;
+        } else {
+          error.classList.add('hidden');
+          input.classList.remove('border-red-500');
+          return true;
+        }
+      }
+
+      // 更新费用显示，支持输入验证
+      function updatePriceDisplay(inputId, displayId, calculateFunction, errorId) {
+        const input = document.getElementById(inputId);
+        const display = document.getElementById(displayId);
+        
+        if (input && display) {
+          const isValid = validateInput(inputId, errorId);
+          if (!isValid) {
+            display.textContent = '';
+            return 0;
+          }
+          
+          const count = parseInt(input.value) || 0;
+          const price = calculateFunction(count);
+          display.textContent = `¥${price.toLocaleString()}.00`;
+          return price;
+        }
+        return 0;
+      }
+
+      // 计算总费用
+      function calculateTotal() {
+        // 基础服务费
+        const baseServiceAmount = selectedBaseService === 'yearly' ? 88000 : 48000;
+        document.getElementById('baseServiceAmount').textContent = baseServiceAmount.toLocaleString() + '.00';
+
+        // 坐席费用
+        const seatAmount = updatePriceDisplay('seatCount', 'seatPriceDisplay', calculateSeatPrice, 'seatCountError');
+        document.getElementById('seatAmount').textContent = seatAmount.toLocaleString() + '.00';
+
+        // 社媒账号费用
+        const socialAmount = updatePriceDisplay('socialCount', 'socialPriceDisplay', calculateSocialPrice, 'socialCountError');
+        document.getElementById('socialAmount').textContent = socialAmount.toLocaleString() + '.00';
+
+        // 翻译字符费用
+        const translationAmount = parseInt(selectedTranslation) || 0;
+        document.getElementById('translationAmount').textContent = translationAmount.toLocaleString() + '.00';
+
+        // 总计
+        const total = baseServiceAmount + seatAmount + socialAmount + translationAmount;
+        document.getElementById('totalAmount').textContent = total.toLocaleString() + '.00';
+      }
+
+      // 基础服务费按钮事件
+      document.querySelectorAll('.base-service-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          // 移除所有按钮的选中状态
+          document.querySelectorAll('.base-service-btn').forEach(b => {
+            b.classList.remove('bg-blue-600', 'text-white');
+            b.classList.add('bg-white', 'text-gray-700', 'border-gray-300');
+          });
+          
+          // 设置当前按钮为选中状态
+          this.classList.remove('bg-white', 'text-gray-700', 'border-gray-300');
+          this.classList.add('bg-blue-600', 'text-white', 'border-blue-600');
+          
+          selectedBaseService = this.dataset.value;
+          calculateTotal();
+        });
+      });
+
+      // 翻译字符费用按钮事件
+      document.querySelectorAll('.translation-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          // 移除所有按钮的选中状态
+          document.querySelectorAll('.translation-btn').forEach(b => {
+            b.classList.remove('bg-blue-600', 'text-white', 'border-blue-600');
+            b.classList.add('bg-white', 'text-gray-700', 'border-gray-300');
+            // 更新价格颜色
+            const priceSpan = b.querySelector('span');
+            if (priceSpan) {
+              priceSpan.classList.remove('text-white');
+              priceSpan.classList.add('text-blue-600');
+            }
+          });
+          
+          // 设置当前按钮为选中状态
+          this.classList.remove('bg-white', 'text-gray-700', 'border-gray-300');
+          this.classList.add('bg-blue-600', 'text-white', 'border-blue-600');
+          
+          // 更新价格颜色为白色
+          const priceSpan = this.querySelector('span');
+          if (priceSpan) {
+            priceSpan.classList.remove('text-blue-600');
+            priceSpan.classList.add('text-white');
+          }
+          
+          selectedTranslation = this.dataset.value;
+          calculateTotal();
+        });
+      });
+
+      // 支付方式选择事件监听
+      document.querySelectorAll('.payment-option').forEach(option => {
+        option.addEventListener('click', function() {
+          // 移除所有选项的选中状态
+          document.querySelectorAll('.payment-option').forEach(opt => {
+            opt.classList.remove('selected', 'border-blue-500', 'bg-blue-50');
+            opt.classList.add('border-gray-200', 'bg-white');
+            
+            // 更新未选中状态的圆圈
+            const circle = opt.querySelector('.payment-radio-circle');
+            if (circle) {
+              circle.classList.remove('border-blue-500', 'bg-blue-500');
+              circle.classList.add('border-gray-300', 'bg-white');
+              const innerCircle = circle.querySelector('div');
+              if (innerCircle) {
+                innerCircle.classList.remove('bg-white');
+                innerCircle.classList.add('bg-transparent');
+              }
+            }
+            
+            // 取消radio选中状态
+            const radio = opt.querySelector('input[type="radio"]');
+            if (radio) {
+              radio.checked = false;
+            }
+          });
+          
+          // 设置当前选项为选中状态
+          this.classList.remove('border-gray-200', 'bg-white');
+          this.classList.add('selected', 'border-blue-500', 'bg-blue-50');
+          
+          // 更新选中状态的圆圈
+          const circle = this.querySelector('.payment-radio-circle');
+          if (circle) {
+            circle.classList.remove('border-gray-300', 'bg-white');
+            circle.classList.add('border-blue-500', 'bg-blue-500');
+            const innerCircle = circle.querySelector('div');
+            if (innerCircle) {
+              innerCircle.classList.remove('bg-transparent');
+              innerCircle.classList.add('bg-white');
+            }
+          }
+          
+          // 设置radio选中状态
+          const radio = this.querySelector('input[type="radio"]');
+          if (radio) {
+            radio.checked = true;
+          }
+        });
+      });
+
+      // 数量输入框事件监听
+      const seatCountInput = document.getElementById('seatCount');
+      if (seatCountInput) {
+        seatCountInput.addEventListener('input', function() {
+          restrictInput(this);
+          calculateTotal();
+        });
+        seatCountInput.addEventListener('change', function() {
+          validateInput('seatCount', 'seatCountError');
+        });
+        seatCountInput.addEventListener('keypress', function(e) {
+          // 只允许数字键
+          if (!/[0-9]/.test(String.fromCharCode(e.which))) {
+            e.preventDefault();
+          }
+        });
+      }
+
+      const socialCountInput = document.getElementById('socialCount');
+      if (socialCountInput) {
+        socialCountInput.addEventListener('input', function() {
+          restrictInput(this);
+          calculateTotal();
+        });
+        socialCountInput.addEventListener('change', function() {
+          validateInput('socialCount', 'socialCountError');
+        });
+        socialCountInput.addEventListener('keypress', function(e) {
+          // 只允许数字键
+          if (!/[0-9]/.test(String.fromCharCode(e.which))) {
+            e.preventDefault();
+          }
+        });
+      }
+      
+      // USDT支付页面相关功能
+      const immediatePayBtn = document.getElementById('immediatePayBtn');
+      const usdtPaymentHeader = document.getElementById('usdtPaymentHeader');
+      const usdtPaymentContent = document.getElementById('usdtPaymentContent');
+      const purchaseHeader = document.getElementById('purchaseHeader');
+      const purchaseContent = document.getElementById('purchaseContent');
+      const backToPurchase = document.getElementById('backToPurchase');
+      const closeUsdtModal = document.getElementById('closeUsdtModal');
+      const cancelPaymentBtn = document.getElementById('cancelPaymentBtn');
+      const paymentCompletedBtn = document.getElementById('paymentCompletedBtn');
+      const copyAddressBtn = document.getElementById('copyAddressBtn');
+      
+      // 立即支付按钮点击事件
+      if (immediatePayBtn) {
+        immediatePayBtn.addEventListener('click', function() {
+          // 检查选中的支付方式
+          const selectedPayment = document.querySelector('input[name="paymentMethod"]:checked');
+          if (selectedPayment && selectedPayment.value === 'usdt') {
+            // 切换到USDT支付页面
+            showUsdtPaymentPage();
+          } else if (selectedPayment && selectedPayment.value === 'paypal') {
+            // PayPal支付逻辑
+            alert('PayPal支付功能正在开发中...');
+          } else {
+            alert('请选择支付方式');
+          }
+        });
+      }
+      
+      // 显示USDT支付页面
+      function showUsdtPaymentPage() {
+        // 隐藏购买授权页面内容
+        purchaseHeader.classList.add('hidden');
+        purchaseContent.classList.add('hidden');
+        
+        // 显示USDT支付页面内容
+        usdtPaymentHeader.classList.remove('hidden');
+        usdtPaymentContent.classList.remove('hidden');
+        
+        // 更新USDT支付金额
+        updateUsdtPaymentAmount();
+      }
+      
+      // 显示购买授权页面
+      function showPurchasePage() {
+        // 显示购买授权页面内容
+        purchaseHeader.classList.remove('hidden');
+        purchaseContent.classList.remove('hidden');
+        
+        // 隐藏USDT支付页面内容
+        usdtPaymentHeader.classList.add('hidden');
+        usdtPaymentContent.classList.add('hidden');
+      }
+      
+      // 更新USDT支付金额
+      function updateUsdtPaymentAmount() {
+        const totalAmountElement = document.getElementById('totalAmount');
+        const usdtAmountElement = document.getElementById('usdtAmount');
+        const usdtAmountCnyElement = document.getElementById('usdtAmountCny');
+        
+        if (totalAmountElement && usdtAmountElement && usdtAmountCnyElement) {
+          const totalAmount = totalAmountElement.textContent.replace(/,/g, '');
+          // 假设1 USDT = 1 CNY (实际应该根据实时汇率)
+          const usdtAmount = totalAmount;
+          
+          usdtAmountElement.textContent = Number(usdtAmount).toLocaleString();
+          usdtAmountCnyElement.textContent = Number(totalAmount).toLocaleString();
+        }
+      }
+      
+      // 返回购买授权页面
+      if (backToPurchase) {
+        backToPurchase.addEventListener('click', function() {
+          showPurchasePage();
+        });
+      }
+      
+      // 关闭USDT支付模态框
+      if (closeUsdtModal) {
+        closeUsdtModal.addEventListener('click', function() {
+          purchaseAuthModal.classList.add('hidden');
+          // 重置到购买授权页面
+          showPurchasePage();
+        });
+      }
+      
+      // 取消支付按钮
+      if (cancelPaymentBtn) {
+        cancelPaymentBtn.addEventListener('click', function() {
+          showPurchasePage();
+        });
+      }
+      
+      // 支付完成按钮
+      if (paymentCompletedBtn) {
+        paymentCompletedBtn.addEventListener('click', function() {
+          // 显示确认对话框
+          if (confirm('请确认您已完成USDT转账？\n\n转账完成后，我们将在1-24小时内处理您的订单。')) {
+            alert('支付确认成功！\n\n您的订单已提交处理，我们将在1-24小时内为您激活授权。\n请注意查看邮箱通知。');
+            
+            // 执行支付成功后的交互更新
+            handlePaymentSuccess();
+            
+            // 关闭模态框
+            purchaseAuthModal.classList.add('hidden');
+            // 重置到购买授权页面
+            showPurchasePage();
+          }
+        });
+      }
+      
+      // 处理支付成功后的交互更新
+      function handlePaymentSuccess() {
+        // 1. 自动选中"正式版-多个正式版"状态
+        selectMultipleOfficialStatus();
+        
+        // 2. 在表格顶部添加新的购买记录
+        addNewPurchaseRecord();
+      }
+      
+      // 选中"正式版-多个正式版"状态
+      function selectMultipleOfficialStatus() {
+        const statusFilterButtons = document.querySelectorAll('.status-filter-btn');
+        const multipleOfficialBtn = document.querySelector('[data-status="multiple-official"]');
+        
+        if (multipleOfficialBtn) {
+          // 移除所有按钮的选中状态
+          statusFilterButtons.forEach(btn => {
+            btn.classList.remove('bg-blue-50', 'border-blue-200', 'text-blue-700', 'font-medium');
+            btn.classList.add('bg-white', 'border-gray-200', 'text-gray-700');
+          });
+          
+          // 设置"正式版-多个正式版"为选中状态
+          multipleOfficialBtn.classList.remove('bg-white', 'border-gray-200', 'text-gray-700');
+          multipleOfficialBtn.classList.add('bg-blue-50', 'border-blue-200', 'text-blue-700', 'font-medium');
+          
+          // 保存选中状态
+          localStorage.setItem('selectedStatus', 'multiple-official');
+          
+          // 更新显示
+          updateStatusDisplay('multiple-official');
+        }
+      }
+      
+      // 添加新的购买记录
+      function addNewPurchaseRecord() {
+        const tableBody = document.querySelector('tbody');
+        const currentTime = new Date();
+        const companyName = document.getElementById('companyName').textContent || '-';
+        
+        // 获取购买时的权益信息
+        const seatCount = document.getElementById('seatCount').value || '50';
+        const socialCount = document.getElementById('socialCount').value || '50';
+        const selectedTranslation = getSelectedTranslationChars();
+        
+        // 计算到期时间（一年后）
+        const expireDate = new Date(currentTime);
+        expireDate.setFullYear(expireDate.getFullYear() + 1);
+        
+        // 创建新的表格行
+        const newRow = document.createElement('tr');
+        newRow.id = 'newPurchaseRow';
+        newRow.className = 'border-t border-gray-200 hover:bg-gray-50 transition-colors duration-150';
+        newRow.style.display = 'table-row';
+        
+        newRow.innerHTML = `
+          <td class="px-4 py-4 text-sm text-gray-800">${companyName}</td>
+          <td class="px-4 py-4 text-sm">
+            <span class="badge badge-primary" data-lang-key="official-version">正式版</span>
+          </td>
+          <td class="px-4 py-4 text-sm text-gray-800">
+            <div class="flex flex-col">
+              <span>${formatDate(currentTime)}</span>
+              <span class="text-gray-500 text-xs">${formatTime(currentTime)}</span>
+            </div>
+          </td>
+          <td class="px-4 py-4 text-sm text-gray-800">
+            <div class="space-y-1">
+              <div class="flex items-center justify-between">
+                <span data-lang-key="member-count">成员数</span>
+                                 <span class="font-semibold">${seatCount}</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span data-lang-key="social-accounts">社媒账号数</span>
+                <span class="font-semibold">${socialCount}</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span data-lang-key="translation-chars">翻译字符数</span>
+                <span class="font-semibold">${selectedTranslation}</span>
+              </div>
+            </div>
+          </td>
+          <td class="px-4 py-4 text-sm">
+            <div class="flex flex-col">
+              <span class="font-medium">${formatDate(expireDate)}</span>
+              <span class="text-gray-500 text-xs">23:59:59</span>
+            </div>
+          </td>
+          <td class="px-4 py-4 text-sm">
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800" data-lang-key="approved">
+              <svg class="mr-1 h-2 w-2 text-green-500" fill="currentColor" viewBox="0 0 8 8">
+                <circle cx="4" cy="4" r="3" />
+              </svg>
+              审核通过
+            </span>
+          </td>
+          <td class="px-4 py-4">
+            <div class="space-y-2">
+              <button class="btn-primary text-sm px-3 py-1 inline-flex items-center rounded w-full justify-center" data-lang-key="download-file">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                下载文件
+              </button>
+              <button onclick="removeNewPurchaseRecord()" class="bg-red-500 hover:bg-red-600 text-white text-sm px-3 py-1 inline-flex items-center rounded w-full justify-center transition-colors duration-200">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+                删除记录
+              </button>
+            </div>
+          </td>
+        `;
+        
+        // 将新行插入到表格最顶部（在现有行之前）
+        const firstRow = tableBody.querySelector('tr');
+        if (firstRow) {
+          tableBody.insertBefore(newRow, firstRow);
+        } else {
+          tableBody.appendChild(newRow);
+        }
+      }
+      
+             // 获取选中的翻译字符费用
+      function getSelectedTranslationChars() {
+        const translationAmount = selectedTranslation || '5000';
+        switch(translationAmount) {
+          case '100': return '10,000';
+          case '800': return '100,000';
+          case '5000': return '1,000,000';
+          case '30000': return '10,000,000';
+          default: return '1,000,000';
+        }
+      }
+      
+      // 格式化日期
+      function formatDate(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      }
+      
+      // 格式化时间
+      function formatTime(date) {
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+        return `${hours}:${minutes}:${seconds}`;
+      }
+      
+      // 删除新购买记录的全局函数
+      window.removeNewPurchaseRecord = function() {
+        if (confirm('确定要删除此条购买记录吗？\n\n删除后将回到"正式版-多个正式版"的初始状态。')) {
+          const newRow = document.getElementById('newPurchaseRow');
+          if (newRow) {
+            newRow.remove();
+            alert('记录已删除');
+          }
+        }
+      };
+      
+      // 复制USDT地址功能
+      if (copyAddressBtn) {
+        copyAddressBtn.addEventListener('click', async function() {
+          const addressElement = document.getElementById('usdtAddress');
+          const address = addressElement.textContent;
+          
+          try {
+            // 使用现代的 Clipboard API
+            await navigator.clipboard.writeText(address);
+            
+            // 显示复制成功的反馈
+            const originalText = this.innerHTML;
+            this.innerHTML = `
+              <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              已复制
+            `;
+            this.classList.remove('bg-blue-500', 'hover:bg-blue-600');
+            this.classList.add('bg-green-500');
+            
+            // 2秒后恢复原样
+            setTimeout(() => {
+              this.innerHTML = originalText;
+              this.classList.remove('bg-green-500');
+              this.classList.add('bg-blue-500', 'hover:bg-blue-600');
+            }, 2000);
+            
+          } catch (err) {
+            // 降级方案：使用传统的复制方法
+            const textArea = document.createElement('textarea');
+            textArea.value = address;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            alert('USDT地址已复制到剪贴板');
+          }
+        });
+      }
+    });
+  </script>
+
+  <!-- 购买授权模态框 -->
+  <div id="purchaseAuthModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+    <div class="relative top-20 mx-auto p-8 border w-11/12 max-w-4xl shadow-lg rounded-md bg-white">
+      <!-- 购买授权页面头部 -->
+      <div id="purchaseHeader" class="flex justify-between items-center mb-6">
+        <h3 class="text-xl font-semibold text-gray-900">购买授权</h3>
+        <button id="closePurchaseModal" class="text-gray-400 hover:text-gray-600">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      
+      <!-- USDT支付页面头部 -->
+      <div id="usdtPaymentHeader" class="hidden flex justify-between items-center mb-6">
+        <div class="flex items-center">
+          <button id="backToPurchase" class="text-gray-400 hover:text-gray-600 mr-4">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+          </button>
+          <h3 class="text-xl font-semibold text-gray-900">USDT 支付</h3>
+        </div>
+        <button id="closeUsdtModal" class="text-gray-400 hover:text-gray-600">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      
+      <!-- 购买授权主体内容 -->
+      <div id="purchaseContent" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- 左侧：服务配置 -->
+        <div class="lg:col-span-2 space-y-6">
+          <!-- 基础服务费 -->
+          <div class="bg-gray-50 p-6 rounded-lg">
+            <h4 class="text-lg font-semibold mb-4 text-gray-800">基础服务费</h4>
+            <div class="flex space-x-4">
+              <button type="button" id="yearlyBtn" class="base-service-btn flex-1 bg-blue-600 text-white border border-blue-600 px-6 py-3 rounded-lg text-center font-medium transition-all duration-200 hover:bg-blue-700" data-value="yearly">
+                年付<br><span class="text-lg font-bold">¥88,000.00</span>
+              </button>
+              <button type="button" id="halfyearlyBtn" class="base-service-btn flex-1 bg-white text-gray-700 border border-gray-300 px-6 py-3 rounded-lg text-center font-medium transition-all duration-200 hover:bg-gray-50" data-value="halfyearly">
+                半年付<br><span class="text-lg font-bold">¥48,000.00</span>
+              </button>
+            </div>
+          </div>
+          
+          <!-- 权益服务费 -->
+          <div class="bg-gray-50 p-6 rounded-lg">
+            <h4 class="text-lg font-semibold mb-4 text-gray-800">权益服务费</h4>
+            
+            <!-- 坐席费用 -->
+            <div class="mb-6 p-4 bg-white rounded-lg border">
+              <h5 class="font-medium mb-3 text-gray-800">坐席费用</h5>
+              <div class="flex items-center space-x-4 mb-2">
+                <label class="text-gray-600">数量：</label>
+                <div class="relative">
+                  <input type="number" id="seatCount" min="1" max="500" value="50" 
+                         class="border border-gray-300 rounded px-3 py-2 w-24 text-center focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+                         placeholder="1-500">
+                  <div id="seatCountError" class="hidden absolute top-full left-0 mt-1 text-red-600 text-xs whitespace-nowrap">请输入有效的数量（1-500）</div>
+                </div>
+                <div class="flex items-center ml-4">
+                  <span class="text-gray-600 text-sm mr-2">小计：</span>
+                  <div id="seatPriceDisplay" class="text-blue-600 font-medium text-sm"></div>
+                </div>
+              </div>
+              <div class="text-sm text-gray-600 space-y-1">
+                <div class="text-gray-500">优惠政策：1-100 个，每个 ¥20；101-300 个，每个 ¥16；301-500 个，每个 ¥12</div>
+                <div class="text-gray-500">更多坐席，请联系客户经理</div>
+              </div>
+            </div>
+            
+            <!-- 社媒账号费用 -->
+            <div class="mb-6 p-4 bg-white rounded-lg border">
+              <h5 class="font-medium mb-3 text-gray-800">社媒账号费用</h5>
+              <div class="flex items-center space-x-4 mb-2">
+                <label class="text-gray-600">数量：</label>
+                <div class="relative">
+                  <input type="number" id="socialCount" min="1" max="500" value="50" 
+                         class="border border-gray-300 rounded px-3 py-2 w-24 text-center focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+                         placeholder="1-500">
+                  <div id="socialCountError" class="hidden absolute top-full left-0 mt-1 text-red-600 text-xs whitespace-nowrap">请输入有效的数量（1-500）</div>
+                </div>
+                <div class="flex items-center ml-4">
+                  <span class="text-gray-600 text-sm mr-2">小计：</span>
+                  <div id="socialPriceDisplay" class="text-blue-600 font-medium text-sm"></div>
+                </div>
+              </div>
+              <div class="text-sm text-gray-600 space-y-1">
+                <div class="text-gray-500">优惠政策：1-100 个，每个 ¥20；101-300 个，每个 ¥16；301-500 个，每个 ¥12</div>
+                <div class="text-gray-500">更多账号，请联系客户经理</div>
+              </div>
+            </div>
+            
+            <!-- 翻译字符费用 -->
+            <div class="p-4 bg-white rounded-lg border">
+              <h5 class="font-medium mb-3 text-gray-800">翻译字符费用</h5>
+              <div class="grid grid-cols-2 gap-3 mb-2">
+                <button type="button" class="translation-btn bg-white text-gray-700 border border-gray-300 px-4 py-3 rounded-lg text-center text-sm font-medium transition-all duration-200 hover:bg-gray-50" data-value="100">
+                  1 万个字符<br><span class="text-blue-600 font-bold">¥100</span>
+                </button>
+                <button type="button" class="translation-btn bg-white text-gray-700 border border-gray-300 px-4 py-3 rounded-lg text-center text-sm font-medium transition-all duration-200 hover:bg-gray-50" data-value="800">
+                  10 万个字符<br><span class="text-blue-600 font-bold">¥800</span>
+                </button>
+                <button type="button" class="translation-btn bg-blue-600 text-white border border-blue-600 px-4 py-3 rounded-lg text-center text-sm font-medium transition-all duration-200 hover:bg-blue-700" data-value="5000">
+                  100 万个字符<br><span class="text-white font-bold">¥5,000</span>
+                </button>
+                <button type="button" class="translation-btn bg-white text-gray-700 border border-gray-300 px-4 py-3 rounded-lg text-center text-sm font-medium transition-all duration-200 hover:bg-gray-50" data-value="30000">
+                  1000 万个字符<br><span class="text-blue-600 font-bold">¥30,000</span>
+                </button>
+              </div>
+              <div class="text-sm text-gray-500">更多字符数，请联系客户经理</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 右侧：费用汇总和支付 -->
+        <div class="space-y-6">
+          <!-- 费用汇总 -->
+          <div class="bg-blue-50 p-6 rounded-lg">
+            <h4 class="text-lg font-semibold mb-4 text-gray-800">费用汇总</h4>
+            <div class="space-y-3 text-sm">
+              <div class="flex justify-between">
+                <span class="text-gray-600">基础服务费：</span>
+                <span class="font-medium">¥<span id="baseServiceAmount">88,000</span></span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600">坐席费用：</span>
+                <span class="font-medium">¥<span id="seatAmount">1,000</span></span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600">社媒账号费用：</span>
+                <span class="font-medium">¥<span id="socialAmount">1,000</span></span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600">翻译字符费用：</span>
+                <span class="font-medium">¥<span id="translationAmount">5,000</span></span>
+              </div>
+              <hr class="border-gray-300">
+              <div class="flex justify-between text-lg font-semibold text-blue-600">
+                <span>总计：</span>
+                <span>¥<span id="totalAmount">95,000</span></span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 支付渠道 -->
+          <div class="bg-gray-50 p-6 rounded-lg">
+            <h4 class="text-lg font-semibold mb-4 text-gray-800">支付渠道</h4>
+            <div class="space-y-3">
+              <!-- USDT 支付选项 -->
+              <label class="payment-option selected relative flex items-center cursor-pointer p-4 border-2 border-blue-500 bg-blue-50 rounded-lg">
+                <input type="radio" name="paymentMethod" value="usdt" checked class="hidden">
+                <div class="flex items-center space-x-4 w-full">
+                  <div class="payment-logo w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center shadow-lg">
+                    <svg class="w-7 h-7 text-white" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 9.75h-2.438v1.5h2.25v1.125h-2.25v1.5h2.438v1.125H10.5v-1.125h1.125v-1.5H10.5V10.5h1.125v-1.5H10.5V7.875h7.062V9.75z"/>
+                    </svg>
+                  </div>
+                  <div class="flex-1">
+                    <div class="payment-title text-lg font-semibold text-gray-800">USDT</div>
+                    <div class="text-sm text-gray-600">稳定币支付，安全便捷</div>
+                  </div>
+                  <div class="payment-radio-circle w-5 h-5 border-2 border-blue-500 rounded-full bg-blue-500 flex items-center justify-center">
+                    <div class="w-2 h-2 bg-white rounded-full"></div>
+                  </div>
+                </div>
+              </label>
+              
+              <!-- PayPal 支付选项 -->
+              <label class="payment-option relative flex items-center cursor-pointer p-4 border-2 border-gray-200 bg-white rounded-lg">
+                <input type="radio" name="paymentMethod" value="paypal" class="hidden">
+                <div class="flex items-center space-x-4 w-full">
+                  <div class="payment-logo w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center shadow-lg">
+                    <svg class="w-7 h-7 text-white" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a9.182 9.182 0 0 1-.014.25c-.14.73-.33 1.449-.571 2.156-1.675 4.934-6.016 6.505-10.738 6.505H6.412c-.524 0-.968.382-1.05.9l-1.12 7.106-.32 2.027a.641.641 0 0 0 .633.74h3.94c.459 0 .85-.334.925-.787l.038-.25 1.02-6.46.065-.435c.074-.453.466-.787.925-.787h.582c3.874 0 6.905-1.572 7.786-6.118.368-1.896.177-3.478-.78-4.665-.26-.322-.57-.608-.92-.857z"/>
+                    </svg>
+                  </div>
+                  <div class="flex-1">
+                    <div class="payment-title text-lg font-semibold text-gray-800">PayPal</div>
+                    <div class="text-sm text-gray-600">全球领先的在线支付平台</div>
+                  </div>
+                  <div class="payment-radio-circle w-5 h-5 border-2 border-gray-300 rounded-full bg-white flex items-center justify-center">
+                    <div class="w-2 h-2 bg-transparent rounded-full"></div>
+                  </div>
+                </div>
+              </label>
+            </div>
+          </div>
+          
+          <!-- 操作按钮 -->
+          <div class="space-y-3">
+            <button id="immediatePayBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg font-medium transition-colors duration-200">
+              立即支付
+            </button>
+            <button class="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 py-3 px-4 rounded-lg font-medium transition-colors duration-200">
+              联系客户经理
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- USDT支付页面内容 -->
+      <div id="usdtPaymentContent" class="hidden">
+        <div class="max-w-2xl mx-auto">
+          <!-- 支付金额显示 -->
+          <div class="text-center mb-8">
+            <div class="bg-gradient-to-r from-green-50 to-blue-50 rounded-2xl p-8 border border-green-200">
+              <div class="text-gray-600 text-lg mb-2">需要支付</div>
+              <div class="text-4xl font-bold text-green-600 mb-2">
+                <span id="usdtAmount">95,000</span> USDT
+              </div>
+              <div class="text-gray-500 text-sm">
+                约合 ¥<span id="usdtAmountCny">95,000</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 支付信息区域 -->
+          <div class="space-y-6">
+            <!-- USDT地址 -->
+            <div class="bg-gray-50 rounded-lg p-6">
+              <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                <svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4zM18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z"/>
+                </svg>
+                平台USDT收款地址
+              </h4>
+              <div class="bg-white rounded-lg border p-4">
+                <div class="flex items-center justify-between">
+                  <div class="font-mono text-sm break-all mr-4" id="usdtAddress">TQn9Y2khEsLMWiMBhVTjmMnrU3fWzFk4jL</div>
+                  <button id="copyAddressBtn" class="flex-shrink-0 bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded text-sm font-medium transition-colors duration-200 flex items-center">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                    </svg>
+                    复制
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <!-- 二维码区域 -->
+            <div class="bg-gray-50 rounded-lg p-6">
+              <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                <svg class="w-5 h-5 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
+                </svg>
+                扫码支付
+              </h4>
+              <div class="flex justify-center">
+                <div class="bg-white p-4 rounded-lg border">
+                  <div id="qrcode" class="w-48 h-48 bg-gray-100 rounded flex items-center justify-center">
+                    <!-- 这里可以放置实际的二维码图片或使用QR码生成库 -->
+                    <div class="text-center text-gray-500">
+                      <svg class="w-16 h-16 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
+                      </svg>
+                      <div class="text-sm">USDT支付二维码</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- 重要提示 -->
+            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+              <div class="flex items-start">
+                <svg class="w-5 h-5 text-yellow-500 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                </svg>
+                <div>
+                  <h5 class="font-medium text-yellow-800 mb-1">重要提示</h5>
+                  <ul class="text-sm text-yellow-700 space-y-1">
+                    <li>• 请仔细核对收款地址，确保地址准确无误</li>
+                    <li>• 转账网络请选择 <strong>TRC20</strong> 网络</li>
+                    <li>• 转账金额需要精确到小数点后6位</li>
+                    <li>• 转账完成后请点击下方"支付完成"按钮</li>
+                    <li>• 如遇到问题，请联系客服处理</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            
+            <!-- 操作按钮 -->
+            <div class="flex space-x-4 pt-4">
+              <button id="cancelPaymentBtn" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 py-3 px-4 rounded-lg font-medium transition-colors duration-200">
+                取消
+              </button>
+              <button id="paymentCompletedBtn" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-lg font-medium transition-colors duration-200">
+                支付完成
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html> 

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaaS 客户 - AIO 运营平台</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-6">
+    <div class="max-w-[90%] mx-auto">
+        <!-- 筛选栏 -->
+        <div class="bg-white rounded-lg shadow-sm p-4 mb-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">关联销售</label>
+                        <select class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">全部</option>
+                            <option value="张三">张三</option>
+                            <option value="李四">李四</option>
+                            <option value="王五">王五</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">注册时间</label>
+                        <input type="date" class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">企业名称</label>
+                        <input type="text" placeholder="搜索企业名称" class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button class="bg-blue-500 text-white px-4 py-2 rounded text-sm hover:bg-blue-600 transition duration-200">
+                        搜索
+                    </button>
+                    <button class="bg-gray-500 text-white px-4 py-2 rounded text-sm hover:bg-gray-600 transition duration-200">
+                        重置
+                    </button>
+                    <button class="bg-green-500 text-white px-4 py-2 rounded text-sm hover:bg-green-600 transition duration-200" onclick="openAddCustomerModal()">
+                        添加客户
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 客户列表 -->
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">企业名称</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">超管账号</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">关联销售</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">注册时间</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">操作</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200" id="customerTable">
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">字节跳动</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">admin@bytedance.com</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">张三</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2024-01-15</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <button class="text-blue-600 hover:text-blue-900" onclick="openDetailModal('1')">详情</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">美团科技</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">admin@meituan.com</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">李四</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2024-02-20</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <button class="text-blue-600 hover:text-blue-900" onclick="openDetailModal('2')">详情</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">滴滴出行</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">admin@didichuxing.com</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">王五</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2024-03-10</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <button class="text-blue-600 hover:text-blue-900" onclick="openDetailModal('3')">详情</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 客户详情弹窗 -->
+    <div id="detailModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen">
+            <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800">企业详细信息</h3>
+                    <button onclick="closeModal('detailModal')" class="text-gray-400 hover:text-gray-600">✕</button>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- 企业信息 -->
+                    <div>
+                        <h4 class="font-semibold text-gray-700 mb-3">企业信息</h4>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600">企业名称</label>
+                                <input type="text" id="companyName" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" readonly>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600">超管账号</label>
+                                <input type="text" id="adminAccount" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" readonly>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600">联系人</label>
+                                <input type="text" id="contactPerson" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600">联系电话</label>
+                                <input type="text" id="contactPhone" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 联系信息和销售信息 -->
+                    <div>
+                        <h4 class="font-semibold text-gray-700 mb-3">联系信息</h4>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600">邮箱</label>
+                                <input type="email" id="email" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600">Telegram</label>
+                                <input type="text" id="telegram" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600">WhatsApp</label>
+                                <input type="text" id="whatsapp" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md">
+                            </div>
+                        </div>
+                        
+                        <h4 class="font-semibold text-gray-700 mb-3 mt-6">销售信息</h4>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600">关联销售</label>
+                            <select id="salesPerson" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md">
+                                <option value="张三">张三</option>
+                                <option value="李四">李四</option>
+                                <option value="王五">王五</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button onclick="closeModal('detailModal')" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">取消</button>
+                    <button onclick="saveCustomerDetail()" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 打开详情弹窗
+        function openDetailModal(customerId) {
+            // 模拟获取客户数据
+            const customerData = {
+                '1': {
+                    companyName: '字节跳动',
+                    adminAccount: 'admin@bytedance.com',
+                    contactPerson: '张一鸣',
+                    contactPhone: '13800138001',
+                    email: 'contact@bytedance.com',
+                    telegram: '@bytedance',
+                    whatsapp: '+86138001380001',
+                    salesPerson: '张三'
+                }
+            };
+
+            const data = customerData[customerId] || {};
+            document.getElementById('companyName').value = data.companyName || '';
+            document.getElementById('adminAccount').value = data.adminAccount || '';
+            document.getElementById('contactPerson').value = data.contactPerson || '';
+            document.getElementById('contactPhone').value = data.contactPhone || '';
+            document.getElementById('email').value = data.email || '';
+            document.getElementById('telegram').value = data.telegram || '';
+            document.getElementById('whatsapp').value = data.whatsapp || '';
+            document.getElementById('salesPerson').value = data.salesPerson || '';
+
+            document.getElementById('detailModal').classList.remove('hidden');
+        }
+
+        // 关闭弹窗
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        // 保存客户详情
+        function saveCustomerDetail() {
+            alert('客户信息已保存');
+            closeModal('detailModal');
+        }
+
+        // 打开添加客户弹窗
+        function openAddCustomerModal() {
+            alert('添加客户功能开发中...');
+        }
+    </script>
+</body>
+</html> 

@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>权益管理 - AIO 运营平台</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .benefit-tab-btn {
+      background-color: #f3f4f6;
+      color: #6b7280;
+    }
+    
+    .benefit-tab-btn.active {
+      background-color: #3b82f6;
+      color: white;
+    }
+    
+    .benefit-tab-btn:hover:not(.active) {
+      background-color: #e5e7eb;
+      color: #374151;
+    }
+    
+    .benefit-card {
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .benefit-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <div class="p-6">
+    <!-- 页面标题 -->
+    <div class="mb-6">
+      <div class="flex justify-between items-center">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900 mb-2">权益管理</h1>
+          <p class="text-gray-600">管理平台提供的各类服务权益和定价配置</p>
+          <p class="text-sm text-blue-600 mt-1">服务周期内可随时扩展任意权益</p>
+        </div>
+        <button id="addBenefitBtn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors">
+          <svg class="w-4 h-4 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+          </svg>
+          新增权益
+        </button>
+      </div>
+    </div>
+    
+    <!-- 分类标签 -->
+    <div class="mb-6">
+      <div class="flex space-x-2">
+        <button class="benefit-tab-btn active px-4 py-2 rounded-lg text-sm font-medium transition-colors" data-category="all">
+          全部权益
+        </button>
+        <button class="benefit-tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-colors" data-category="基础服务">
+          基础服务
+        </button>
+        <button class="benefit-tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-colors" data-category="增值服务">
+          增值服务
+        </button>
+        <button class="benefit-tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-colors" data-category="扩展功能">
+          扩展功能
+        </button>
+      </div>
+    </div>
+    
+    <!-- 权益卡片网格 -->
+    <div id="benefitsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- 权益卡片将通过JavaScript动态生成 -->
+    </div>
+  </div>
+
+  <!-- 权益管理弹窗 -->
+  <div id="benefitModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+      <div class="mt-3">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-medium text-gray-900" id="benefitModalTitle">新增权益</h3>
+          <button id="closeBenefitModal" class="text-gray-400 hover:text-gray-600">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+        
+        <form id="benefitForm" class="space-y-4">
+          <div>
+            <label for="benefitName" class="block text-sm font-medium text-gray-700 mb-1">权益名称 <span class="text-red-500">*</span></label>
+            <input type="text" id="benefitName" name="name" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="请输入权益名称">
+          </div>
+          
+          <div>
+            <label for="benefitCategory" class="block text-sm font-medium text-gray-700 mb-1">权益分类 <span class="text-red-500">*</span></label>
+            <select id="benefitCategory" name="category" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <option value="">请选择分类</option>
+              <option value="基础服务">基础服务</option>
+              <option value="增值服务">增值服务</option>
+              <option value="扩展功能">扩展功能</option>
+            </select>
+          </div>
+          
+          <div>
+            <label for="benefitDescription" class="block text-sm font-medium text-gray-700 mb-1">权益描述</label>
+            <textarea id="benefitDescription" name="description" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="请输入权益描述"></textarea>
+          </div>
+          
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label for="benefitPrice" class="block text-sm font-medium text-gray-700 mb-1">价格 <span class="text-red-500">*</span></label>
+              <input type="number" id="benefitPrice" name="price" required min="0" step="0.01" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="0.00">
+            </div>
+            
+            <div>
+              <label for="benefitUnit" class="block text-sm font-medium text-gray-700 mb-1">计费单位 <span class="text-red-500">*</span></label>
+              <select id="benefitUnit" name="unit" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="">请选择单位</option>
+                <option value="个">个</option>
+                <option value="月">月</option>
+                <option value="年">年</option>
+                <option value="万字符">万字符</option>
+                <option value="GB">GB</option>
+                <option value="次">次</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="flex justify-end space-x-3 pt-4">
+            <button type="button" id="cancelBenefitBtn" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500">
+              取消
+            </button>
+            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+              保存
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 初始化权益数据
+    let benefitsList = [
+      {
+        id: 1,
+        name: '基础坐席服务',
+        category: '基础服务',
+        description: '提供基础的客服坐席功能，支持文本对话',
+        price: 299,
+        unit: '个',
+        status: '启用',
+        updateTime: '2024-01-01 10:00:00'
+      },
+      {
+        id: 2,
+        name: '社媒账号管理',
+        category: '基础服务',
+        description: '支持社交媒体账号的统一管理和消息处理',
+        price: 199,
+        unit: '个',
+        status: '启用',
+        updateTime: '2024-01-01 10:00:00'
+      },
+      {
+        id: 3,
+        name: '智能机器人',
+        category: '增值服务',
+        description: 'AI智能客服机器人，提供24小时自动回复',
+        price: 599,
+        unit: '个',
+        status: '启用',
+        updateTime: '2024-01-05 14:30:00'
+      },
+      {
+        id: 4,
+        name: '数据分析报表',
+        category: '增值服务',
+        description: '详细的客服数据分析和可视化报表',
+        price: 399,
+        unit: '月',
+        status: '启用',
+        updateTime: '2024-01-05 14:30:00'
+      },
+      {
+        id: 5,
+        name: '翻译字符包',
+        category: '扩展功能',
+        description: '多语言翻译服务，支持实时消息翻译',
+        price: 0.01,
+        unit: '万字符',
+        status: '启用',
+        updateTime: '2024-01-10 09:15:00'
+      },
+      {
+        id: 6,
+        name: '存储扩展包',
+        category: '扩展功能',
+        description: '额外的数据存储空间，用于保存聊天记录和文件',
+        price: 50,
+        unit: 'GB',
+        status: '启用',
+        updateTime: '2024-01-10 09:15:00'
+      }
+    ];
+    
+    let currentEditingBenefit = null;
+    let currentCategory = 'all';
+    
+    // 获取分类颜色
+    function getCategoryColor(category) {
+      const colors = {
+        '基础服务': 'bg-blue-100 text-blue-800',
+        '增值服务': 'bg-green-100 text-green-800',
+        '扩展功能': 'bg-purple-100 text-purple-800'
+      };
+      return colors[category] || 'bg-gray-100 text-gray-800';
+    }
+    
+    // 获取分类图标
+    function getCategoryIcon(category) {
+      const icons = {
+        '基础服务': `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-2m-2 0H5m14 0v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5m6 0v-4a1 1 0 00-1-1h-2a1 1 0 00-1 1v4"></path>
+        </svg>`,
+        '增值服务': `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+        </svg>`,
+        '扩展功能': `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"></path>
+        </svg>`
+      };
+      return icons[category] || '';
+    }
+    
+    // 渲染权益卡片
+    function renderBenefitsGrid() {
+      const grid = document.getElementById('benefitsGrid');
+      grid.innerHTML = '';
+      
+      const filteredBenefits = currentCategory === 'all' 
+        ? benefitsList 
+        : benefitsList.filter(benefit => benefit.category === currentCategory);
+      
+      filteredBenefits.forEach(benefit => {
+        const card = document.createElement('div');
+        card.className = 'benefit-card bg-white rounded-lg shadow p-6';
+        card.innerHTML = `
+          <div class="flex items-start justify-between mb-4">
+            <div class="flex items-center">
+              <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center text-white mr-3">
+                ${getCategoryIcon(benefit.category)}
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-gray-900">${benefit.name}</h3>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getCategoryColor(benefit.category)}">
+                  ${benefit.category}
+                </span>
+              </div>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${benefit.status === '启用' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+                ${benefit.status}
+              </span>
+            </div>
+          </div>
+          
+          <p class="text-gray-600 text-sm mb-4">${benefit.description || '暂无描述'}</p>
+          
+          <div class="flex items-center justify-between">
+            <div class="text-2xl font-bold text-gray-900">
+              ${benefit.price === 0 ? '免费' : `¥${benefit.price}`}
+              ${benefit.price > 0 ? `<span class="text-sm font-normal text-gray-500">/${benefit.unit}</span>` : ''}
+            </div>
+            <div class="flex space-x-2">
+              <button onclick="editBenefit(${benefit.id})" class="text-blue-600 hover:text-blue-900 text-sm">
+                编辑
+              </button>
+              <button onclick="toggleBenefitStatus(${benefit.id})" class="text-${benefit.status === '启用' ? 'yellow' : 'green'}-600 hover:text-${benefit.status === '启用' ? 'yellow' : 'green'}-900 text-sm">
+                ${benefit.status === '启用' ? '禁用' : '启用'}
+              </button>
+              <button onclick="deleteBenefit(${benefit.id})" class="text-red-600 hover:text-red-900 text-sm">
+                删除
+              </button>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+    
+    // 权益管理弹窗控制
+    const benefitModal = document.getElementById('benefitModal');
+    const benefitForm = document.getElementById('benefitForm');
+    const benefitModalTitle = document.getElementById('benefitModalTitle');
+    
+    // 显示权益弹窗
+    function showBenefitModal(isEdit = false, benefit = null) {
+      currentEditingBenefit = benefit;
+      benefitModalTitle.textContent = isEdit ? '编辑权益' : '新增权益';
+      
+      if (isEdit && benefit) {
+        document.getElementById('benefitName').value = benefit.name;
+        document.getElementById('benefitCategory').value = benefit.category;
+        document.getElementById('benefitDescription').value = benefit.description || '';
+        document.getElementById('benefitPrice').value = benefit.price;
+        document.getElementById('benefitUnit').value = benefit.unit;
+      } else {
+        benefitForm.reset();
+      }
+      
+      benefitModal.classList.remove('hidden');
+    }
+    
+    // 关闭权益弹窗
+    function closeBenefitModal() {
+      benefitModal.classList.add('hidden');
+      currentEditingBenefit = null;
+    }
+    
+    // 全局函数定义
+    window.editBenefit = function(id) {
+      const benefit = benefitsList.find(b => b.id === id);
+      if (benefit) {
+        showBenefitModal(true, benefit);
+      }
+    };
+    
+    window.toggleBenefitStatus = function(id) {
+      const benefit = benefitsList.find(b => b.id === id);
+      if (benefit) {
+        benefit.status = benefit.status === '启用' ? '禁用' : '启用';
+        benefit.updateTime = new Date().toLocaleString('zh-CN');
+        renderBenefitsGrid();
+        alert(`权益已${benefit.status}`);
+      }
+    };
+    
+    window.deleteBenefit = function(id) {
+      const benefit = benefitsList.find(b => b.id === id);
+      if (benefit) {
+        if (confirm(`确定要删除权益"${benefit.name}"吗？`)) {
+          benefitsList = benefitsList.filter(b => b.id !== id);
+          renderBenefitsGrid();
+          alert('权益删除成功');
+        }
+      }
+    };
+    
+    // 分类标签切换
+    document.querySelectorAll('.benefit-tab-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        // 移除所有活动状态
+        document.querySelectorAll('.benefit-tab-btn').forEach(b => b.classList.remove('active'));
+        // 添加当前活动状态
+        this.classList.add('active');
+        
+        currentCategory = this.dataset.category;
+        renderBenefitsGrid();
+      });
+    });
+    
+    // 事件监听器
+    document.getElementById('addBenefitBtn').addEventListener('click', () => showBenefitModal());
+    document.getElementById('closeBenefitModal').addEventListener('click', closeBenefitModal);
+    document.getElementById('cancelBenefitBtn').addEventListener('click', closeBenefitModal);
+    
+    // 权益表单提交
+    benefitForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(benefitForm);
+      const name = formData.get('name').trim();
+      const category = formData.get('category');
+      const description = formData.get('description').trim();
+      const price = parseFloat(formData.get('price'));
+      const unit = formData.get('unit');
+      
+      if (!name || !category || isNaN(price) || !unit) {
+        alert('请填写必填字段');
+        return;
+      }
+      
+      // 检查权益名是否重复
+      const existingBenefit = benefitsList.find(b => b.name === name && b.id !== (currentEditingBenefit?.id || 0));
+      if (existingBenefit) {
+        alert('权益名称已存在');
+        return;
+      }
+      
+      if (currentEditingBenefit) {
+        // 编辑权益
+        currentEditingBenefit.name = name;
+        currentEditingBenefit.category = category;
+        currentEditingBenefit.description = description;
+        currentEditingBenefit.price = price;
+        currentEditingBenefit.unit = unit;
+        currentEditingBenefit.updateTime = new Date().toLocaleString('zh-CN');
+        alert('权益更新成功');
+      } else {
+        // 新增权益
+        const newBenefit = {
+          id: Math.max(...benefitsList.map(b => b.id)) + 1,
+          name,
+          category,
+          description,
+          price,
+          unit,
+          status: '启用',
+          updateTime: new Date().toLocaleString('zh-CN')
+        };
+        benefitsList.push(newBenefit);
+        alert('权益创建成功');
+      }
+      
+      renderBenefitsGrid();
+      closeBenefitModal();
+    });
+    
+    // 点击弹窗背景关闭
+    benefitModal.addEventListener('click', function(e) {
+      if (e.target === benefitModal) {
+        closeBenefitModal();
+      }
+    });
+    
+    // 初始化渲染
+    renderBenefitsGrid();
+  </script>
+</body>
+</html> 

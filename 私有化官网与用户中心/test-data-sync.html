@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据同步测试</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-6">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-2xl font-bold mb-6">数据同步功能测试</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- License数据 -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-lg font-semibold mb-4">License数据 (TEST001)</h2>
+                <div id="licenseData" class="space-y-2 text-sm"></div>
+                <button onclick="refreshLicenseData()" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">刷新License数据</button>
+            </div>
+            
+            <!-- 订单数据 -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-lg font-semibold mb-4">订单数据</h2>
+                <div id="orderData" class="space-y-2 text-sm"></div>
+                <button onclick="refreshOrderData()" class="mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">刷新订单数据</button>
+            </div>
+        </div>
+        
+        <div class="mt-6 bg-white rounded-lg shadow p-6">
+            <h2 class="text-lg font-semibold mb-4">操作按钮</h2>
+            <div class="space-x-4">
+                <button onclick="clearAllData()" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">清空所有数据</button>
+                        <a href="admin-private-customers.html" class="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">打开私有化客户页面</a>
+        <a href="admin-private-orders.html" class="inline-block bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">打开私有化订单页面</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 刷新License数据显示
+        function refreshLicenseData() {
+            const data = localStorage.getItem('license_TEST001');
+            const container = document.getElementById('licenseData');
+            
+            if (data) {
+                const licenses = JSON.parse(data);
+                container.innerHTML = licenses.map(license => `
+                    <div class="border p-2 rounded">
+                        <strong>ID:</strong> ${license.id}<br>
+                        <strong>版本:</strong> ${license.version}(${license.status === '审核通过' ? '已使用' : '未使用'})<br>
+                        <strong>状态:</strong> ${license.status}<br>
+                        <strong>金额:</strong> ¥${license.totalAmount}<br>
+                        <strong>创建时间:</strong> ${new Date(license.createTime).toLocaleString()}
+                    </div>
+                `).join('');
+            } else {
+                container.innerHTML = '<div class="text-gray-500">暂无数据</div>';
+            }
+        }
+        
+        // 刷新订单数据显示
+        function refreshOrderData() {
+            const data = localStorage.getItem('private_orders');
+            const container = document.getElementById('orderData');
+            
+            if (data) {
+                const orders = JSON.parse(data);
+                container.innerHTML = orders.map(order => `
+                    <div class="border p-2 rounded">
+                        <strong>订单号:</strong> ${order.orderNumber}<br>
+                        <strong>企业:</strong> ${order.companyName}<br>
+                        <strong>状态:</strong> ${order.auditStatus}<br>
+                        <strong>金额:</strong> ¥${order.amount}<br>
+                        <strong>License ID:</strong> ${order.licenseId}<br>
+                        <strong>创建时间:</strong> ${new Date(order.createTime).toLocaleString()}
+                    </div>
+                `).join('');
+            } else {
+                container.innerHTML = '<div class="text-gray-500">暂无数据</div>';
+            }
+        }
+        
+        // 清空所有数据
+        function clearAllData() {
+            if (confirm('确定要清空所有数据吗？')) {
+                localStorage.removeItem('license_TEST001');
+                localStorage.removeItem('private_orders');
+                refreshLicenseData();
+                refreshOrderData();
+                alert('数据已清空');
+            }
+        }
+        
+        // 页面加载时刷新数据
+        document.addEventListener('DOMContentLoaded', function() {
+            refreshLicenseData();
+            refreshOrderData();
+        });
+        
+        // 监听存储变化
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'license_TEST001') {
+                refreshLicenseData();
+            }
+            if (e.key === 'private_orders') {
+                refreshOrderData();
+            }
+        });
+    </script>
+</body>
+</html> 

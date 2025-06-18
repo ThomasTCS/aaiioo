@@ -1,0 +1,1840 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-lang-key="page-title">AIOChat - 授权申请管理</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/@arco-design/web-react/dist/css/arco.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@arco-design/web-react/dist/arco.min.js"></script>
+  <style>
+    .language-switch {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+    }
+    .language-dropdown {
+      display: none;
+      position: absolute;
+      right: 0;
+      background: white;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .language-dropdown.show {
+      display: block;
+    }
+    .language-option {
+      padding: 8px 16px;
+      cursor: pointer;
+    }
+    .language-option:hover {
+      background-color: #f0f0f0;
+    }
+    /* 隐藏number输入框的增减按钮 */
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
+    
+    /* 支付选项样式 */
+    .payment-option {
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    /* 未选中状态的默认样式 */
+    .payment-option:not(.selected) {
+      background: white;
+      border-color: #e5e7eb;
+    }
+    
+    /* hover状态 */
+    .payment-option:hover:not(.selected) {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border-color: #93c5fd;
+      background: #eff6ff;
+    }
+    
+    /* 选中状态 */
+    .payment-option.selected,
+    .payment-option[class*="border-blue-500"] {
+      background: #eff6ff;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+    
+    /* 支付选项logo动画 */
+    .payment-option .payment-logo {
+      transition: transform 0.2s ease;
+    }
+    
+    .payment-option:hover .payment-logo {
+      transform: scale(1.05);
+    }
+    
+    .payment-option.selected .payment-logo {
+      transform: scale(1.1);
+    }
+    
+    /* 支付选项文字渐变动画 */
+    .payment-option .payment-title {
+      transition: color 0.2s ease;
+    }
+    
+    .payment-option:hover .payment-title,
+    .payment-option.selected .payment-title {
+      color: #1d4ed8;
+    }
+    
+    /* 自定义单选圈动画 */
+    .payment-radio-circle {
+      transition: all 0.3s ease;
+    }
+    
+    .payment-option:hover .payment-radio-circle {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <!-- 顶部导航栏 -->
+  <header class="bg-white shadow-sm sticky top-0 z-50 transition-shadow duration-300">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+      <div class="flex items-center">
+        <img src="../私有化官网与用户中心/images/aio-logo_kxblvp.png.png" alt="AIOChat Logo" class="h-8 w-8 mr-2 logo">
+        <a href="index.html" class="text-xl font-bold text-gray-800 hover:text-primary-color transition-colors duration-300">AIOChat</a>
+        
+        <a href="private-admin-login.html" class="ml-4 bg-white border border-gray-300 text-gray-600 hover:text-gray-800 hover:border-gray-400 px-3 py-1.5 rounded-md text-sm font-medium transition-colors duration-200">
+          私有化客户后台(demo)
+        </a>
+      </div>
+      <div class="flex items-center">
+        <button class="mx-2 text-gray-600 hover:text-gray-900 nav-link">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span data-lang-key="auth-tutorial">授权使用教程</span>
+        </button>
+        
+        <div class="relative ml-4">
+          <div class="flex items-center text-gray-700 cursor-pointer rounded-full hover:bg-gray-100 px-3 py-2 transition-colors duration-300" id="userMenuButton">
+            <div class="user-avatar mr-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <span id="userEmail" class="font-medium">123@gmail.com</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+          
+          <!-- 用户下拉菜单 -->
+          <div id="userDropdownMenu" class="hidden absolute right-0 mt-2 w-56 dropdown-menu animate-slideDown">
+            <!-- 切换服务 -->
+            <div class="px-4 py-2 text-xs font-semibold text-gray-500 border-b" data-lang-key="switch-service">切换服务</div>
+            <a href="#" class="dropdown-item">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2H5z" />
+              </svg>
+              <span data-lang-key="private-service">私有化服务</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-auto text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+            </a>
+            <a href="saas-login.html" class="dropdown-item">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+              </svg>
+              <span data-lang-key="saas-service">SAAS 服务</span>
+            </a>
+            
+            <!-- 语言设置 -->
+            <div class="dropdown-divider"></div>
+            <div class="px-4 py-2 text-xs font-semibold text-gray-500" data-lang-key="language">语言</div>
+            <a href="#" data-lang="zh" class="lang-option dropdown-item">
+              <span class="mr-2">🇨🇳</span>
+              <span>中文</span>
+              <svg id="zhCheckmark" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-auto text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+            </a>
+            <a href="#" data-lang="en" class="lang-option dropdown-item">
+              <span class="mr-2">🇬🇧</span>
+              <span>English</span>
+              <svg id="enCheckmark" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-auto text-blue-500 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+            </a>
+            
+            <!-- 退出选项 -->
+            <div class="dropdown-divider"></div>
+            <a href="private-login.html" class="dropdown-item text-red-600 hover:bg-red-50">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+              </svg>
+              <span data-lang-key="logout">退出</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主要内容区域 -->
+  <main class="container mx-auto px-4 py-8 animate-fadeIn">
+    <!-- 企业信息卡片 -->
+    <div class="bg-white rounded-lg shadow card p-6 mb-6 animate-slideUp">
+      <!-- 隐藏标题 -->
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="bg-gray-50 rounded-md p-3 flex flex-col">
+          <span class="text-sm text-gray-500 mb-0.5" data-lang-key="company-name">企业名称：</span>
+          <span id="companyName" class="font-semibold text-gray-800">-</span>
+        </div>
+        <div class="bg-gray-50 rounded-md p-3 flex flex-col">
+          <span class="text-sm text-gray-500 mb-0.5" data-lang-key="email-label">邮箱：</span>
+          <span id="userEmailInfo" class="font-semibold text-gray-800">123@gmail.com</span>
+        </div>
+        <div class="bg-gray-50 rounded-md p-3 flex flex-col">
+          <span class="text-sm text-gray-500 mb-0.5" data-lang-key="contact-name-label">联系人：</span>
+          <span id="contactName" class="font-semibold text-gray-800">-</span>
+        </div>
+        <div class="bg-gray-50 rounded-md p-3 flex flex-col">
+          <span class="text-sm text-gray-500 mb-0.5" data-lang-key="contact-phone-label">联系电话：</span>
+          <span id="contactPhone" class="font-semibold text-gray-800">-</span>
+        </div>
+        <div class="bg-gray-50 rounded-md p-3 flex flex-col">
+          <span class="text-sm text-gray-500 mb-0.5" data-lang-key="telegram-label">Telegram：</span>
+          <span id="telegramNumber" class="font-semibold text-gray-800">-</span>
+        </div>
+        <div class="bg-gray-50 rounded-md p-3 flex flex-col">
+          <span class="text-sm text-gray-500 mb-0.5" data-lang-key="whatsapp-label">WhatsApp：</span>
+          <span id="whatsappNumber" class="font-semibold text-gray-800">-</span>
+        </div>
+        <div class="bg-gray-50 rounded-md p-3 flex flex-col md:col-span-2">
+          <span class="text-sm text-gray-500 mb-0.5" data-lang-key="server-code-label">服务器机器码：</span>
+          <span id="machineCode" class="font-mono text-xs bg-gray-100 p-2 rounded border border-gray-200 mt-0.5 overflow-auto">AIOC-XXXX-XXXX-XXXX-XXXX</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- License 授权模块 -->
+    <div class="relative">
+      <!-- 原型设计状态切换按钮 -->
+      <div class="absolute -right-32 top-0 z-10">
+        <div class="bg-white rounded-lg shadow-lg p-2 border w-max">
+          <div class="text-xs text-gray-500 mb-2 font-medium">原型预览</div>
+          <div class="flex flex-col space-y-1">
+            <button id="stateTrial" class="text-left px-2 py-1 text-xs bg-green-100 text-green-800 rounded hover:bg-green-200 transition-colors whitespace-nowrap">
+              试用版
+            </button>
+            <button id="stateTrialExpiring" class="text-left px-2 py-1 text-xs bg-yellow-100 text-yellow-800 rounded hover:bg-yellow-200 transition-colors whitespace-nowrap">
+              试用版即将过期
+            </button>
+            <button id="stateTrialExpired" class="text-left px-2 py-1 text-xs bg-red-100 text-red-800 rounded hover:bg-red-200 transition-colors whitespace-nowrap">
+              试用版已过期
+            </button>
+            <button id="stateOfficial" class="text-left px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded hover:bg-blue-200 transition-colors whitespace-nowrap">
+              正式版
+            </button>
+            <button id="stateOfficialExtended" class="text-left px-2 py-1 text-xs bg-purple-100 text-purple-800 rounded hover:bg-purple-200 transition-colors whitespace-nowrap">
+              正式版续期扩展
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-lg shadow card overflow-hidden animate-slideUp mt-6" style="animation-delay: 300ms;">
+      <div class="card-header flex justify-between items-center">
+        <h2 class="text-lg font-semibold text-gray-800 flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          </svg>
+            <span data-lang-key="license-authorization">License 授权</span>
+        </h2>
+        <div>
+            <!-- 购买授权按钮 - 试用版状态显示 -->
+            <button id="purchaseAuthBtn" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+              </svg>
+              购买授权
+            </button>
+            
+            <!-- 正式版按钮组 - 正式版状态显示 -->
+            <div id="officialButtons" class="hidden flex items-center space-x-3">
+              <button id="renewAuthBtn" class="bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 flex items-center shadow-sm hover:shadow-md">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                授权续期
+              </button>
+              <button id="expandBenefitsBtn" class="bg-purple-500 hover:bg-purple-600 text-white px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 flex items-center shadow-sm hover:shadow-md">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+                扩展权益
+              </button>
+        </div>
+      </div>
+      </div>
+        
+        <div class="p-5">
+          <!-- 授权版本信息 -->
+          <div class="bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-5 mb-4">
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center">
+                <div class="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
+                <h3 class="text-lg font-semibold text-gray-800" data-lang-key="current-license">当前授权</h3>
+              </div>
+            </div>
+            
+            <!-- 版本标识和到期时间 -->
+            <div class="flex gap-4 mb-3">
+              <!-- 版本标识 -->
+              <div class="w-1/3">
+                <div class="flex items-center justify-center h-full bg-green-100 text-green-800 text-lg font-medium rounded-lg p-4">
+                  <span id="licenseVersion">试用版</span>
+                </div>
+              </div>
+              
+              <!-- 授权到期时间 -->
+              <div class="bg-white rounded-lg p-4 w-2/3">
+                <div class="flex items-center justify-between h-full">
+                  <div>
+                    <span class="text-gray-600 font-medium" data-lang-key="expire-time">授权到期时间：</span>
+                    <div id="expireDate" class="text-lg font-bold text-gray-800 mt-1">2024-12-31 23:59:59</div>
+                  </div>
+                  <div id="remainingDays" class="text-sm text-gray-500">剩余 30 天</div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- 权益信息 -->
+            <div class="bg-white rounded-lg p-4">
+              <h4 class="font-medium text-gray-800 mb-2" data-lang-key="benefits-info">权益信息</h4>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="text-center p-3 bg-gray-50 rounded-lg">
+                  <div class="text-gray-600 text-sm mb-1" data-lang-key="seat-count">成员坐席数</div>
+                  <div id="seatCount" class="text-2xl font-bold text-blue-600">5 <span class="text-sm text-gray-500 font-normal">个</span></div>
+                </div>
+                <div class="text-center p-3 bg-gray-50 rounded-lg">
+                  <div class="text-gray-600 text-sm mb-1" data-lang-key="social-account-count">社媒账号数</div>
+                  <div id="socialAccountCount" class="text-2xl font-bold text-purple-600">10 <span class="text-sm text-gray-500 font-normal">个</span></div>
+                </div>
+                <div class="text-center p-3 bg-gray-50 rounded-lg">
+                  <div class="text-gray-600 text-sm mb-1" data-lang-key="translation-chars">翻译字符数</div>
+                  <div id="translationChars" class="text-2xl font-bold text-orange-600">1万 <span class="text-sm text-gray-500 font-normal">个字符</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 购买记录模块 -->
+    <div class="bg-white rounded-lg shadow card overflow-hidden animate-slideUp mt-6" style="animation-delay: 400ms;">
+      <div class="card-header">
+        <h2 class="text-lg font-semibold text-gray-800 flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+          </svg>
+          <span data-lang-key="purchase-records">购买记录</span>
+        </h2>
+      </div>
+      
+      <div class="overflow-x-auto">
+        <table class="w-full">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-lang-key="version-record">版本记录</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-lang-key="benefits-info">权益信息</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-lang-key="service-duration">服务时长</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-lang-key="expire-time">授权到期时间</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-lang-key="cost">费用</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-lang-key="status">状态</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <!-- 权益扩展记录 -->
+            <tr class="hover:bg-gray-50 transition-colors duration-150">
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center">
+                  <div class="w-2 h-2 bg-purple-500 rounded-full mr-2"></div>
+                  <div>
+                    <div class="text-sm font-medium text-gray-900">权益扩展</div>
+                    <div class="text-sm text-gray-500">2024-12-15 购买</div>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-4">
+                <div class="text-sm text-gray-900 space-y-1">
+                  <div>坐席：+30个</div>
+                  <div>社媒：+50个</div>
+                  <div>翻译：+500万字符</div>
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-900">-</div>
+                <div class="text-sm text-gray-500">权益增加</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-900">2025-11-30</div>
+                <div class="text-sm text-gray-500">同正式版</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm font-medium text-purple-600">¥45,000</div>
+                <div class="text-sm text-gray-500">已支付</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                  生效中
+                </span>
+              </td>
+            </tr>
+            
+            <!-- 正式版记录 -->
+            <tr class="hover:bg-gray-50 transition-colors duration-150">
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center">
+                  <div class="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
+                  <div>
+                    <div class="text-sm font-medium text-gray-900">正式版</div>
+                    <div class="text-sm text-gray-500">2024-12-01 购买</div>
+                  </div>
+                  </div>
+              </td>
+              <td class="px-6 py-4">
+                <div class="text-sm text-gray-900 space-y-1">
+                  <div>坐席：20个</div>
+                  <div>社媒：50个</div>
+                  <div>翻译：100万字符</div>
+                  </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-900">365天</div>
+                <div class="text-sm text-gray-500">年付套餐</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-900">2025-11-30</div>
+                <div class="text-sm text-gray-500">23:59:59</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm font-medium text-blue-600">¥95,000</div>
+                <div class="text-sm text-gray-500">已支付</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                  生效中
+                </span>
+              </td>
+            </tr>
+            
+            <!-- 试用版记录 -->
+            <tr class="hover:bg-gray-50 transition-colors duration-150">
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center">
+                  <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                  <div>
+                    <div class="text-sm font-medium text-gray-900">试用版</div>
+                    <div class="text-sm text-gray-500">2024-11-01 申请</div>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-4">
+                <div class="text-sm text-gray-900 space-y-1">
+                  <div>坐席：5个</div>
+                  <div>社媒：10个</div>
+                  <div>翻译：1万字符</div>
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-900">14天</div>
+                <div class="text-sm text-gray-500">免费试用</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-900">2024-11-15</div>
+                <div class="text-sm text-gray-500">23:59:59</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm font-medium text-green-600">¥0</div>
+                <div class="text-sm text-gray-500">免费</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                  已过期
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 历史授权申请记录 -->
+    <!-- <div class="mt-10">
+      <h2 class="text-lg font-semibold mb-4">历史授权申请记录</h2>
+      
+      <div class="bg-white rounded-lg shadow overflow-hidden">
+        <table class="w-full border-collapse">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="px-4 py-3 text-left text-sm font-medium text-gray-600">企业名称</th>
+              <th class="px-4 py-3 text-left text-sm font-medium text-gray-600">授权类型</th>
+              <th class="px-4 py-3 text-left text-sm font-medium text-gray-600">申请时间</th>
+              <th class="px-4 py-3 text-left text-sm font-medium text-gray-600">权益</th>
+              <th class="px-4 py-3 text-left text-sm font-medium text-gray-600">到期时间</th>
+              <th class="px-4 py-3 text-left text-sm font-medium text-gray-600">审核状态</th>
+              <th class="px-4 py-3 text-left text-sm font-medium text-gray-600">操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-t border-gray-200">
+              <td class="px-4 py-4 text-sm text-gray-800" id="tableCompanyName">天鹅集团</td>
+              <td class="px-4 py-4 text-sm text-gray-800">试用版</td>
+              <td class="px-4 py-4 text-sm text-gray-800">2025-05-01<br>13:02:24</td>
+              <td class="px-4 py-4 text-sm text-gray-800">
+                成员数：2<br>
+                并发连接数：3<br>
+                翻译字符数：1,000
+              </td>
+              <td class="px-4 py-4 text-sm text-gray-800">2025-05-15<br>23:59:59</td>
+              <td class="px-4 py-4 text-sm text-gray-800">审核通过</td>
+              <td class="px-4 py-4 text-sm text-gray-800">已过期</td>
+            </tr>
+            <tr class="border-t border-gray-200">
+              <td class="px-4 py-4 text-sm text-gray-800" id="tableCompanyName">天鹅集团</td>
+              <td class="px-4 py-4 text-sm text-gray-800">正式版 1</td>
+              <td class="px-4 py-4 text-sm text-gray-800">2025-06-01<br>12:12:56</td>
+              <td class="px-4 py-4 text-sm text-gray-800">
+                成员数：5<br>
+                并发连接数：3<br>
+                翻译字符数：1,000
+              </td>
+              <td class="px-4 py-4 text-sm text-gray-800">2025-06-30<br>23:59:59</td>
+              <td class="px-4 py-4 text-sm text-gray-800">审核通过</td>
+              <td class="px-4 py-4 text-sm text-gray-800">已使用</td>
+            </tr>
+            <tr class="border-t border-gray-200">
+              <td class="px-4 py-4 text-sm text-gray-800" id="tableCompanyName">天鹅集团</td>
+              <td class="px-4 py-4 text-sm text-gray-800">正式版 2</td>
+              <td class="px-4 py-4 text-sm text-gray-800">2025-06-28<br>13:02:24</td>
+              <td class="px-4 py-4 text-sm text-gray-800">
+                成员数：10<br>
+                并发连接数：3<br>
+                翻译字符数：1,000,000
+              </td>
+              <td class="px-4 py-4 text-sm text-gray-800">2025-12-30<br>23:59:59</td>
+              <td class="px-4 py-4 text-sm text-gray-800">审核通过</td>
+              <td class="px-4 py-4">
+                <button class="text-blue-500 hover:text-blue-700 text-sm">
+                  下载文件
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div> -->
+  </main>
+
+  <!-- 购买授权弹窗 -->
+  <div id="purchaseModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-2">
+    <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[80vh] overflow-hidden flex flex-col">
+      <!-- 弹窗头部 -->
+      <div class="flex justify-between items-center px-4 py-3 border-b bg-white flex-shrink-0">
+        <h3 class="text-lg font-semibold text-gray-800">购买授权</h3>
+        <button id="closePurchaseModal" class="text-gray-400 hover:text-gray-600">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- 弹窗内容 - 可滚动区域 -->
+      <div class="flex-1 overflow-y-auto">
+        <div class="p-4">
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <!-- 左侧：费用选择 -->
+            <div class="lg:col-span-2 space-y-4">
+              <!-- 授权服务 -->
+              <div class="bg-gray-50 rounded-lg p-3">
+                <h4 class="text-base font-medium text-gray-800 mb-3">授权服务</h4>
+                <div class="space-y-2">
+                  <div id="service360" class="service-option bg-white border-2 border-blue-500 rounded-lg p-3 cursor-pointer transition-all duration-200">
+                    <div class="flex justify-between items-center">
+                      <div>
+                        <div class="font-medium text-gray-800 text-sm">360 天服务</div>
+                        <div class="text-xs text-gray-500">年付套餐，更优惠</div>
+                      </div>
+                      <div class="text-base font-bold text-blue-600">¥88,000.00</div>
+                    </div>
+                  </div>
+                  <div id="service180" class="service-option bg-white border-2 border-gray-200 rounded-lg p-3 cursor-pointer transition-all duration-200">
+                    <div class="flex justify-between items-center">
+                      <div>
+                        <div class="font-medium text-gray-800 text-sm">180 天服务</div>
+                        <div class="text-xs text-gray-500">半年套餐</div>
+                      </div>
+                      <div class="text-base font-bold text-blue-600">¥44,000.00</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 权益费用 -->
+              <div class="bg-gray-50 rounded-lg p-3">
+                <h4 class="text-base font-medium text-gray-800 mb-3">权益费用</h4>
+                
+                <!-- 坐席费用 -->
+                <div class="bg-white rounded-lg p-3 mb-3">
+                  <h5 class="font-medium text-gray-800 mb-2 text-sm">坐席费用</h5>
+                  <div class="flex items-center space-x-3 mb-1">
+                    <div class="flex items-center space-x-2">
+                      <label class="text-xs text-gray-600">数量：</label>
+                      <input type="number" id="seatQuantity" min="1" max="500" value="1" class="w-16 px-2 py-1 border border-gray-300 rounded text-center text-sm">
+                      <span class="text-xs text-gray-500">个</span>
+                    </div>
+                    <div class="text-xs text-gray-500">每个 ¥12.00</div>
+                    <div class="ml-auto">
+                      <span class="text-xs text-gray-600">小计：</span>
+                      <span id="seatSubtotal" class="font-medium text-blue-600 text-sm">¥12.00</span>
+                    </div>
+                  </div>
+                  <div class="text-xs text-gray-400 mb-1">可输入范围1-500</div>
+                  <div class="text-xs text-orange-600">更多坐席需求，请联系客户经理</div>
+                </div>
+
+                <!-- 社媒账号费用 -->
+                <div class="bg-white rounded-lg p-3 mb-3">
+                  <h5 class="font-medium text-gray-800 mb-2 text-sm">社媒账号费用</h5>
+                  <div class="flex items-center space-x-3 mb-1">
+                    <div class="flex items-center space-x-2">
+                      <label class="text-xs text-gray-600">数量：</label>
+                      <input type="number" id="socialQuantity" min="1" max="500" value="1" class="w-16 px-2 py-1 border border-gray-300 rounded text-center text-sm">
+                      <span class="text-xs text-gray-500">个</span>
+                    </div>
+                    <div class="text-xs text-gray-500">每个 ¥12.00</div>
+                    <div class="ml-auto">
+                      <span class="text-xs text-gray-600">小计：</span>
+                      <span id="socialSubtotal" class="font-medium text-blue-600 text-sm">¥12.00</span>
+                    </div>
+                  </div>
+                  <div class="text-xs text-gray-400 mb-1">可输入范围1-500</div>
+                  <div class="text-xs text-orange-600">更多社媒账号需求，请联系客户经理</div>
+                </div>
+
+                <!-- 翻译字符费用 -->
+                <div class="bg-white rounded-lg p-3">
+                  <h5 class="font-medium text-gray-800 mb-2 text-sm">翻译字符费用</h5>
+                  <div class="space-y-1 mb-2">
+                    <div id="char1000w" class="char-option bg-gray-50 border-2 border-gray-200 rounded-lg p-2 cursor-pointer transition-all duration-200">
+                      <div class="flex justify-between items-center">
+                        <span class="text-xs font-medium">1000 万个字符</span>
+                        <span class="font-medium text-blue-600 text-sm">¥30,000.00</span>
+                      </div>
+                    </div>
+                    <div id="char100w" class="char-option bg-white border-2 border-blue-500 rounded-lg p-2 cursor-pointer transition-all duration-200">
+                      <div class="flex justify-between items-center">
+                        <span class="text-xs font-medium">100 万个字符</span>
+                        <span class="font-medium text-blue-600 text-sm">¥5,000.00</span>
+                      </div>
+                    </div>
+                    <div id="char10w" class="char-option bg-gray-50 border-2 border-gray-200 rounded-lg p-2 cursor-pointer transition-all duration-200">
+                      <div class="flex justify-between items-center">
+                        <span class="text-xs font-medium">10 万个字符</span>
+                        <span class="font-medium text-blue-600 text-sm">¥800.00</span>
+                      </div>
+                    </div>
+                    <div id="char1w" class="char-option bg-gray-50 border-2 border-gray-200 rounded-lg p-2 cursor-pointer transition-all duration-200">
+                      <div class="flex justify-between items-center">
+                        <span class="text-xs font-medium">1 万个字符</span>
+                        <span class="font-medium text-blue-600 text-sm">¥100.00</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="text-xs text-orange-600">更多翻译字符需求，请联系客户经理</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 右侧：费用汇总 -->
+            <div class="lg:col-span-1">
+              <div class="bg-gray-50 rounded-lg p-3 sticky top-0">
+                <h4 class="text-base font-medium text-gray-800 mb-3">费用汇总</h4>
+                
+                <!-- 基础服务费汇总 -->
+                <div class="space-y-1 mb-3">
+                  <div class="flex justify-between text-xs">
+                    <span class="text-gray-600">授权服务：</span>
+                    <span id="serviceFeeDisplay" class="font-medium">¥88,000.00</span>
+                  </div>
+                </div>
+
+                <!-- 权益费用汇总 -->
+                <div class="space-y-1 mb-3 pb-3 border-b">
+                  <div class="flex justify-between text-xs">
+                    <span class="text-gray-600">坐席费用：</span>
+                    <span id="seatFeeDisplay" class="font-medium">¥12.00</span>
+                  </div>
+                  <div class="flex justify-between text-xs">
+                    <span class="text-gray-600">社媒账号费用：</span>
+                    <span id="socialFeeDisplay" class="font-medium">¥12.00</span>
+                  </div>
+                  <div class="flex justify-between text-xs">
+                    <span class="text-gray-600">翻译字符费用：</span>
+                    <span id="charFeeDisplay" class="font-medium">¥5,000.00</span>
+                  </div>
+                </div>
+
+                <!-- 总计 -->
+                <div class="flex justify-between text-base font-bold mb-4">
+                  <span>总计：</span>
+                  <span id="totalAmount" class="text-blue-600">¥93,024.00</span>
+                </div>
+
+                <!-- 支付渠道 -->
+                <div class="mb-4">
+                  <h5 class="font-medium text-gray-800 mb-2 text-sm">支付渠道</h5>
+                  <div class="space-y-2">
+                    <div id="paymentUSDT" class="payment-method bg-white border-2 border-blue-500 rounded-lg p-2 cursor-pointer transition-all duration-200">
+                      <div class="flex items-center">
+                        <div class="w-5 h-5 bg-green-500 rounded mr-2 flex items-center justify-center">
+                          <span class="text-white text-xs font-bold">₮</span>
+                        </div>
+                        <span class="font-medium text-sm">USDT</span>
+                      </div>
+                    </div>
+                    <div id="paymentPaypal" class="payment-method bg-gray-50 border-2 border-gray-200 rounded-lg p-2 cursor-pointer transition-all duration-200">
+                      <div class="flex items-center">
+                        <div class="w-5 h-5 bg-blue-600 rounded mr-2 flex items-center justify-center">
+                          <span class="text-white text-xs font-bold">P</span>
+                        </div>
+                        <span class="font-medium text-sm">PayPal</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 立即支付按钮 -->
+                <button id="payNowBtn" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 rounded-lg transition-colors duration-200 text-sm">
+                  立即支付
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- USDT支付弹窗 -->
+  <div id="usdtPaymentModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
+      <!-- 弹窗头部 -->
+      <div class="flex justify-between items-center px-6 py-4 border-b">
+        <h3 class="text-lg font-semibold text-gray-800">USDT 支付</h3>
+        <button id="closeUsdtPaymentModal" class="text-gray-400 hover:text-gray-600">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- 弹窗内容 -->
+      <div class="px-6 py-4">
+        <!-- 支付金额 -->
+        <div class="text-center mb-6">
+          <div class="text-sm text-gray-600 mb-2">需要支付</div>
+          <div id="usdtPaymentAmount" class="text-2xl font-bold text-blue-600">¥93,024.00</div>
+          <div class="text-sm text-gray-500 mt-1">约 13,289.14 USDT</div>
+        </div>
+
+        <!-- 支付地址 -->
+        <div class="mb-6">
+          <div class="text-sm font-medium text-gray-800 mb-2">USDT 支付地址</div>
+          <div class="bg-gray-50 rounded-lg p-3 border">
+            <div class="text-xs text-gray-600 mb-1">TRC20 网络</div>
+            <div id="usdtAddress" class="font-mono text-sm text-gray-800 break-all">TQn9Y2khEsLMG73Lyubovk8oQzqiEuFd4A</div>
+            <button id="copyAddressBtn" class="mt-2 text-xs text-blue-600 hover:text-blue-800 flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              </svg>
+              复制地址
+            </button>
+          </div>
+        </div>
+
+        <!-- 二维码 -->
+        <div class="text-center mb-6">
+          <div class="text-sm font-medium text-gray-800 mb-2">扫码支付</div>
+          <div class="inline-block p-4 bg-white border-2 border-gray-200 rounded-lg">
+            <div class="w-32 h-32 bg-gray-100 flex items-center justify-center text-gray-400 text-xs">
+              <!-- 这里可以放置真实的二维码 -->
+              <div class="text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+                </svg>
+                二维码
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 重要提示 -->
+        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-6">
+          <div class="flex items-start">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-600 mt-0.5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+            </svg>
+            <div class="text-sm">
+              <div class="font-medium text-yellow-800 mb-1">重要提示</div>
+              <ul class="text-yellow-700 text-xs space-y-1">
+                <li>• 请务必使用 TRC20 网络转账</li>
+                <li>• 支付地址必须输入正确，转错无法找回</li>
+                <li>• 转账完成后请点击"支付成功"按钮</li>
+                <li>• 我们将在1-3个工作日内处理您的订单</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- 操作按钮 -->
+        <div class="flex space-x-3">
+          <button id="cancelUsdtPayment" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors duration-200">
+            取消
+          </button>
+          <button id="confirmUsdtPayment" class="flex-1 bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
+            支付成功
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 授权续期弹窗 -->
+  <div id="renewModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[80vh] overflow-y-auto">
+      <div class="flex justify-between items-center p-4 border-b">
+        <h3 class="text-lg font-semibold text-gray-800">授权续期</h3>
+        <button id="closeRenewModal" class="text-gray-400 hover:text-gray-600 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      
+      <div class="p-4">
+        <div class="grid lg:grid-cols-3 gap-4">
+          <!-- 左侧：授权服务选择 -->
+          <div class="lg:col-span-2">
+            <div class="bg-gray-50 rounded-lg p-3">
+              <h4 class="text-base font-medium text-gray-800 mb-3">授权服务</h4>
+              
+              <!-- 服务选项 -->
+              <div class="space-y-2">
+                <div id="renewService360" class="renew-service-option bg-white border-2 border-blue-500 rounded-lg p-3 cursor-pointer transition-all duration-200">
+                  <div class="flex justify-between items-center">
+                    <div>
+                      <div class="font-medium text-gray-800">360 天授权服务</div>
+                      <div class="text-xs text-gray-500 mt-1">一年期授权续期服务</div>
+                    </div>
+                    <div class="text-right">
+                      <div class="font-bold text-blue-600 text-lg">¥88,000.00</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div id="renewService180" class="renew-service-option bg-gray-50 border-2 border-gray-200 rounded-lg p-3 cursor-pointer transition-all duration-200">
+                  <div class="flex justify-between items-center">
+                    <div>
+                      <div class="font-medium text-gray-800">180 天授权服务</div>
+                      <div class="text-xs text-gray-500 mt-1">半年期授权续期服务</div>
+                    </div>
+                    <div class="text-right">
+                      <div class="font-bold text-blue-600 text-lg">¥44,000.00</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 右侧：费用汇总 -->
+          <div class="lg:col-span-1">
+            <div class="bg-gray-50 rounded-lg p-3 sticky top-0">
+              <h4 class="text-base font-medium text-gray-800 mb-3">费用汇总</h4>
+              
+              <!-- 授权服务费汇总 -->
+              <div class="space-y-1 mb-3 pb-3 border-b">
+                <div class="flex justify-between text-xs">
+                  <span class="text-gray-600">授权服务：</span>
+                  <span id="renewServiceFeeDisplay" class="font-medium">¥88,000.00</span>
+                </div>
+              </div>
+
+              <!-- 总计 -->
+              <div class="flex justify-between text-base font-bold mb-4">
+                <span>总计：</span>
+                <span id="renewTotalAmount" class="text-blue-600">¥88,000.00</span>
+              </div>
+
+              <!-- 支付渠道 -->
+              <div class="mb-4">
+                <h5 class="font-medium text-gray-800 mb-2 text-sm">支付渠道</h5>
+                <div class="space-y-2">
+                  <div id="renewPaymentUSDT" class="renew-payment-method bg-white border-2 border-blue-500 rounded-lg p-2 cursor-pointer transition-all duration-200">
+                    <div class="flex items-center">
+                      <div class="w-5 h-5 bg-green-500 rounded mr-2 flex items-center justify-center">
+                        <span class="text-white text-xs font-bold">₮</span>
+                      </div>
+                      <span class="font-medium text-sm">USDT</span>
+                    </div>
+                  </div>
+                  <div id="renewPaymentPaypal" class="renew-payment-method bg-gray-50 border-2 border-gray-200 rounded-lg p-2 cursor-pointer transition-all duration-200">
+                    <div class="flex items-center">
+                      <div class="w-5 h-5 bg-blue-600 rounded mr-2 flex items-center justify-center">
+                        <span class="text-white text-xs font-bold">P</span>
+                      </div>
+                      <span class="font-medium text-sm">PayPal</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 立即支付按钮 -->
+              <button id="renewPayNowBtn" class="w-full bg-green-500 hover:bg-green-600 text-white font-medium py-2 rounded-lg transition-colors duration-200 text-sm">
+                立即支付
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 扩展权益弹窗 -->
+  <div id="expandModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[80vh] overflow-y-auto">
+      <div class="flex justify-between items-center p-4 border-b">
+        <h3 class="text-lg font-semibold text-gray-800">扩展权益</h3>
+        <button id="closeExpandModal" class="text-gray-400 hover:text-gray-600 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      
+      <div class="p-4">
+        <div class="grid lg:grid-cols-3 gap-4">
+          <!-- 左侧：权益费用 -->
+          <div class="lg:col-span-2">
+            <div class="bg-gray-50 rounded-lg p-3">
+              <h4 class="text-base font-medium text-gray-800 mb-3">权益费用</h4>
+              
+              <!-- 坐席费用 -->
+              <div class="bg-white rounded-lg p-3 mb-3">
+                <h5 class="font-medium text-gray-800 mb-2 text-sm">坐席费用</h5>
+                <div class="flex items-center space-x-3 mb-1">
+                  <div class="flex items-center space-x-2">
+                    <label class="text-xs text-gray-600">数量：</label>
+                    <input type="number" id="expandSeatQuantity" min="1" max="500" value="1" class="w-16 px-2 py-1 border border-gray-300 rounded text-center text-sm">
+                    <span class="text-xs text-gray-500">个</span>
+                  </div>
+                  <div class="text-xs text-gray-500">每个 ¥12.00</div>
+                  <div class="ml-auto">
+                    <span class="text-xs text-gray-600">小计：</span>
+                    <span id="expandSeatSubtotal" class="font-medium text-blue-600 text-sm">¥12.00</span>
+                  </div>
+                </div>
+                <div class="text-xs text-gray-400 mb-1">可输入范围1-500</div>
+                <div class="text-xs text-orange-600">更多坐席需求，请联系客户经理</div>
+              </div>
+
+              <!-- 社媒账号费用 -->
+              <div class="bg-white rounded-lg p-3 mb-3">
+                <h5 class="font-medium text-gray-800 mb-2 text-sm">社媒账号费用</h5>
+                <div class="flex items-center space-x-3 mb-1">
+                  <div class="flex items-center space-x-2">
+                    <label class="text-xs text-gray-600">数量：</label>
+                    <input type="number" id="expandSocialQuantity" min="1" max="500" value="1" class="w-16 px-2 py-1 border border-gray-300 rounded text-center text-sm">
+                    <span class="text-xs text-gray-500">个</span>
+                  </div>
+                  <div class="text-xs text-gray-500">每个 ¥12.00</div>
+                  <div class="ml-auto">
+                    <span class="text-xs text-gray-600">小计：</span>
+                    <span id="expandSocialSubtotal" class="font-medium text-blue-600 text-sm">¥12.00</span>
+                  </div>
+                </div>
+                <div class="text-xs text-gray-400 mb-1">可输入范围1-500</div>
+                <div class="text-xs text-orange-600">更多社媒账号需求，请联系客户经理</div>
+              </div>
+
+              <!-- 翻译字符费用 -->
+              <div class="bg-white rounded-lg p-3">
+                <h5 class="font-medium text-gray-800 mb-2 text-sm">翻译字符费用</h5>
+                <div class="space-y-1 mb-2">
+                  <div id="expandChar1000w" class="expand-char-option bg-gray-50 border-2 border-gray-200 rounded-lg p-2 cursor-pointer transition-all duration-200">
+                    <div class="flex justify-between items-center">
+                      <span class="text-xs font-medium">1000 万个字符</span>
+                      <span class="font-medium text-blue-600 text-sm">¥30,000.00</span>
+                    </div>
+                  </div>
+                  <div id="expandChar100w" class="expand-char-option bg-white border-2 border-blue-500 rounded-lg p-2 cursor-pointer transition-all duration-200">
+                    <div class="flex justify-between items-center">
+                      <span class="text-xs font-medium">100 万个字符</span>
+                      <span class="font-medium text-blue-600 text-sm">¥5,000.00</span>
+                    </div>
+                  </div>
+                  <div id="expandChar10w" class="expand-char-option bg-gray-50 border-2 border-gray-200 rounded-lg p-2 cursor-pointer transition-all duration-200">
+                    <div class="flex justify-between items-center">
+                      <span class="text-xs font-medium">10 万个字符</span>
+                      <span class="font-medium text-blue-600 text-sm">¥800.00</span>
+                    </div>
+                  </div>
+                  <div id="expandChar1w" class="expand-char-option bg-gray-50 border-2 border-gray-200 rounded-lg p-2 cursor-pointer transition-all duration-200">
+                    <div class="flex justify-between items-center">
+                      <span class="text-xs font-medium">1 万个字符</span>
+                      <span class="font-medium text-blue-600 text-sm">¥100.00</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="text-xs text-orange-600">更多翻译字符需求，请联系客户经理</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 右侧：费用汇总 -->
+          <div class="lg:col-span-1">
+            <div class="bg-gray-50 rounded-lg p-3 sticky top-0">
+              <h4 class="text-base font-medium text-gray-800 mb-3">费用汇总</h4>
+              
+              <!-- 权益费用汇总 -->
+              <div class="space-y-1 mb-3 pb-3 border-b">
+                <div class="flex justify-between text-xs">
+                  <span class="text-gray-600">坐席费用：</span>
+                  <span id="expandSeatFeeDisplay" class="font-medium">¥12.00</span>
+                </div>
+                <div class="flex justify-between text-xs">
+                  <span class="text-gray-600">社媒账号费用：</span>
+                  <span id="expandSocialFeeDisplay" class="font-medium">¥12.00</span>
+                </div>
+                <div class="flex justify-between text-xs">
+                  <span class="text-gray-600">翻译字符费用：</span>
+                  <span id="expandCharFeeDisplay" class="font-medium">¥5,000.00</span>
+                </div>
+              </div>
+
+              <!-- 总计 -->
+              <div class="flex justify-between text-base font-bold mb-4">
+                <span>总计：</span>
+                <span id="expandTotalAmount" class="text-blue-600">¥5,024.00</span>
+              </div>
+
+              <!-- 支付渠道 -->
+              <div class="mb-4">
+                <h5 class="font-medium text-gray-800 mb-2 text-sm">支付渠道</h5>
+                <div class="space-y-2">
+                  <div id="expandPaymentUSDT" class="expand-payment-method bg-white border-2 border-blue-500 rounded-lg p-2 cursor-pointer transition-all duration-200">
+                    <div class="flex items-center">
+                      <div class="w-5 h-5 bg-green-500 rounded mr-2 flex items-center justify-center">
+                        <span class="text-white text-xs font-bold">₮</span>
+                      </div>
+                      <span class="font-medium text-sm">USDT</span>
+                    </div>
+                  </div>
+                  <div id="expandPaymentPaypal" class="expand-payment-method bg-gray-50 border-2 border-gray-200 rounded-lg p-2 cursor-pointer transition-all duration-200">
+                    <div class="flex items-center">
+                      <div class="w-5 h-5 bg-blue-600 rounded mr-2 flex items-center justify-center">
+                        <span class="text-white text-xs font-bold">P</span>
+                      </div>
+                      <span class="font-medium text-sm">PayPal</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 立即支付按钮 -->
+              <button id="expandPayNowBtn" class="w-full bg-purple-500 hover:bg-purple-600 text-white font-medium py-2 rounded-lg transition-colors duration-200 text-sm">
+                立即支付
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 中英文对照表
+    const translations = {
+      'zh': {
+        'page-title': 'AIOChat - 授权申请管理',
+        'auth-tutorial': '授权使用教程',
+        'switch-service': '切换服务',
+        'private-service': '私有化服务',
+        'saas-service': 'SAAS 服务',
+        'language': '语言',
+        'logout': '退出',
+        'auth-application-list': '授权申请列表',
+        'company-name': '企业名称：',
+        'email-label': '邮箱：',
+        'contact-name-label': '联系人：',
+        'contact-phone-label': '联系电话：',
+        'telegram-label': 'Telegram：',
+        'whatsapp-label': 'WhatsApp：',
+        'server-code-label': '服务器机器码：',
+        'license-label': 'License 授权：',
+        'license-authorization': 'License 授权',
+        'license-authorization': 'License 授权',
+        'current-license': '当前授权',
+        'expire-time': '授权到期时间：',
+        'benefits-info': '权益信息',
+        'seat-count': '成员坐席数',
+        'social-account-count': '社媒账号数',
+        'translation-chars': '翻译字符数',
+        'purchase-records': '购买记录',
+        'version-record': '版本记录',
+        'service-duration': '服务时长',
+        'cost': '费用',
+        'status': '状态'
+      },
+      'en': {
+        'page-title': 'AIOChat - Authorization Management',
+        'auth-tutorial': 'Authorization Tutorial',
+        'switch-service': 'Switch Service',
+        'private-service': 'Private Service',
+        'saas-service': 'SAAS Service',
+        'language': 'Language',
+        'logout': 'Logout',
+        'auth-application-list': 'Authorization Application List',
+        'company-name': 'Company Name:',
+        'email-label': 'Email:',
+        'contact-name-label': 'Contact Name:',
+        'contact-phone-label': 'Contact Phone:',
+        'telegram-label': 'Telegram:',
+        'whatsapp-label': 'WhatsApp:',
+        'license-label': 'License Authorization:',
+        'server-code-label': 'Server Code:',
+        'license-authorization': 'License Authorization',
+        'current-license': 'Current License',
+        'expire-time': 'License Expiry Time:',
+        'benefits-info': 'Benefits Information',
+        'seat-count': 'Member Seats',
+        'social-account-count': 'Social Accounts',
+        'translation-chars': 'Translation Characters',
+        'purchase-records': 'Purchase Records',
+        'version-record': 'Version Record',
+        'service-duration': 'Service Duration',
+        'cost': 'Cost',
+        'status': 'Status'
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // 用户菜单下拉功能
+      const userMenuButton = document.getElementById('userMenuButton');
+      const userDropdownMenu = document.getElementById('userDropdownMenu');
+      
+      if (userMenuButton && userDropdownMenu) {
+        userMenuButton.addEventListener('click', function(e) {
+          e.stopPropagation();
+          userDropdownMenu.classList.toggle('hidden');
+        });
+        
+        // 点击文档其他地方关闭下拉菜单
+        document.addEventListener('click', function(e) {
+          if (!userMenuButton.contains(e.target) && !userDropdownMenu.contains(e.target)) {
+            userDropdownMenu.classList.add('hidden');
+          }
+        });
+        
+        // 语言选择功能
+        const langOptions = document.querySelectorAll('.lang-option');
+        const zhCheckmark = document.getElementById('zhCheckmark');
+        const enCheckmark = document.getElementById('enCheckmark');
+        
+        langOptions.forEach(option => {
+          option.addEventListener('click', function(e) {
+            e.preventDefault();
+            const lang = this.getAttribute('data-lang');
+            
+            // 更新选中状态
+            if (lang === 'zh') {
+              zhCheckmark.classList.remove('hidden');
+              enCheckmark.classList.add('hidden');
+            } else {
+              zhCheckmark.classList.add('hidden');
+              enCheckmark.classList.remove('hidden');
+            }
+            
+            // 保存语言选择
+            localStorage.setItem('selectedLanguage', lang);
+            
+            // 应用语言
+            applyLanguage(lang);
+          });
+        });
+      }
+
+      // 从URL获取参数
+      function getParamFromURL(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+      }
+      
+      // 更新用户邮箱显示
+      const userEmail = document.getElementById('userEmail');
+      const email = getParamFromURL('email') || '123@gmail.com';
+      if (userEmail) {
+        userEmail.textContent = email;
+      }
+      
+      // 更新用户信息卡片
+      document.getElementById('userEmailInfo').textContent = email;
+      
+      // 尝试获取并填充其他参数
+      const company = getParamFromURL('company');
+      if (company) {
+        document.getElementById('companyName').textContent = company;
+      }
+      
+      const contact = getParamFromURL('contact');
+      if (contact) {
+        document.getElementById('contactName').textContent = contact;
+      }
+      
+      const phoneCode = getParamFromURL('phoneCode');
+      const phone = getParamFromURL('phone');
+      if (phone) {
+        const fullPhone = phoneCode ? `${phoneCode} ${phone}` : phone;
+        document.getElementById('contactPhone').textContent = fullPhone;
+      }
+      
+      // 获取并显示Telegram号码
+      const telegram = getParamFromURL('telegram');
+      if (telegram) {
+        document.getElementById('telegramNumber').textContent = telegram;
+      }
+      
+      // 获取并显示WhatsApp号码
+      const whatsapp = getParamFromURL('whatsapp');
+      if (whatsapp) {
+        document.getElementById('whatsappNumber').textContent = whatsapp;
+      }
+      
+      // 显示机器码
+      const machineCode = getParamFromURL('machineCode');
+      if (machineCode) {
+        document.getElementById('machineCode').textContent = machineCode;
+      }
+      
+      // 从URL参数获取语言设置或使用localStorage
+      function getLanguageFromURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('lang') || localStorage.getItem('selectedLanguage') || 'zh';
+      }
+      
+      let currentLang = getLanguageFromURL();
+      localStorage.setItem('selectedLanguage', currentLang);
+      
+      // 更新语言选项的选中状态
+      if (zhCheckmark && enCheckmark) {
+        if (currentLang === 'zh') {
+          zhCheckmark.classList.remove('hidden');
+          enCheckmark.classList.add('hidden');
+        } else {
+          zhCheckmark.classList.add('hidden');
+          enCheckmark.classList.remove('hidden');
+        }
+      }
+      
+      // 应用初始语言
+      applyLanguage(currentLang);
+      
+      // 应用语言翻译函数
+      function applyLanguage(lang) {
+        // 更新网页标题
+        document.title = translations[lang]['page-title'] || document.title;
+        
+        // 翻译所有带有data-lang-key的元素
+        document.querySelectorAll('[data-lang-key]').forEach(element => {
+          const key = element.getAttribute('data-lang-key');
+          if (translations[lang][key]) {
+            element.textContent = translations[lang][key];
+          }
+        });
+        
+        // 更新HTML语言属性
+        document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+      }
+
+      // 购买授权按钮点击事件
+      const purchaseAuthBtn = document.getElementById('purchaseAuthBtn');
+      if (purchaseAuthBtn) {
+        purchaseAuthBtn.addEventListener('click', function() {
+          document.getElementById('purchaseModal').classList.remove('hidden');
+        });
+      }
+
+      // 授权续期按钮点击事件
+      document.getElementById('renewAuthBtn').addEventListener('click', function() {
+        document.getElementById('renewModal').classList.remove('hidden');
+      });
+      
+      // 扩展权益按钮点击事件
+      document.getElementById('expandBenefitsBtn').addEventListener('click', function() {
+        document.getElementById('expandModal').classList.remove('hidden');
+      });
+
+      // 购买授权弹窗交互
+      initPurchaseModal();
+
+      // USDT支付弹窗交互
+      initUsdtPaymentModal();
+
+      // 授权续期弹窗交互
+      initRenewModal();
+
+      // 扩展权益弹窗交互
+      initExpandModal();
+
+      // 原型设计状态切换功能
+      initPrototypeStateButtons();
+    });
+
+    // 购买授权弹窗初始化
+    function initPurchaseModal() {
+      const modal = document.getElementById('purchaseModal');
+      const closeBtn = document.getElementById('closePurchaseModal');
+      
+      // 关闭弹窗
+      closeBtn.addEventListener('click', function() {
+        modal.classList.add('hidden');
+      });
+      
+      // 点击背景关闭弹窗
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+          modal.classList.add('hidden');
+        }
+      });
+
+      // 基础服务费选择
+      const serviceOptions = document.querySelectorAll('.service-option');
+      serviceOptions.forEach(option => {
+        option.addEventListener('click', function() {
+          serviceOptions.forEach(opt => {
+            opt.classList.remove('border-blue-500');
+            opt.classList.add('border-gray-200');
+            opt.classList.remove('bg-white');
+            opt.classList.add('bg-gray-50');
+          });
+          this.classList.add('border-blue-500');
+          this.classList.remove('border-gray-200');
+          this.classList.add('bg-white');
+          this.classList.remove('bg-gray-50');
+          updateTotalAmount();
+        });
+      });
+
+      // 翻译字符费用选择
+      const charOptions = document.querySelectorAll('.char-option');
+      charOptions.forEach(option => {
+        option.addEventListener('click', function() {
+          charOptions.forEach(opt => {
+            opt.classList.remove('border-blue-500');
+            opt.classList.add('border-gray-200');
+            opt.classList.remove('bg-white');
+            opt.classList.add('bg-gray-50');
+          });
+          this.classList.add('border-blue-500');
+          this.classList.remove('border-gray-200');
+          this.classList.add('bg-white');
+          this.classList.remove('bg-gray-50');
+          updateTotalAmount();
+        });
+      });
+
+      // 支付方式选择
+      const paymentMethods = document.querySelectorAll('.payment-method');
+      paymentMethods.forEach(method => {
+        method.addEventListener('click', function() {
+          paymentMethods.forEach(pm => {
+            pm.classList.remove('border-blue-500');
+            pm.classList.add('border-gray-200');
+            pm.classList.remove('bg-white');
+            pm.classList.add('bg-gray-50');
+          });
+          this.classList.add('border-blue-500');
+          this.classList.remove('border-gray-200');
+          this.classList.add('bg-white');
+          this.classList.remove('bg-gray-50');
+        });
+      });
+
+      // 坐席数量输入
+      const seatQuantity = document.getElementById('seatQuantity');
+      seatQuantity.addEventListener('input', function() {
+        let value = parseInt(this.value) || 1;
+        if (value < 1) value = 1;
+        if (value > 500) value = 500;
+        this.value = value;
+        
+        const subtotal = value * 12;
+        document.getElementById('seatSubtotal').textContent = `¥${subtotal.toFixed(2)}`;
+        updateTotalAmount();
+      });
+
+      // 社媒账号数量输入
+      const socialQuantity = document.getElementById('socialQuantity');
+      socialQuantity.addEventListener('input', function() {
+        let value = parseInt(this.value) || 1;
+        if (value < 1) value = 1;
+        if (value > 500) value = 500;
+        this.value = value;
+        
+        const subtotal = value * 12;
+        document.getElementById('socialSubtotal').textContent = `¥${subtotal.toFixed(2)}`;
+        updateTotalAmount();
+      });
+
+      // 立即支付按钮
+      document.getElementById('payNowBtn').addEventListener('click', function() {
+        const selectedPayment = document.querySelector('.payment-method.border-blue-500');
+        const paymentMethod = selectedPayment ? selectedPayment.querySelector('span').textContent.trim() : 'USDT';
+        const totalAmount = document.getElementById('totalAmount').textContent;
+        
+        console.log('选中的支付方式:', paymentMethod); // 调试信息
+        console.log('选中的支付元素:', selectedPayment); // 调试信息
+        
+        // 直接检查是否是USDT支付（包括默认情况）
+        if (paymentMethod === 'USDT' || !selectedPayment || selectedPayment.id === 'paymentUSDT') {
+          // 打开USDT支付弹窗
+          document.getElementById('usdtPaymentAmount').textContent = totalAmount;
+          document.getElementById('usdtPaymentModal').classList.remove('hidden');
+        } else {
+          alert(`即将使用${paymentMethod}支付 ${totalAmount}\n\n支付功能正在开发中...`);
+        }
+      });
+
+      // 初始化总金额计算
+      updateTotalAmount();
+    }
+
+    // USDT支付弹窗初始化
+    function initUsdtPaymentModal() {
+      const modal = document.getElementById('usdtPaymentModal');
+      const closeBtn = document.getElementById('closeUsdtPaymentModal');
+      const cancelBtn = document.getElementById('cancelUsdtPayment');
+      const confirmBtn = document.getElementById('confirmUsdtPayment');
+      const copyBtn = document.getElementById('copyAddressBtn');
+      
+      // 关闭弹窗
+      function closeModal() {
+        modal.classList.add('hidden');
+      }
+      
+      closeBtn.addEventListener('click', closeModal);
+      cancelBtn.addEventListener('click', closeModal);
+      
+      // 点击背景关闭弹窗
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+          closeModal();
+        }
+      });
+      
+      // 复制地址
+      copyBtn.addEventListener('click', function() {
+        const address = document.getElementById('usdtAddress').textContent;
+        navigator.clipboard.writeText(address).then(function() {
+          // 临时改变按钮文字
+          const originalText = copyBtn.innerHTML;
+          copyBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>已复制';
+          copyBtn.classList.add('text-green-600');
+          
+          setTimeout(function() {
+            copyBtn.innerHTML = originalText;
+            copyBtn.classList.remove('text-green-600');
+          }, 2000);
+        }).catch(function() {
+          alert('复制失败，请手动复制地址');
+        });
+      });
+      
+      // 支付成功确认
+      confirmBtn.addEventListener('click', function() {
+        // 关闭USDT支付弹窗
+        closeModal();
+        
+        // 关闭购买授权弹窗
+        document.getElementById('purchaseModal').classList.add('hidden');
+        
+        // 显示成功提示
+        alert('支付确认成功！\n\n我们已收到您的支付确认，订单将在1-3个工作日内处理。\n处理完成后会通过邮件通知您。');
+        
+        // 这里可以添加更多逻辑，比如：
+        // - 发送支付确认到后端
+        // - 更新页面状态
+        // - 刷新订单列表等
+      });
+    }
+
+    // 授权续期弹窗初始化
+    function initRenewModal() {
+      const modal = document.getElementById('renewModal');
+      const closeBtn = document.getElementById('closeRenewModal');
+      
+      // 关闭弹窗
+      closeBtn.addEventListener('click', function() {
+        modal.classList.add('hidden');
+      });
+      
+      // 点击背景关闭弹窗
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+          modal.classList.add('hidden');
+        }
+      });
+
+      // 授权服务选择
+      const serviceOptions = document.querySelectorAll('.renew-service-option');
+      serviceOptions.forEach(option => {
+        option.addEventListener('click', function() {
+          serviceOptions.forEach(opt => {
+            opt.classList.remove('border-blue-500');
+            opt.classList.add('border-gray-200');
+            opt.classList.remove('bg-white');
+            opt.classList.add('bg-gray-50');
+          });
+          this.classList.add('border-blue-500');
+          this.classList.remove('border-gray-200');
+          this.classList.add('bg-white');
+          this.classList.remove('bg-gray-50');
+          updateRenewTotalAmount();
+        });
+      });
+
+      // 支付方式选择
+      const paymentMethods = document.querySelectorAll('.renew-payment-method');
+      paymentMethods.forEach(method => {
+        method.addEventListener('click', function() {
+          paymentMethods.forEach(pm => {
+            pm.classList.remove('border-blue-500');
+            pm.classList.add('border-gray-200');
+            pm.classList.remove('bg-white');
+            pm.classList.add('bg-gray-50');
+          });
+          this.classList.add('border-blue-500');
+          this.classList.remove('border-gray-200');
+          this.classList.add('bg-white');
+          this.classList.remove('bg-gray-50');
+        });
+      });
+
+      // 立即支付按钮
+      document.getElementById('renewPayNowBtn').addEventListener('click', function() {
+        const selectedPayment = document.querySelector('.renew-payment-method.border-blue-500');
+        const paymentMethod = selectedPayment ? selectedPayment.querySelector('span').textContent : 'USDT';
+        const totalAmount = document.getElementById('renewTotalAmount').textContent;
+        
+        alert(`即将使用${paymentMethod}支付 ${totalAmount}\n\n支付功能正在开发中...`);
+      });
+
+      // 初始化总金额计算
+      updateRenewTotalAmount();
+    }
+
+    // 更新续期总金额
+    function updateRenewTotalAmount() {
+      // 获取选中的授权服务费
+      const selectedService = document.querySelector('.renew-service-option.border-blue-500');
+      const serviceFee = selectedService?.id === 'renewService360' ? 88000 : 44000;
+      
+      // 更新显示
+      document.getElementById('renewServiceFeeDisplay').textContent = `¥${serviceFee.toLocaleString()}.00`;
+      document.getElementById('renewTotalAmount').textContent = `¥${serviceFee.toLocaleString()}.00`;
+    }
+
+    // 更新总金额
+    function updateTotalAmount() {
+      // 获取基础服务费
+      const selectedService = document.querySelector('.service-option.border-blue-500');
+      const serviceFee = selectedService?.id === 'service360' ? 88000 : 44000;
+      
+      // 获取坐席费用
+      const seatQuantity = parseInt(document.getElementById('seatQuantity').value) || 1;
+      const seatFee = seatQuantity * 12;
+      
+      // 获取社媒账号费用
+      const socialQuantity = parseInt(document.getElementById('socialQuantity').value) || 1;
+      const socialFee = socialQuantity * 12;
+      
+      // 获取翻译字符费用
+      const selectedChar = document.querySelector('.char-option.border-blue-500');
+      let charFee = 5000; // 默认100万字符
+      if (selectedChar) {
+        switch(selectedChar.id) {
+          case 'char1000w': charFee = 30000; break;
+          case 'char100w': charFee = 5000; break;
+          case 'char10w': charFee = 800; break;
+          case 'char1w': charFee = 100; break;
+        }
+      }
+      
+      // 更新显示
+      document.getElementById('serviceFeeDisplay').textContent = `¥${serviceFee.toLocaleString()}.00`;
+      document.getElementById('seatFeeDisplay').textContent = `¥${seatFee.toFixed(2)}`;
+      document.getElementById('socialFeeDisplay').textContent = `¥${socialFee.toFixed(2)}`;
+      document.getElementById('charFeeDisplay').textContent = `¥${charFee.toLocaleString()}.00`;
+      
+      // 计算总计
+      const total = serviceFee + seatFee + socialFee + charFee;
+      document.getElementById('totalAmount').textContent = `¥${total.toLocaleString()}.00`;
+    }
+
+    // 扩展权益弹窗初始化
+    function initExpandModal() {
+      const modal = document.getElementById('expandModal');
+      const closeBtn = document.getElementById('closeExpandModal');
+      
+      // 关闭弹窗
+      closeBtn.addEventListener('click', function() {
+        modal.classList.add('hidden');
+      });
+      
+      // 点击背景关闭弹窗
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+          modal.classList.add('hidden');
+        }
+      });
+
+      // 翻译字符费用选择
+      const charOptions = document.querySelectorAll('.expand-char-option');
+      charOptions.forEach(option => {
+        option.addEventListener('click', function() {
+          charOptions.forEach(opt => {
+            opt.classList.remove('border-blue-500');
+            opt.classList.add('border-gray-200');
+            opt.classList.remove('bg-white');
+            opt.classList.add('bg-gray-50');
+          });
+          this.classList.add('border-blue-500');
+          this.classList.remove('border-gray-200');
+          this.classList.add('bg-white');
+          this.classList.remove('bg-gray-50');
+          updateExpandTotalAmount();
+        });
+      });
+
+      // 支付方式选择
+      const paymentMethods = document.querySelectorAll('.expand-payment-method');
+      paymentMethods.forEach(method => {
+        method.addEventListener('click', function() {
+          paymentMethods.forEach(pm => {
+            pm.classList.remove('border-blue-500');
+            pm.classList.add('border-gray-200');
+            pm.classList.remove('bg-white');
+            pm.classList.add('bg-gray-50');
+          });
+          this.classList.add('border-blue-500');
+          this.classList.remove('border-gray-200');
+          this.classList.add('bg-white');
+          this.classList.remove('bg-gray-50');
+        });
+      });
+
+      // 坐席数量输入
+      const seatQuantity = document.getElementById('expandSeatQuantity');
+      seatQuantity.addEventListener('input', function() {
+        let value = parseInt(this.value) || 1;
+        if (value < 1) value = 1;
+        if (value > 500) value = 500;
+        this.value = value;
+        
+        const subtotal = value * 12;
+        document.getElementById('expandSeatSubtotal').textContent = `¥${subtotal.toFixed(2)}`;
+        updateExpandTotalAmount();
+      });
+
+      // 社媒账号数量输入
+      const socialQuantity = document.getElementById('expandSocialQuantity');
+      socialQuantity.addEventListener('input', function() {
+        let value = parseInt(this.value) || 1;
+        if (value < 1) value = 1;
+        if (value > 500) value = 500;
+        this.value = value;
+        
+        const subtotal = value * 12;
+        document.getElementById('expandSocialSubtotal').textContent = `¥${subtotal.toFixed(2)}`;
+        updateExpandTotalAmount();
+      });
+
+      // 立即支付按钮
+      document.getElementById('expandPayNowBtn').addEventListener('click', function() {
+        const selectedPayment = document.querySelector('.expand-payment-method.border-blue-500');
+        const paymentMethod = selectedPayment ? selectedPayment.querySelector('span').textContent : 'USDT';
+        const totalAmount = document.getElementById('expandTotalAmount').textContent;
+        
+        alert(`即将使用${paymentMethod}支付 ${totalAmount}\n\n支付功能正在开发中...`);
+      });
+
+      // 初始化总金额计算
+      updateExpandTotalAmount();
+    }
+
+    // 更新扩展权益总金额
+    function updateExpandTotalAmount() {
+      // 获取坐席费用
+      const seatQuantity = parseInt(document.getElementById('expandSeatQuantity').value) || 1;
+      const seatFee = seatQuantity * 12;
+      
+      // 获取社媒账号费用
+      const socialQuantity = parseInt(document.getElementById('expandSocialQuantity').value) || 1;
+      const socialFee = socialQuantity * 12;
+      
+      // 获取翻译字符费用
+      const selectedChar = document.querySelector('.expand-char-option.border-blue-500');
+      let charFee = 5000; // 默认100万字符
+      if (selectedChar) {
+        switch(selectedChar.id) {
+          case 'expandChar1000w': charFee = 30000; break;
+          case 'expandChar100w': charFee = 5000; break;
+          case 'expandChar10w': charFee = 800; break;
+          case 'expandChar1w': charFee = 100; break;
+        }
+      }
+      
+      // 更新显示
+      document.getElementById('expandSeatFeeDisplay').textContent = `¥${seatFee.toFixed(2)}`;
+      document.getElementById('expandSocialFeeDisplay').textContent = `¥${socialFee.toFixed(2)}`;
+      document.getElementById('expandCharFeeDisplay').textContent = `¥${charFee.toLocaleString()}.00`;
+      
+      // 计算总计
+      const total = seatFee + socialFee + charFee;
+      document.getElementById('expandTotalAmount').textContent = `¥${total.toLocaleString()}.00`;
+    }
+
+    // 原型设计状态切换初始化
+    function initPrototypeStateButtons() {
+      // 状态数据配置
+      const stateConfigs = {
+        trial: {
+          version: '试用版',
+          versionBg: 'bg-green-100 text-green-800',
+          expireDate: '2024-12-31 23:59:59',
+          remainingDays: '剩余 30 天',
+          remainingDaysStyle: 'text-sm text-gray-500',
+          seatCount: '5',
+          socialCount: '10',
+          translationChars: '1万'
+        },
+        trialExpiring: {
+          version: '试用版',
+          versionBg: 'bg-yellow-100 text-yellow-800',
+          expireDate: '2024-11-20 23:59:59',
+          remainingDays: '剩余 3 天',
+          remainingDaysStyle: 'text-sm text-yellow-600 font-bold',
+          seatCount: '5',
+          socialCount: '10',
+          translationChars: '1万'
+        },
+        trialExpired: {
+          version: '试用版',
+          versionBg: 'bg-red-100 text-red-800',
+          expireDate: '2024-11-15 23:59:59',
+          remainingDays: '已过期',
+          remainingDaysStyle: 'text-sm text-red-600 font-bold',
+          seatCount: '5',
+          socialCount: '10',
+          translationChars: '1万'
+        },
+        official: {
+          version: '正式版',
+          versionBg: 'bg-blue-100 text-blue-800',
+          expireDate: '2025-11-30 23:59:59',
+          remainingDays: '剩余 365 天',
+          remainingDaysStyle: 'text-sm text-gray-500',
+          seatCount: '20',
+          socialCount: '50',
+          translationChars: '100万'
+        },
+        officialExtended: {
+          version: '正式版',
+          versionBg: 'bg-purple-100 text-purple-800',
+          expireDate: '2026-06-30 23:59:59',
+          remainingDays: '剩余 365 天',
+          remainingDaysStyle: 'text-sm text-gray-500',
+          seatCount: '50',
+          socialCount: '100',
+          translationChars: '600万'
+        }
+      };
+
+      // 绑定按钮事件
+      document.getElementById('stateTrial').addEventListener('click', () => updateLicenseState(stateConfigs.trial));
+      document.getElementById('stateTrialExpiring').addEventListener('click', () => updateLicenseState(stateConfigs.trialExpiring));
+      document.getElementById('stateTrialExpired').addEventListener('click', () => updateLicenseState(stateConfigs.trialExpired));
+      document.getElementById('stateOfficial').addEventListener('click', () => updateLicenseState(stateConfigs.official));
+      document.getElementById('stateOfficialExtended').addEventListener('click', () => updateLicenseState(stateConfigs.officialExtended));
+    }
+
+    // 更新授权状态显示
+    function updateLicenseState(config) {
+      // 更新版本标识
+      const versionElement = document.getElementById('licenseVersion');
+      const versionContainer = versionElement.parentElement;
+      
+      // 清除所有背景色类
+      versionContainer.className = versionContainer.className.replace(/bg-\w+-\d+/g, '').replace(/text-\w+-\d+/g, '');
+      // 添加新的背景色类
+      versionContainer.className += ` ${config.versionBg}`;
+      versionElement.textContent = config.version;
+      
+      // 更新到期时间
+      document.getElementById('expireDate').textContent = config.expireDate;
+      
+      // 更新剩余天数并应用样式
+      const remainingDaysElement = document.getElementById('remainingDays');
+      remainingDaysElement.textContent = config.remainingDays;
+      remainingDaysElement.className = config.remainingDaysStyle;
+      
+      // 更新权益信息
+      document.getElementById('seatCount').innerHTML = `${config.seatCount} <span class="text-sm text-gray-500 font-normal">个</span>`;
+      document.getElementById('socialAccountCount').innerHTML = `${config.socialCount} <span class="text-sm text-gray-500 font-normal">个</span>`;
+      document.getElementById('translationChars').innerHTML = `${config.translationChars} <span class="text-sm text-gray-500 font-normal">个字符</span>`;
+      
+      // 按钮显示控制逻辑
+      const purchaseAuthBtn = document.getElementById('purchaseAuthBtn');
+      const officialButtons = document.getElementById('officialButtons');
+      
+      // 判断是否为正式版状态（正式版或正式版续期扩展）
+      if (config.version === '正式版' && (config.versionBg.includes('blue') || config.versionBg.includes('purple'))) {
+        // 正式版状态：隐藏购买授权按钮，显示正式版按钮组
+        purchaseAuthBtn.classList.add('hidden');
+        officialButtons.classList.remove('hidden');
+      } else {
+        // 试用版状态：显示购买授权按钮，隐藏正式版按钮组
+        purchaseAuthBtn.classList.remove('hidden');
+        officialButtons.classList.add('hidden');
+      }
+    }
+  </script>
+</body>
+</html> 
